@@ -88,7 +88,8 @@ tr:hover td { background: #f9fafb; }
         <label>Año</label>
         <select id="f-año">
           <option value="">Todos</option>
-          <option value="2025" selected>2025</option>
+          <option value="2026" selected>2026</option>
+          <option value="2025">2025</option>
           <option value="2024">2024</option>
         </select>
       </div>
@@ -150,7 +151,7 @@ async function cargarDatos() {
     const names=[...new Set(rawData.map(r=>(r.asesor_nombre||'').trim()).filter(Boolean))].sort();
     const sel=document.getElementById('f-asesor');
     sel.innerHTML='<option value="">Todos</option>'+names.map(n=>`<option value="${n}">${n}</option>`).join('');
-    st('green','Conectado · SIESA SBS QA');
+    st('green','Conectado · SIESA SBS Producción');
     document.getElementById('last-update').textContent='Act: '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
     aplicarFiltros();
   } catch(e) {
@@ -165,7 +166,7 @@ function gF(){ return { asesor:document.getElementById('f-asesor').value, año:p
 function fil(data,f){ return data.filter(r=>{ if(f.asesor&&(r.asesor_nombre||'').trim()!==f.asesor)return false; if(f.año&&parseInt(r.año)!==f.año)return false; if(f.mes&&parseInt(r.mes)!==f.mes)return false; if(f.semana&&parseInt(r.semana)!==f.semana)return false; return true; }); }
 
 function aplicarFiltros(){ dC(); const f=gF(),d=fil(rawData,f); render(d,f); }
-function resetFiltros(){ ['f-asesor','f-mes','f-semana'].forEach(id=>document.getElementById(id).value=''); document.getElementById('f-año').value='2025'; aplicarFiltros(); }
+function resetFiltros(){ ['f-asesor','f-mes','f-semana'].forEach(id=>document.getElementById(id).value=''); document.getElementById('f-año').value='2026'; aplicarFiltros(); }
 function setVista(v,el){ vista=v; document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); aplicarFiltros(); }
 function dC(){ Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}}); charts={}; }
 
@@ -214,7 +215,7 @@ function rResumen(d,f,c){
 
 // ── COMPARATIVOS ──
 function rComp(f,c){
-  const mA=f.mes||new Date().getMonth()+1, yA=f.año||2025;
+  const mA=f.mes||new Date().getMonth()+1, yA=f.año||2026;
   const mAnt=mA===1?12:mA-1, yAnt=mA===1?yA-1:yA, yP=yA-1;
   const ase=f.asesor||'';
   const s=(d)=>d.reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);
@@ -263,7 +264,7 @@ function rTend(d,f,c){
   const mk=Object.keys(pm).sort();
 
   const ps={};
-  base.filter(r=>parseInt(r.año)===2025).forEach(r=>{const k=`${r.año}-${String(r.semana).padStart(2,'0')}`;if(!ps[k])ps[k]={l:`S${r.semana}`,n:0};ps[k].n+=parseFloat(r.venta_neta||0);});
+  base.filter(r=>parseInt(r.año)===2026).forEach(r=>{const k=`${r.año}-${String(r.semana).padStart(2,'0')}`;if(!ps[k])ps[k]={l:`S${r.semana}`,n:0};ps[k].n+=parseFloat(r.venta_neta||0);});
   const sk=Object.keys(ps).sort().slice(-16);
 
   const top5=agA(d).slice(0,5);
@@ -275,7 +276,7 @@ function rTend(d,f,c){
       <div class="card"><div class="card-title">Venta neta mensual</div><div class="chart-wrap h260"><canvas id="cTM"></canvas></div></div>
       <div class="card"><div class="card-title">Facturas por mes</div><div class="chart-wrap h260"><canvas id="cTF"></canvas></div></div>
     </div>
-    <div class="card"><div class="card-title">Tendencia semanal 2025</div><div class="chart-wrap h200"><canvas id="cTS"></canvas></div></div>
+    <div class="card"><div class="card-title">Tendencia semanal 2026</div><div class="chart-wrap h200"><canvas id="cTS"></canvas></div></div>
     <div class="card"><div class="card-title">Tendencia mensual — top 5 asesores</div><div class="chart-wrap h300"><canvas id="cTA"></canvas></div></div>`;
 
   charts.tm=new Chart(document.getElementById('cTM'),{type:'line',data:{labels:mk.map(k=>pm[k].l),datasets:[{label:'Venta neta',data:mk.map(k=>pm[k].n),borderColor:'#4f46e5',backgroundColor:'rgba(79,70,229,0.07)',fill:true,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}}}});
@@ -287,7 +288,7 @@ function rTend(d,f,c){
 // ── RANKING ──
 function rRank(d,f,c){
   const a=agA(d), tot=a.reduce((s,x)=>s+x.neto,0);
-  const mA=f.mes||new Date().getMonth()+1, yA=f.año||2025;
+  const mA=f.mes||new Date().getMonth()+1, yA=f.año||2026;
   const mAnt=mA===1?12:mA-1, yAnt=mA===1?yA-1:yA;
   const prev=agA(fil(rawData,{asesor:'',año:yAnt,mes:mAnt,semana:null}));
   const pp={};prev.forEach((x,i)=>pp[x.codigo]=i+1);

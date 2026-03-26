@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ventas por Asesor — Jota Mundial SAS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a1a2e; min-height: 100vh; }
+
+  header { background: #1a1a2e; color: white; padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 17px; font-weight: 600; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  #last-update { font-size: 12px; opacity: 0.55; }
+  #btn-refresh { background: #4f46e5; color: white; border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer; font-size: 13px; font-weight: 500; }
+  #btn-refresh:hover { background: #4338ca; }
+  #btn-refresh:disabled { background: #6b7280; cursor: not-allowed; }
+
+  .main { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
+
+  /* Config bar */
+  .config-bar {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    border: 1px solid #e5e7eb;
+  }
+  .config-bar label { font-size: 12px; font-weight: 600; color: #6b7280; }
+  .config-bar input, .config-bar select {
+    padding: 6px 10px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1f2937;
+    background: #f9fafb;
+  }
+  .config-bar input { width: 320px; font-family: monospace; font-size: 12px; }
+  #btn-conectar { background: #10b981; color: white; border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer; font-size: 13px; font-weight: 600; }
+  #btn-conectar:hover { background: #059669; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; display: inline-block; margin-right: 4px; }
+  .dot.green { background: #10b981; }
+  .dot.red { background: #ef4444; }
+  #conn-status { font-size: 12px; color: #6b7280; display: flex; align-items: center; gap: 4px; }
+
+  .period-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab { padding: 8px 20px; border-radius: 20px; border: 1.5px solid #d1d5db; background: white; cursor: pointer; font-size: 13px; font-weight: 500; color: #6b7280; transition: all 0.15s; }
+  .tab.active { background: #4f46e5; border-color: #4f46e5; color: white; }
+
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi { background: white; border-radius: 12px; padding: 20px 22px; border-left: 4px solid #4f46e5; }
+  .kpi.green { border-left-color: #10b981; }
+  .kpi.amber { border-left-color: #f59e0b; }
+  .kpi.red   { border-left-color: #ef4444; }
+  .kpi-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 600; }
+  .kpi-value { font-size: 24px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+  .kpi-sub   { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media(max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+  .card { background: white; border-radius: 12px; padding: 22px; }
+  .card h2 { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .chart-wrap { position: relative; height: 280px; }
+
+  .table-card { background: white; border-radius: 12px; padding: 22px; }
+  .table-card h2 { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 14px; background: #f9fafb; color: #6b7280; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
+  td { padding: 11px 14px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f9fafb; }
+  .rank { font-weight: 700; color: #9ca3af; font-size: 12px; }
+  .rank.top1 { color: #f59e0b; font-size: 16px; }
+  .rank.top2 { color: #94a3b8; font-size: 15px; }
+  .rank.top3 { color: #b45309; font-size: 14px; }
+  .name-cell strong { display: block; font-size: 13px; color: #1f2937; }
+  .name-cell small { font-size: 11px; color: #9ca3af; }
+  .bar-bg { background: #e5e7eb; border-radius: 4px; height: 5px; margin-top: 5px; min-width: 80px; }
+  .bar-fill { background: #4f46e5; border-radius: 4px; height: 5px; transition: width 0.6s ease; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pct-cell { min-width: 80px; }
+
+  .loading { text-align: center; padding: 60px; color: #9ca3af; font-size: 14px; }
+  .error-msg { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: #b91c1c; font-size: 13px; margin-bottom: 16px; }
+  .tip-msg { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; color: #1e40af; font-size: 12px; margin-bottom: 16px; }
+
+  /* Credenciales modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: white; border-radius: 14px; padding: 28px; width: 420px; max-width: 95vw; }
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .modal p { font-size: 12px; color: #6b7280; margin-bottom: 20px; }
+  .modal-field { margin-bottom: 14px; }
+  .modal-field label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 4px; }
+  .modal-field input { width: 100%; padding: 9px 12px; border: 1.5px solid #d1d5db; border-radius: 7px; font-size: 13px; font-family: monospace; }
+  .modal-field input:focus { outline: none; border-color: #4f46e5; }
+  .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-primary { flex: 1; background: #4f46e5; color: white; border: none; border-radius: 7px; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-secondary { background: #f3f4f6; color: #374151; border: none; border-radius: 7px; padding: 10px 16px; font-size: 14px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- Modal de credenciales -->
+<div class="modal-overlay" id="modal-creds">
+  <div class="modal">
+    <h3>🔐 Credenciales Connekta</h3>
+    <p>Se guardan solo en tu navegador (localStorage). Nunca se envían a ningún servidor externo.</p>
+    <div class="modal-field">
+      <label>client_id</label>
+      <input type="password" id="m_client_id" placeholder="Tu client_id de Connekta">
+    </div>
+    <div class="modal-field">
+      <label>ConniKey</label>
+      <input type="password" id="m_conni_key" placeholder="Tu ConniKey">
+    </div>
+    <div class="modal-field">
+      <label>ConniToken</label>
+      <input type="password" id="m_conni_token" placeholder="Tu ConniToken">
+    </div>
+    <div class="modal-field">
+      <label>Ambiente</label>
+      <select id="m_ambiente" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:7px;font-size:13px;">
+        <option value="qa">QA — apiqa.siesacloud.com</option>
+        <option value="prod">Producción — api.siesacloud.com</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-primary" onclick="guardarCreds()">Guardar y conectar</button>
+      <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <h1>📊 Ventas por Asesor — Jota Mundial SAS</h1>
+  <div class="header-right">
+    <span id="last-update"></span>
+    <button id="btn-refresh" onclick="cargarDatos()" disabled>↻ Actualizar</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="config-bar">
+    <div>
+      <label>Estado de conexión</label>
+      <div id="conn-status" style="margin-top:4px"><span class="dot" id="conn-dot"></span><span id="conn-text">Sin configurar</span></div>
+    </div>
+    <button id="btn-conectar" onclick="abrirModal()">⚙️ Configurar credenciales</button>
+    <div style="margin-left:auto;font-size:12px;color:#9ca3af">
+      ID Compañía: <strong>8628</strong> · Consulta: <strong>jotamundialsas_ventas_asesores</strong>
+    </div>
+  </div>
+
+  <div class="period-tabs">
+    <button class="tab active" onclick="setPeriod('semana', this)">Esta semana</button>
+    <button class="tab" onclick="setPeriod('mes', this)">Este mes</button>
+    <button class="tab" onclick="setPeriod('año', this)">Este año</button>
+  </div>
+
+  <div id="content">
+    <div class="loading">Configura tus credenciales para ver los datos en tiempo real.</div>
+  </div>
+
+</div>
+
+<script>
+const ID_COMPANIA = '8628';
+const DESCRIPCION = 'jotamundialsas_ventas_asesores';
+
+let globalData = null;
+let currentPeriod = 'semana';
+let chartBar = null;
+let chartDona = null;
+
+// ── Credenciales (localStorage) ──────────────────────
+function getCreds() {
+  return {
+    client_id:  localStorage.getItem('conn_client_id') || '',
+    conni_key:  localStorage.getItem('conn_key') || '',
+    conni_token:localStorage.getItem('conn_token') || '',
+    ambiente:   localStorage.getItem('conn_ambiente') || 'qa'
+  };
+}
+function abrirModal() {
+  const c = getCreds();
+  if (c.client_id) document.getElementById('m_client_id').value = c.client_id;
+  if (c.conni_key) document.getElementById('m_conni_key').value = c.conni_key;
+  if (c.conni_token) document.getElementById('m_conni_token').value = c.conni_token;
+  document.getElementById('m_ambiente').value = c.ambiente;
+  document.getElementById('modal-creds').style.display = 'flex';
+}
+function cerrarModal() { document.getElementById('modal-creds').style.display = 'none'; }
+function guardarCreds() {
+  const cid = document.getElementById('m_client_id').value.trim();
+  const ck  = document.getElementById('m_conni_key').value.trim();
+  const ct  = document.getElementById('m_conni_token').value.trim();
+  const amb = document.getElementById('m_ambiente').value;
+  if (!cid || !ck || !ct) { alert('Completa los 3 campos de credenciales.'); return; }
+  localStorage.setItem('conn_client_id', cid);
+  localStorage.setItem('conn_key', ck);
+  localStorage.setItem('conn_token', ct);
+  localStorage.setItem('conn_ambiente', amb);
+  cerrarModal();
+  actualizarEstado(true);
+  cargarDatos();
+}
+function actualizarEstado(ok) {
+  document.getElementById('conn-dot').className = 'dot ' + (ok ? 'green' : 'red');
+  document.getElementById('conn-text').textContent = ok
+    ? (getCreds().ambiente === 'qa' ? 'Conectado · QA' : 'Conectado · Producción')
+    : 'Sin credenciales';
+  document.getElementById('btn-refresh').disabled = !ok;
+}
+
+// ── Helpers ──────────────────────────────────────────
+const formatCOP = v =>
+  new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(v);
+const formatM = v => {
+  if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
+  if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
+  return '$' + (v/1e3).toFixed(0) + 'K';
+};
+
+function getSemanaActual() {
+  const d = new Date();
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+  return Math.ceil((((date - yearStart) / 86400000) + 1)/7);
+}
+
+// ── Fetch todas las páginas ───────────────────────────
+async function fetchPagina(baseUrl, headers, pag) {
+  const url = `${baseUrl}?idCompania=${ID_COMPANIA}&descripcion=${DESCRIPCION}&paginacion=${encodeURIComponent('numPag='+pag+'|tamPag=100')}`;
+  const res = await fetch(url, { method: 'GET', headers });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = await res.json();
+  if (json.codigo !== 0) throw new Error(json.detalle || json.mensaje);
+  return json.detalle;
+}
+
+async function cargarDatos() {
+  const creds = getCreds();
+  if (!creds.client_id) { abrirModal(); return; }
+
+  const btn = document.getElementById('btn-refresh');
+  btn.disabled = true;
+  btn.textContent = '⏳ Cargando...';
+  document.getElementById('last-update').textContent = 'Actualizando...';
+  document.getElementById('content').innerHTML = '<div class="loading">Consultando SIESA a través de Connekta...</div>';
+
+  const baseUrl = creds.ambiente === 'qa'
+    ? 'https://apiqa.siesacloud.com/connekta/siesa/dinamico/consulta/v4.0.1'
+    : 'https://api.siesacloud.com/connekta/siesa/dinamico/consulta/v4.0.1';
+
+  const headers = {
+    'client_id':  creds.client_id,
+    'conniKey':   creds.conni_key,
+    'conniToken': creds.conni_token,
+    'Content-Type': 'application/json'
+  };
+
+  try {
+    // Página 1
+    const p1 = await fetchPagina(baseUrl, headers, 1);
+    let todos = [...p1.Datos];
+    const totalPags = p1.total_páginas;
+
+    // Páginas restantes
+    for (let p = 2; p <= totalPags; p++) {
+      document.getElementById('content').innerHTML = `<div class="loading">Cargando página ${p} de ${totalPags}...</div>`;
+      const px = await fetchPagina(baseUrl, headers, p);
+      todos = todos.concat(px.Datos);
+    }
+
+    // Procesar acumulados
+    globalData = procesarDatos(todos);
+    actualizarEstado(true);
+    renderAll(globalData);
+
+    const ahora = new Date();
+    document.getElementById('last-update').textContent =
+      'Actualizado: ' + ahora.toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
+
+  } catch(e) {
+    actualizarEstado(false);
+    document.getElementById('content').innerHTML = `<div class="error-msg">❌ Error al consultar Connekta: ${e.message}<br><small>Verifica tus credenciales o intenta de nuevo.</small></div>`;
+    document.getElementById('last-update').textContent = 'Error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '↻ Actualizar';
+  }
+}
+
+function procesarDatos(registros) {
+  const hoy = new Date();
+  const añoActual = hoy.getFullYear();
+  const mesActual = hoy.getMonth() + 1;
+  const semanaActual = getSemanaActual();
+
+  const map = {};
+  for (const r of registros) {
+    const codigo = (r.asesor_codigo || '').trim();
+    const nombre = (r.asesor_nombre || codigo).trim();
+    const año = parseInt(r.año);
+    const mes = parseInt(r.mes);
+    const semana = parseInt(r.semana);
+    const neto = parseFloat(r.venta_neta || 0);
+    const bruto = parseFloat(r.venta_bruta || 0);
+    const facturas = parseInt(r.num_facturas || 0);
+
+    if (!map[codigo]) {
+      map[codigo] = {
+        codigo, nombre,
+        acum_semana: 0, acum_mes: 0, acum_año: 0,
+        fact_semana: 0, fact_mes: 0, fact_año: 0,
+        bruto_mes: 0, bruto_año: 0
+      };
+    }
+    const a = map[codigo];
+    if (año === añoActual) {
+      a.acum_año += neto; a.fact_año += facturas; a.bruto_año += bruto;
+      if (mes === mesActual) {
+        a.acum_mes += neto; a.fact_mes += facturas; a.bruto_mes += bruto;
+        if (semana === semanaActual) {
+          a.acum_semana += neto; a.fact_semana += facturas;
+        }
+      }
+    }
+  }
+  return {
+    semana: semanaActual, mes: mesActual, año: añoActual,
+    asesores: Object.values(map).filter(a => a.codigo !== '9999')
+  };
+}
+
+// ── Período ──────────────────────────────────────────
+function setPeriod(p, el) {
+  currentPeriod = p;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (globalData) renderAll(globalData);
+}
+function getVal(a) {
+  if (currentPeriod === 'semana') return { v: a.acum_semana, f: a.fact_semana };
+  if (currentPeriod === 'mes')    return { v: a.acum_mes,    f: a.fact_mes    };
+  return                                 { v: a.acum_año,    f: a.fact_año    };
+}
+function periodoLabel() {
+  if (currentPeriod === 'semana') return `Semana ${globalData.semana}`;
+  if (currentPeriod === 'mes') {
+    const meses = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    return meses[globalData.mes] + ' ' + globalData.año;
+  }
+  return 'Año ' + globalData.año;
+}
+
+// ── Render ────────────────────────────────────────────
+function renderAll(d) {
+  const sorted = [...d.asesores].sort((a,b) => getVal(b).v - getVal(a).v);
+  const total = sorted.reduce((s,a) => s + getVal(a).v, 0);
+  const totalF = sorted.reduce((s,a) => s + getVal(a).f, 0);
+  const top = sorted[0];
+  const totalAño = sorted.reduce((s,a) => s + a.acum_año, 0);
+
+  document.getElementById('content').innerHTML = `
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi-label">Total ventas · ${periodoLabel()}</div>
+        <div class="kpi-value">${formatM(total)}</div>
+        <div class="kpi-sub">${formatCOP(total)}</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-label">Líder · ${periodoLabel()}</div>
+        <div class="kpi-value" style="font-size:17px">${top ? top.nombre.split(' ').slice(-2).join(' ') : '-'}</div>
+        <div class="kpi-sub">${top ? formatM(getVal(top).v) : ''}</div>
+      </div>
+      <div class="kpi amber">
+        <div class="kpi-label">Facturas · ${periodoLabel()}</div>
+        <div class="kpi-value">${totalF.toLocaleString('es-CO')}</div>
+        <div class="kpi-sub">${sorted.length} asesores activos</div>
+      </div>
+      <div class="kpi red">
+        <div class="kpi-label">Acumulado año ${d.año}</div>
+        <div class="kpi-value">${formatM(totalAño)}</div>
+        <div class="kpi-sub">${formatCOP(totalAño)}</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2>Ventas por asesor · ${periodoLabel()}</h2>
+        <div class="chart-wrap"><canvas id="chartBar"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Participación del total</h2>
+        <div class="chart-wrap"><canvas id="chartDona"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h2>Ranking completo · ${periodoLabel()}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Asesor</th>
+            <th class="num">Esta semana</th>
+            <th class="num">Este mes</th>
+            <th class="num">Este año</th>
+            <th class="num">Facturas</th>
+            <th>Participación</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sorted.map((a, i) => {
+            const pct = total > 0 ? ((getVal(a).v / total)*100).toFixed(1) : 0;
+            const barW = sorted[0] && getVal(sorted[0]).v > 0
+              ? Math.round((getVal(a).v / getVal(sorted[0]).v) * 100) : 0;
+            const rankClass = i===0?'top1':i===1?'top2':i===2?'top3':'';
+            const rankIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+            return `<tr>
+              <td class="rank ${rankClass}">${rankIcon}</td>
+              <td class="name-cell">
+                <strong>${a.nombre}</strong>
+                <small>Cód. ${a.codigo}</small>
+              </td>
+              <td class="num">${formatM(a.acum_semana)}</td>
+              <td class="num">${formatM(a.acum_mes)}</td>
+              <td class="num">${formatM(a.acum_año)}</td>
+              <td class="num">${getVal(a).f}</td>
+              <td class="pct-cell">
+                <span style="font-size:12px;font-weight:600;color:#4f46e5">${pct}%</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:${barW}%"></div></div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  // Gráfica barras
+  const top8 = sorted.slice(0, 8);
+  const colores = ['#4f46e5','#7c3aed','#2563eb','#0891b2','#059669','#d97706','#dc2626','#9333ea'];
+  const ctx1 = document.getElementById('chartBar').getContext('2d');
+  if (chartBar) chartBar.destroy();
+  chartBar = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: top8.map(a => a.nombre.split(' ').slice(-2).join(' ')),
+      datasets: [{ label: 'Venta neta', data: top8.map(a => getVal(a).v), backgroundColor: colores, borderRadius: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: v => formatM(v), font: {size:11} }, grid: { color: '#f3f4f6' } },
+        x: { ticks: { font: {size:10} }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Gráfica dona
+  const ctx2 = document.getElementById('chartDona').getContext('2d');
+  if (chartDona) chartDona.destroy();
+  chartDona = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: top8.map(a => a.nombre.split(' ').slice(-2).join(' ')),
+      datasets: [{ data: top8.map(a => getVal(a).v), backgroundColor: colores, borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { font: {size:11}, padding: 10, boxWidth: 12 } },
+        tooltip: { callbacks: { label: ctx => ` ${formatM(ctx.raw)} (${((ctx.raw/total)*100).toFixed(1)}%)` } }
+      }
+    }
+  });
+}
+
+// ── Init ──────────────────────────────────────────────
+window.addEventListener('load', () => {
+  const creds = getCreds();
+  if (creds.client_id) {
+    actualizarEstado(true);
+    cargarDatos();
+  } else {
+    actualizarEstado(false);
+    setTimeout(abrirModal, 400);
+  }
+});
+
+// Auto-refresh cada 30 min
+setInterval(() => { if (getCreds().client_id) cargarDatos(); }, 30 * 60 * 1000);
+</script>
+</body>
+</html>

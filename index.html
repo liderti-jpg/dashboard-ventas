@@ -435,6 +435,9 @@ tr:hover td{background:var(--blue3)}
       <button class="ba" onclick="ap()">Aplicar</button>
       <button class="bcl" onclick="rst()">Limpiar</button>
     </div>
+    <div id="filtro-nota" style="display:none;margin-top:10px;font-size:11px;color:var(--text3);background:var(--blue3);padding:7px 12px;border-radius:var(--rs);border:1px solid var(--border)">
+      ℹ️ El rango de fechas filtra por día exacto. Los gráficos de tendencia se muestran por día cuando el rango es ≤ 2 meses.
+    </div>
   </div>
 
   <!-- TABS -->
@@ -513,17 +516,27 @@ function gF(){return{asesor:document.getElementById('fa').value,año:parseInt(do
 function fil(data,f){
   return data.filter(r=>{
     if(f.asesor&&(r.asesor_nombre||'').trim()!==f.asesor)return false;
+    // Si hay rango de fechas, tiene prioridad sobre año/mes
+    if(f.desde||f.hasta){
+      const fR=r.fecha||(r.año+'-'+String(r.mes).padStart(2,'0')+'-'+String(r.dia||15).padStart(2,'0'));
+      if(f.desde&&fR<f.desde)return false;
+      if(f.hasta&&fR>f.hasta)return false;
+      if(f.asesor&&(r.asesor_nombre||'').trim()!==f.asesor)return false;
+      return true;
+    }
     if(f.año&&parseInt(r.año)!==f.año)return false;
     if(f.mes&&parseInt(r.mes)!==f.mes)return false;
-    if(f.desde||f.hasta){
-      const fR=new Date(parseInt(r.año),parseInt(r.mes)-1,15);
-      if(f.desde&&fR<new Date(f.desde))return false;
-      if(f.hasta&&fR>new Date(f.hasta))return false;
-    }
     return true;
   });
 }
-function ap(){dC();const f=gF(),d=fil(raw,f);render(d,f)}
+function ap(){
+  dC();
+  const f=gF();
+  // Mostrar nota si se usan fechas
+  const nota=document.getElementById('filtro-nota');
+  if(nota)nota.style.display=(f.desde||f.hasta)?'block':'none';
+  const d=fil(raw,f);render(d,f);
+}
 function rst(){['fa','fm','fd','fh'].forEach(id=>document.getElementById(id).value='');document.getElementById('fy').value='2026';ap()}
 function sv(v,el){
   vista=v;
@@ -805,38 +818,70 @@ function bC(){
 function vT(d,f,c){
   const ase=f.asesor||'';
   const base=ase?raw.filter(r=>(r.asesor_nombre||'').trim()===ase):raw;
+
+  // Detectar si hay rango de fechas corto (≤ 31 días) → agrupar por día
+  let usaDias=false;
+  if(f.desde&&f.hasta){
+    const diff=(new Date(f.hasta)-new Date(f.desde))/(1000*60*60*24);
+    usaDias=diff<=62;
+  }
+
   const pm={};
   base.forEach(r=>{
-    const k=`${r.año}-${String(r.mes).padStart(2,'0')}`;
-    if(!pm[k])pm[k]={l:`${MN[r.mes]} ${r.año}`,n:0,f:0};
-    pm[k].n+=parseFloat(r.venta_neta||0);pm[k].f+=parseInt(r.num_facturas||0);
+    let k,l;
+    if(usaDias&&r.fecha){
+      k=r.fecha;
+      l=r.fecha.split('-').reverse().join('/');
+    } else {
+      k=`${r.año}-${String(r.mes).padStart(2,'0')}`;
+      l=`${MN[r.mes]} ${r.año}`;
+    }
+    if(!pm[k])pm[k]={l,n:0,f:0};
+    pm[k].n+=parseFloat(r.venta_neta||0);
+    pm[k].f+=parseInt(r.num_facturas||0);
   });
-  const mk=Object.keys(pm).sort();
+
+  // Filtrar por rango si aplica
+  let mk=Object.keys(pm).sort();
+  if(f.desde||f.hasta){
+    mk=mk.filter(k=>{
+      if(f.desde&&k<f.desde.substring(0,usaDias?10:7))return false;
+      if(f.hasta&&k>f.hasta.substring(0,usaDias?10:7))return false;
+      return true;
+    });
+  }
+
   const top5=agA(d).slice(0,5);
   const td={};
   top5.forEach(a=>{
     td[a.nombre]=mk.map(k=>{
-      const[ano,mes]=k.split('-').map(Number);
-      return base.filter(r=>(r.asesor_nombre||'').trim()===a.nombre&&parseInt(r.año)===ano&&parseInt(r.mes)===mes).reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);
+      return base.filter(r=>{
+        if((r.asesor_nombre||'').trim()!==a.nombre)return false;
+        if(usaDias)return r.fecha===k;
+        const km=`${r.año}-${String(r.mes).padStart(2,'0')}`;
+        return km===k;
+      }).reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);
     });
   });
+
+  const etq=usaDias?'diaria':'mensual';
   c.innerHTML=`
     <div class="g2">
-      <div class="card"><div class="ct">Venta neta mensual <span class="ct-line"></span></div><div class="cw h240"><canvas id="cTM"></canvas></div></div>
-      <div class="card"><div class="ct">Facturas por mes <span class="ct-line"></span></div><div class="cw h240"><canvas id="cTF"></canvas></div></div>
+      <div class="card"><div class="ct">Venta neta ${etq} <span class="ct-line"></span></div><div class="cw h240"><canvas id="cTM"></canvas></div></div>
+      <div class="card"><div class="ct">Facturas por ${usaDias?'día':'mes'} <span class="ct-line"></span></div><div class="cw h240"><canvas id="cTF"></canvas></div></div>
     </div>
-    <div class="card gf"><div class="ct">Top 5 asesores — tendencia <span class="ct-line"></span></div><div class="cw h320"><canvas id="cTA"></canvas></div></div>`;
+    <div class="card gf"><div class="ct">Top 5 asesores — tendencia ${etq} <span class="ct-line"></span></div><div class="cw h320"><canvas id="cTA"></canvas></div></div>`;
 
   const tOpts={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{
     legend:{display:false},
     tooltip:{backgroundColor:'rgba(11,31,74,.92)',titleColor:'rgba(255,255,255,.6)',titleFont:{size:11},bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:12,cornerRadius:10,callbacks:{label:ctx=>' '+fCOP(ctx.raw)}}
   },scales:{
     y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},
-    x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:40},grid:{display:false},border:{display:false}}
+    x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:45},grid:{display:false},border:{display:false}}
   }};
-  ch.tM=new Chart(document.getElementById('cTM'),{type:'line',data:{labels:mk.map(k=>pm[k].l),datasets:[{label:'Venta neta',data:mk.map(k=>pm[k].n),borderColor:'#1A3A6E',backgroundColor:'rgba(26,58,110,.06)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#1A3A6E',pointBorderColor:'#fff',pointBorderWidth:2,pointHoverRadius:7,pointHoverBackgroundColor:'#3B6FD4'}]},options:tOpts});
-  ch.tF=new Chart(document.getElementById('cTF'),{type:'bar',data:{labels:mk.map(k=>pm[k].l),datasets:[{data:mk.map(k=>pm[k].f),backgroundColor:'rgba(59,111,212,.18)',borderColor:'rgba(59,111,212,.6)',borderWidth:1.5,borderRadius:6,hoverBackgroundColor:'rgba(59,111,212,.35)'}]},options:{...tOpts,plugins:{...tOpts.plugins,tooltip:{...tOpts.plugins.tooltip,callbacks:{label:ctx=>` ${ctx.raw.toLocaleString('es-CO')} facturas`}}}}});
-  ch.tA=new Chart(document.getElementById('cTA'),{type:'line',data:{labels:mk.map(k=>pm[k].l),datasets:top5.map((a,i)=>({label:a.nombre.split(' ').slice(-2).join(' '),data:td[a.nombre],borderColor:CL[i],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2,pointBackgroundColor:CL[i],pointBorderColor:'#fff',pointBorderWidth:1.5,pointHoverRadius:6}))},options:{...tOpts,plugins:{...tOpts.plugins,legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:10},boxWidth:10,padding:14}}}}});
+  ch.tM=new Chart(document.getElementById('cTM'),{type:'line',data:{labels:mk.map(k=>pm[k]?.l||k),datasets:[{label:'Venta neta',data:mk.map(k=>pm[k]?.n||0),borderColor:'#1A3A6E',backgroundColor:'rgba(26,58,110,.06)',fill:true,tension:.4,pointRadius:usaDias?4:4,pointBackgroundColor:'#1A3A6E',pointBorderColor:'#fff',pointBorderWidth:2,pointHoverRadius:7,pointHoverBackgroundColor:'#3B6FD4'}]},options:tOpts});
+  ch.tF=new Chart(document.getElementById('cTF'),{type:'bar',data:{labels:mk.map(k=>pm[k]?.l||k),datasets:[{data:mk.map(k=>pm[k]?.f||0),backgroundColor:'rgba(59,111,212,.18)',borderColor:'rgba(59,111,212,.6)',borderWidth:1.5,borderRadius:6,hoverBackgroundColor:'rgba(59,111,212,.35)'}]},options:{...tOpts,plugins:{...tOpts.plugins,tooltip:{...tOpts.plugins.tooltip,callbacks:{label:ctx=>` ${ctx.raw.toLocaleString('es-CO')} facturas`}}}}});
+  ch.tA=new Chart(document.getElementById('cTA'),{type:'line',data:{labels:mk.map(k=>pm[k]?.l||k),datasets:top5.map((a,i)=>({label:a.nombre.split(' ').slice(-2).join(' '),data:td[a.nombre],borderColor:CL[i],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2,pointBackgroundColor:CL[i],pointBorderColor:'#fff',pointBorderWidth:1.5,pointHoverRadius:6}))},options:{...tOpts,plugins:{...tOpts.plugins,legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:10},boxWidth:10,padding:14}}}}});
 }
 
 // ══ RANKING ══════════════════════════════════

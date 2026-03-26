@@ -19,34 +19,19 @@
 
   .main { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
 
-  /* Config bar */
-  .config-bar {
+  .info-bar {
     background: white;
     border-radius: 10px;
-    padding: 14px 20px;
+    padding: 12px 20px;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    justify-content: space-between;
     border: 1px solid #e5e7eb;
+    font-size: 12px;
+    color: #6b7280;
   }
-  .config-bar label { font-size: 12px; font-weight: 600; color: #6b7280; }
-  .config-bar input, .config-bar select {
-    padding: 6px 10px;
-    border: 1.5px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #1f2937;
-    background: #f9fafb;
-  }
-  .config-bar input { width: 320px; font-family: monospace; font-size: 12px; }
-  #btn-conectar { background: #10b981; color: white; border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer; font-size: 13px; font-weight: 600; }
-  #btn-conectar:hover { background: #059669; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; display: inline-block; margin-right: 4px; }
-  .dot.green { background: #10b981; }
-  .dot.red { background: #ef4444; }
-  #conn-status { font-size: 12px; color: #6b7280; display: flex; align-items: center; gap: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block; margin-right: 6px; }
 
   .period-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
   .tab { padding: 8px 20px; border-radius: 20px; border: 1.5px solid #d1d5db; background: white; cursor: pointer; font-size: 13px; font-weight: 500; color: #6b7280; transition: all 0.15s; }
@@ -87,74 +72,23 @@
 
   .loading { text-align: center; padding: 60px; color: #9ca3af; font-size: 14px; }
   .error-msg { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: #b91c1c; font-size: 13px; margin-bottom: 16px; }
-  .tip-msg { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; color: #1e40af; font-size: 12px; margin-bottom: 16px; }
-
-  /* Credenciales modal */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
-  .modal { background: white; border-radius: 14px; padding: 28px; width: 420px; max-width: 95vw; }
-  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-  .modal p { font-size: 12px; color: #6b7280; margin-bottom: 20px; }
-  .modal-field { margin-bottom: 14px; }
-  .modal-field label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 4px; }
-  .modal-field input { width: 100%; padding: 9px 12px; border: 1.5px solid #d1d5db; border-radius: 7px; font-size: 13px; font-family: monospace; }
-  .modal-field input:focus { outline: none; border-color: #4f46e5; }
-  .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
-  .btn-primary { flex: 1; background: #4f46e5; color: white; border: none; border-radius: 7px; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-secondary { background: #f3f4f6; color: #374151; border: none; border-radius: 7px; padding: 10px 16px; font-size: 14px; cursor: pointer; }
 </style>
 </head>
 <body>
-
-<!-- Modal de credenciales -->
-<div class="modal-overlay" id="modal-creds">
-  <div class="modal">
-    <h3>🔐 Credenciales Connekta</h3>
-    <p>Se guardan solo en tu navegador (localStorage). Nunca se envían a ningún servidor externo.</p>
-    <div class="modal-field">
-      <label>client_id</label>
-      <input type="password" id="m_client_id" placeholder="Tu client_id de Connekta">
-    </div>
-    <div class="modal-field">
-      <label>ConniKey</label>
-      <input type="password" id="m_conni_key" placeholder="Tu ConniKey">
-    </div>
-    <div class="modal-field">
-      <label>ConniToken</label>
-      <input type="password" id="m_conni_token" placeholder="Tu ConniToken">
-    </div>
-    <div class="modal-field">
-      <label>Ambiente</label>
-      <select id="m_ambiente" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:7px;font-size:13px;">
-        <option value="qa">QA — apiqa.siesacloud.com</option>
-        <option value="prod">Producción — api.siesacloud.com</option>
-      </select>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-primary" onclick="guardarCreds()">Guardar y conectar</button>
-      <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
-    </div>
-  </div>
-</div>
 
 <header>
   <h1>📊 Ventas por Asesor — Jota Mundial SAS</h1>
   <div class="header-right">
     <span id="last-update"></span>
-    <button id="btn-refresh" onclick="cargarDatos()" disabled>↻ Actualizar</button>
+    <button id="btn-refresh" onclick="cargarDatos()">↻ Actualizar</button>
   </div>
 </header>
 
 <div class="main">
 
-  <div class="config-bar">
-    <div>
-      <label>Estado de conexión</label>
-      <div id="conn-status" style="margin-top:4px"><span class="dot" id="conn-dot"></span><span id="conn-text">Sin configurar</span></div>
-    </div>
-    <button id="btn-conectar" onclick="abrirModal()">⚙️ Configurar credenciales</button>
-    <div style="margin-left:auto;font-size:12px;color:#9ca3af">
-      ID Compañía: <strong>8628</strong> · Consulta: <strong>jotamundialsas_ventas_asesores</strong>
-    </div>
+  <div class="info-bar">
+    <div><span class="dot"></span><span id="conn-text">Conectando...</span></div>
+    <div>Datos en tiempo real · SIESA SBS · Se actualiza cada 30 min</div>
   </div>
 
   <div class="period-tabs">
@@ -164,61 +98,22 @@
   </div>
 
   <div id="content">
-    <div class="loading">Configura tus credenciales para ver los datos en tiempo real.</div>
+    <div class="loading">⏳ Cargando datos desde SIESA...</div>
   </div>
 
 </div>
 
 <script>
-const ID_COMPANIA = '8628';
-const DESCRIPCION = 'jotamundialsas_ventas_asesores';
+// ═══════════════════════════════════════
+// URL del webhook de n8n — no cambiar
+const WEBHOOK_URL = 'https://jotamundial2.app.n8n.cloud/webhook/ventas-asesores';
+// ═══════════════════════════════════════
 
 let globalData = null;
 let currentPeriod = 'semana';
 let chartBar = null;
 let chartDona = null;
 
-// ── Credenciales (localStorage) ──────────────────────
-function getCreds() {
-  return {
-    client_id:  localStorage.getItem('conn_client_id') || '',
-    conni_key:  localStorage.getItem('conn_key') || '',
-    conni_token:localStorage.getItem('conn_token') || '',
-    ambiente:   localStorage.getItem('conn_ambiente') || 'qa'
-  };
-}
-function abrirModal() {
-  const c = getCreds();
-  if (c.client_id) document.getElementById('m_client_id').value = c.client_id;
-  if (c.conni_key) document.getElementById('m_conni_key').value = c.conni_key;
-  if (c.conni_token) document.getElementById('m_conni_token').value = c.conni_token;
-  document.getElementById('m_ambiente').value = c.ambiente;
-  document.getElementById('modal-creds').style.display = 'flex';
-}
-function cerrarModal() { document.getElementById('modal-creds').style.display = 'none'; }
-function guardarCreds() {
-  const cid = document.getElementById('m_client_id').value.trim();
-  const ck  = document.getElementById('m_conni_key').value.trim();
-  const ct  = document.getElementById('m_conni_token').value.trim();
-  const amb = document.getElementById('m_ambiente').value;
-  if (!cid || !ck || !ct) { alert('Completa los 3 campos de credenciales.'); return; }
-  localStorage.setItem('conn_client_id', cid);
-  localStorage.setItem('conn_key', ck);
-  localStorage.setItem('conn_token', ct);
-  localStorage.setItem('conn_ambiente', amb);
-  cerrarModal();
-  actualizarEstado(true);
-  cargarDatos();
-}
-function actualizarEstado(ok) {
-  document.getElementById('conn-dot').className = 'dot ' + (ok ? 'green' : 'red');
-  document.getElementById('conn-text').textContent = ok
-    ? (getCreds().ambiente === 'qa' ? 'Conectado · QA' : 'Conectado · Producción')
-    : 'Sin credenciales';
-  document.getElementById('btn-refresh').disabled = !ok;
-}
-
-// ── Helpers ──────────────────────────────────────────
 const formatCOP = v =>
   new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(v);
 const formatM = v => {
@@ -236,62 +131,43 @@ function getSemanaActual() {
   return Math.ceil((((date - yearStart) / 86400000) + 1)/7);
 }
 
-// ── Fetch todas las páginas ───────────────────────────
-async function fetchPagina(baseUrl, headers, pag) {
-  const url = `${baseUrl}?idCompania=${ID_COMPANIA}&descripcion=${DESCRIPCION}&paginacion=${encodeURIComponent('numPag='+pag+'|tamPag=100')}`;
-  const res = await fetch(url, { method: 'GET', headers });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const json = await res.json();
-  if (json.codigo !== 0) throw new Error(json.detalle || json.mensaje);
-  return json.detalle;
-}
-
 async function cargarDatos() {
-  const creds = getCreds();
-  if (!creds.client_id) { abrirModal(); return; }
-
   const btn = document.getElementById('btn-refresh');
   btn.disabled = true;
   btn.textContent = '⏳ Cargando...';
   document.getElementById('last-update').textContent = 'Actualizando...';
-  document.getElementById('content').innerHTML = '<div class="loading">Consultando SIESA a través de Connekta...</div>';
-
-  const baseUrl = creds.ambiente === 'qa'
-    ? 'https://apiqa.siesacloud.com/connekta/siesa/dinamico/consulta/v4.0.1'
-    : 'https://api.siesacloud.com/connekta/siesa/dinamico/consulta/v4.0.1';
-
-  const headers = {
-    'client_id':  creds.client_id,
-    'conniKey':   creds.conni_key,
-    'conniToken': creds.conni_token,
-    'Content-Type': 'application/json'
-  };
+  document.getElementById('conn-text').textContent = 'Consultando SIESA...';
 
   try {
     // Página 1
-    const p1 = await fetchPagina(baseUrl, headers, 1);
-    let todos = [...p1.Datos];
-    const totalPags = p1.total_páginas;
+    const r1 = await fetch(`${WEBHOOK_URL}?pagina=1`);
+    if (!r1.ok) throw new Error(`HTTP ${r1.status}`);
+    const d1 = await r1.json();
+    const detalle = d1.detalle || d1;
+    let todos = [...(detalle.Datos || [])];
+    const totalPags = detalle.total_páginas || 1;
 
     // Páginas restantes
     for (let p = 2; p <= totalPags; p++) {
-      document.getElementById('content').innerHTML = `<div class="loading">Cargando página ${p} de ${totalPags}...</div>`;
-      const px = await fetchPagina(baseUrl, headers, p);
-      todos = todos.concat(px.Datos);
+      document.getElementById('content').innerHTML = `<div class="loading">⏳ Cargando página ${p} de ${totalPags}...</div>`;
+      const rp = await fetch(`${WEBHOOK_URL}?pagina=${p}`);
+      const dp = await rp.json();
+      const det = dp.detalle || dp;
+      todos = todos.concat(det.Datos || []);
     }
 
-    // Procesar acumulados
     globalData = procesarDatos(todos);
-    actualizarEstado(true);
     renderAll(globalData);
 
     const ahora = new Date();
     document.getElementById('last-update').textContent =
-      'Actualizado: ' + ahora.toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
+      'Actualizado: ' + ahora.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('conn-text').textContent = '✅ Conectado · SIESA SBS QA';
 
   } catch(e) {
-    actualizarEstado(false);
-    document.getElementById('content').innerHTML = `<div class="error-msg">❌ Error al consultar Connekta: ${e.message}<br><small>Verifica tus credenciales o intenta de nuevo.</small></div>`;
+    document.getElementById('conn-text').textContent = '❌ Error de conexión';
+    document.getElementById('content').innerHTML =
+      `<div class="error-msg">❌ Error al cargar datos: ${e.message}<br><small>Verifica que el workflow de n8n esté activo.</small></div>`;
     document.getElementById('last-update').textContent = 'Error';
   } finally {
     btn.disabled = false;
@@ -341,18 +217,19 @@ function procesarDatos(registros) {
   };
 }
 
-// ── Período ──────────────────────────────────────────
 function setPeriod(p, el) {
   currentPeriod = p;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   if (globalData) renderAll(globalData);
 }
+
 function getVal(a) {
   if (currentPeriod === 'semana') return { v: a.acum_semana, f: a.fact_semana };
   if (currentPeriod === 'mes')    return { v: a.acum_mes,    f: a.fact_mes    };
   return                                 { v: a.acum_año,    f: a.fact_año    };
 }
+
 function periodoLabel() {
   if (currentPeriod === 'semana') return `Semana ${globalData.semana}`;
   if (currentPeriod === 'mes') {
@@ -362,7 +239,6 @@ function periodoLabel() {
   return 'Año ' + globalData.año;
 }
 
-// ── Render ────────────────────────────────────────────
 function renderAll(d) {
   const sorted = [...d.asesores].sort((a,b) => getVal(b).v - getVal(a).v);
   const total = sorted.reduce((s,a) => s + getVal(a).v, 0);
@@ -447,9 +323,9 @@ function renderAll(d) {
     </div>
   `;
 
-  // Gráfica barras
   const top8 = sorted.slice(0, 8);
   const colores = ['#4f46e5','#7c3aed','#2563eb','#0891b2','#059669','#d97706','#dc2626','#9333ea'];
+
   const ctx1 = document.getElementById('chartBar').getContext('2d');
   if (chartBar) chartBar.destroy();
   chartBar = new Chart(ctx1, {
@@ -468,7 +344,6 @@ function renderAll(d) {
     }
   });
 
-  // Gráfica dona
   const ctx2 = document.getElementById('chartDona').getContext('2d');
   if (chartDona) chartDona.destroy();
   chartDona = new Chart(ctx2, {
@@ -487,20 +362,11 @@ function renderAll(d) {
   });
 }
 
-// ── Init ──────────────────────────────────────────────
-window.addEventListener('load', () => {
-  const creds = getCreds();
-  if (creds.client_id) {
-    actualizarEstado(true);
-    cargarDatos();
-  } else {
-    actualizarEstado(false);
-    setTimeout(abrirModal, 400);
-  }
-});
+// Cargar al inicio
+cargarDatos();
 
-// Auto-refresh cada 30 min
-setInterval(() => { if (getCreds().client_id) cargarDatos(); }, 30 * 60 * 1000);
+// Auto-refresh cada 30 minutos
+setInterval(cargarDatos, 30 * 60 * 1000);
 </script>
 </body>
 </html>

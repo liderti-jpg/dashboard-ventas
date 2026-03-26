@@ -6,356 +6,307 @@
 <title>Ventas por Asesor — Jota Mundial SAS</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a1a2e; min-height: 100vh; }
-
-  header { background: #1a1a2e; color: white; padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; }
-  header h1 { font-size: 17px; font-weight: 600; }
-  .header-right { display: flex; align-items: center; gap: 12px; }
-  #last-update { font-size: 12px; opacity: 0.55; }
-  #btn-refresh { background: #4f46e5; color: white; border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer; font-size: 13px; font-weight: 500; }
-  #btn-refresh:hover { background: #4338ca; }
-  #btn-refresh:disabled { background: #6b7280; cursor: not-allowed; }
-
-  .main { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
-
-  .info-bar {
-    background: white;
-    border-radius: 10px;
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #e5e7eb;
-    font-size: 12px;
-    color: #6b7280;
-  }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block; margin-right: 6px; }
-
-  .period-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-  .tab { padding: 8px 20px; border-radius: 20px; border: 1.5px solid #d1d5db; background: white; cursor: pointer; font-size: 13px; font-weight: 500; color: #6b7280; transition: all 0.15s; }
-  .tab.active { background: #4f46e5; border-color: #4f46e5; color: white; }
-
-  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .kpi { background: white; border-radius: 12px; padding: 20px 22px; border-left: 4px solid #4f46e5; }
-  .kpi.green { border-left-color: #10b981; }
-  .kpi.amber { border-left-color: #f59e0b; }
-  .kpi.red   { border-left-color: #ef4444; }
-  .kpi-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 600; }
-  .kpi-value { font-size: 24px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
-  .kpi-sub   { font-size: 12px; color: #9ca3af; margin-top: 4px; }
-
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-  @media(max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
-  .card { background: white; border-radius: 12px; padding: 22px; }
-  .card h2 { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .chart-wrap { position: relative; height: 280px; }
-
-  .table-card { background: white; border-radius: 12px; padding: 22px; }
-  .table-card h2 { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.4px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 10px 14px; background: #f9fafb; color: #6b7280; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
-  td { padding: 11px 14px; border-bottom: 1px solid #f3f4f6; color: #374151; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f9fafb; }
-  .rank { font-weight: 700; color: #9ca3af; font-size: 12px; }
-  .rank.top1 { color: #f59e0b; font-size: 16px; }
-  .rank.top2 { color: #94a3b8; font-size: 15px; }
-  .rank.top3 { color: #b45309; font-size: 14px; }
-  .name-cell strong { display: block; font-size: 13px; color: #1f2937; }
-  .name-cell small { font-size: 11px; color: #9ca3af; }
-  .bar-bg { background: #e5e7eb; border-radius: 4px; height: 5px; margin-top: 5px; min-width: 80px; }
-  .bar-fill { background: #4f46e5; border-radius: 4px; height: 5px; transition: width 0.6s ease; }
-  .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .pct-cell { min-width: 80px; }
-
-  .loading { text-align: center; padding: 60px; color: #9ca3af; font-size: 14px; }
-  .error-msg { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: #b91c1c; font-size: 13px; margin-bottom: 16px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a1a2e; min-height: 100vh; }
+header { background: #1a1a2e; color: white; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+header h1 { font-size: 16px; font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+#last-update { font-size: 11px; opacity: 0.5; }
+.btn { border: none; border-radius: 6px; padding: 7px 14px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.btn-blue { background: #4f46e5; color: white; }
+.btn-blue:hover { background: #4338ca; }
+.btn-blue:disabled { background: #6b7280; cursor: not-allowed; }
+.main { padding: 20px 24px; max-width: 1500px; margin: 0 auto; }
+.status-bar { background: white; border-radius: 8px; padding: 10px 18px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.dot.green { background: #10b981; } .dot.red { background: #ef4444; } .dot.gray { background: #9ca3af; }
+.filters { background: white; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; border: 1px solid #e5e7eb; }
+.filters-title { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.filters-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.filter-group { display: flex; flex-direction: column; gap: 4px; }
+.filter-group label { font-size: 11px; font-weight: 600; color: #374151; }
+.filter-group select { padding: 7px 10px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 12px; color: #1f2937; background: #f9fafb; min-width: 130px; }
+.filter-group select:focus { outline: none; border-color: #4f46e5; }
+.btn-aplicar { background: #4f46e5; color: white; border: none; border-radius: 6px; padding: 7px 18px; cursor: pointer; font-size: 12px; font-weight: 600; height: 34px; }
+.btn-aplicar:hover { background: #4338ca; }
+.btn-reset { background: #f3f4f6; color: #374151; border: none; border-radius: 6px; padding: 7px 14px; cursor: pointer; font-size: 12px; height: 34px; }
+.view-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.vtab { padding: 7px 18px; border-radius: 20px; border: 1.5px solid #d1d5db; background: white; cursor: pointer; font-size: 12px; font-weight: 500; color: #6b7280; }
+.vtab.active { background: #1a1a2e; border-color: #1a1a2e; color: white; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi { background: white; border-radius: 10px; padding: 16px 18px; border-left: 4px solid #4f46e5; }
+.kpi.green { border-left-color: #10b981; } .kpi.amber { border-left-color: #f59e0b; }
+.kpi.red { border-left-color: #ef4444; } .kpi.teal { border-left-color: #0891b2; }
+.kpi-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: 600; }
+.kpi-value { font-size: 21px; font-weight: 700; color: #1a1a2e; line-height: 1.2; }
+.kpi-sub { font-size: 11px; color: #9ca3af; margin-top: 3px; }
+.kpi-change { font-size: 11px; font-weight: 600; margin-top: 4px; }
+.kpi-change.up { color: #10b981; } .kpi-change.down { color: #ef4444; } .kpi-change.neutral { color: #9ca3af; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media(max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+.card { background: white; border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+.card-title { font-size: 11px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 14px; }
+.chart-wrap { position: relative; }
+.h200 { height: 200px; } .h260 { height: 260px; } .h300 { height: 300px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { text-align: left; padding: 8px 12px; background: #f9fafb; color: #6b7280; font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
+td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.up { color: #10b981; font-weight: 600; } .down { color: #ef4444; font-weight: 600; } .neutral2 { color: #9ca3af; }
+.bar-bg { background: #e5e7eb; border-radius: 3px; height: 4px; margin-top: 4px; min-width: 60px; }
+.bar-fill { background: #4f46e5; border-radius: 3px; height: 4px; }
+.loading { text-align: center; padding: 50px; color: #9ca3af; font-size: 13px; }
+.error-msg { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: #b91c1c; font-size: 12px; margin-bottom: 14px; }
 </style>
 </head>
 <body>
-
 <header>
   <h1>📊 Ventas por Asesor — Jota Mundial SAS</h1>
   <div class="header-right">
     <span id="last-update"></span>
-    <button id="btn-refresh" onclick="cargarDatos()">↻ Actualizar</button>
+    <button class="btn btn-blue" id="btn-refresh" onclick="cargarDatos()">↻ Actualizar</button>
   </div>
 </header>
 
 <div class="main">
-
-  <div class="info-bar">
-    <div><span class="dot"></span><span id="conn-text">Conectando...</span></div>
-    <div>Datos en tiempo real · SIESA SBS · Se actualiza cada 30 min</div>
+  <div class="status-bar">
+    <div><span class="dot gray" id="conn-dot"></span><span id="conn-text">Conectando...</span></div>
+    <div>SIESA SBS · Connekta · Auto-refresh 30 min</div>
   </div>
 
-  <div class="period-tabs">
-    <button class="tab active" onclick="setPeriod('semana', this)">Esta semana</button>
-    <button class="tab" onclick="setPeriod('mes', this)">Este mes</button>
-    <button class="tab" onclick="setPeriod('año', this)">Este año</button>
+  <div class="filters">
+    <div class="filters-title">🔍 Filtros</div>
+    <div class="filters-row">
+      <div class="filter-group">
+        <label>Asesor</label>
+        <select id="f-asesor"><option value="">Todos</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Año</label>
+        <select id="f-año">
+          <option value="">Todos</option>
+          <option value="2025" selected>2025</option>
+          <option value="2024">2024</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Mes</label>
+        <select id="f-mes">
+          <option value="">Todos</option>
+          <option value="1">Enero</option><option value="2">Febrero</option>
+          <option value="3">Marzo</option><option value="4">Abril</option>
+          <option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option>
+          <option value="9">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Semana</label>
+        <select id="f-semana">
+          <option value="">Todas</option>
+          ${Array.from({length:52},(_,i)=>`<option value="${i+1}">Semana ${i+1}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn-aplicar" onclick="aplicarFiltros()">▶ Aplicar</button>
+      <button class="btn-reset" onclick="resetFiltros()">✕ Limpiar</button>
+    </div>
   </div>
 
-  <div id="content">
-    <div class="loading">⏳ Cargando datos desde SIESA...</div>
+  <div class="view-tabs">
+    <button class="vtab active" onclick="setVista('resumen',this)">📈 Resumen</button>
+    <button class="vtab" onclick="setVista('comparativo',this)">⚖️ Comparativos</button>
+    <button class="vtab" onclick="setVista('tendencia',this)">📉 Tendencia</button>
+    <button class="vtab" onclick="setVista('ranking',this)">🏆 Ranking</button>
   </div>
 
+  <div id="content"><div class="loading">⏳ Cargando datos desde SIESA...</div></div>
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// URL del webhook de n8n — no cambiar
-const WEBHOOK_URL = 'https://jotamundial2.app.n8n.cloud/webhook/ventas-asesores';
-// ═══════════════════════════════════════
+const WEBHOOK = 'https://jotamundial2.app.n8n.cloud/webhook/ventas-asesores';
+const MESES = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const COLS = ['#4f46e5','#7c3aed','#2563eb','#0891b2','#059669','#d97706','#dc2626','#9333ea','#0d9488','#b45309'];
+let rawData=[], vista='resumen', charts={};
 
-let globalData = null;
-let currentPeriod = 'semana';
-let chartBar = null;
-let chartDona = null;
-
-const formatCOP = v =>
-  new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(v);
-const formatM = v => {
-  if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
-  if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
-  return '$' + (v/1e3).toFixed(0) + 'K';
-};
-
-function getSemanaActual() {
-  const d = new Date();
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const dayNum = date.getUTCDay() || 7;
-  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
-  return Math.ceil((((date - yearStart) / 86400000) + 1)/7);
-}
+const fM = v => v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+(v/1e3).toFixed(0)+'K':'$'+Math.round(v);
+const fCOP = v => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
+const pct = (a,b) => b===0?null:((a-b)/b*100).toFixed(1);
+const pctHtml = (a,b) => { const p=pct(a,b); if(!p) return '<span class="neutral2">—</span>'; const u=p>=0; return `<span class="${u?'up':'down'}">${u?'▲':'▼'} ${Math.abs(p)}%</span>`; };
+const pctObj = (a,b) => { const p=pct(a,b); if(!p) return {t:'—',c:'neutral'}; return {t:(p>=0?'▲ +':'▼ ')+p+'%',c:p>=0?'up':'down'}; };
 
 async function cargarDatos() {
-  const btn = document.getElementById('btn-refresh');
-  btn.disabled = true;
-  btn.textContent = '⏳ Cargando...';
-  document.getElementById('last-update').textContent = 'Actualizando...';
-  document.getElementById('conn-text').textContent = 'Consultando SIESA...';
-
+  const btn=document.getElementById('btn-refresh');
+  btn.disabled=true; btn.textContent='⏳';
+  st('gray','Consultando...');
   try {
-    const r1 = await fetch(WEBHOOK_URL);
-    if (!r1.ok) throw new Error(`HTTP ${r1.status}`);
-    const d1 = await r1.json();
-    const detalle = d1.detalle || d1;
-    const todos = detalle.Datos || [];
-
-    globalData = procesarDatos(todos);
-    renderAll(globalData);
-
-    const ahora = new Date();
-    document.getElementById('last-update').textContent =
-      'Actualizado: ' + ahora.toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('conn-text').textContent = '✅ Conectado · SIESA SBS QA';
-
+    const r=await fetch(WEBHOOK);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    rawData=(j.detalle||j).Datos||[];
+    const names=[...new Set(rawData.map(r=>(r.asesor_nombre||'').trim()).filter(Boolean))].sort();
+    const sel=document.getElementById('f-asesor');
+    sel.innerHTML='<option value="">Todos</option>'+names.map(n=>`<option value="${n}">${n}</option>`).join('');
+    st('green','Conectado · SIESA SBS QA');
+    document.getElementById('last-update').textContent='Act: '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+    aplicarFiltros();
   } catch(e) {
-    document.getElementById('conn-text').textContent = '❌ Error de conexión';
-    document.getElementById('content').innerHTML =
-      `<div class="error-msg">❌ Error al cargar datos: ${e.message}<br><small>Verifica que el workflow de n8n esté activo.</small></div>`;
-    document.getElementById('last-update').textContent = 'Error';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '↻ Actualizar';
-  }
+    st('red','Error'); document.getElementById('content').innerHTML=`<div class="error-msg">❌ ${e.message}</div>`;
+  } finally { btn.disabled=false; btn.textContent='↻ Actualizar'; }
 }
 
-function procesarDatos(registros) {
-  const hoy = new Date();
-  const añoActual = hoy.getFullYear();
-  const mesActual = hoy.getMonth() + 1;
-  const semanaActual = getSemanaActual();
+function st(c,t){ document.getElementById('conn-dot').className='dot '+c; document.getElementById('conn-text').textContent=t; }
 
-  const map = {};
-  for (const r of registros) {
-    const codigo = (r.asesor_codigo || '').trim();
-    const nombre = (r.asesor_nombre || codigo).trim();
-    const año = parseInt(r.año);
-    const mes = parseInt(r.mes);
-    const semana = parseInt(r.semana);
-    const neto = parseFloat(r.venta_neta || 0);
-    const bruto = parseFloat(r.venta_bruta || 0);
-    const facturas = parseInt(r.num_facturas || 0);
+function gF(){ return { asesor:document.getElementById('f-asesor').value, año:parseInt(document.getElementById('f-año').value)||null, mes:parseInt(document.getElementById('f-mes').value)||null, semana:parseInt(document.getElementById('f-semana').value)||null }; }
 
-    if (!map[codigo]) {
-      map[codigo] = {
-        codigo, nombre,
-        acum_semana: 0, acum_mes: 0, acum_año: 0,
-        fact_semana: 0, fact_mes: 0, fact_año: 0,
-        bruto_mes: 0, bruto_año: 0
-      };
-    }
-    const a = map[codigo];
-    if (año === añoActual) {
-      a.acum_año += neto; a.fact_año += facturas; a.bruto_año += bruto;
-      if (mes === mesActual) {
-        a.acum_mes += neto; a.fact_mes += facturas; a.bruto_mes += bruto;
-        if (semana === semanaActual) {
-          a.acum_semana += neto; a.fact_semana += facturas;
-        }
-      }
-    }
-  }
-  return {
-    semana: semanaActual, mes: mesActual, año: añoActual,
-    asesores: Object.values(map).filter(a => a.codigo !== '9999')
-  };
+function fil(data,f){ return data.filter(r=>{ if(f.asesor&&(r.asesor_nombre||'').trim()!==f.asesor)return false; if(f.año&&parseInt(r.año)!==f.año)return false; if(f.mes&&parseInt(r.mes)!==f.mes)return false; if(f.semana&&parseInt(r.semana)!==f.semana)return false; return true; }); }
+
+function aplicarFiltros(){ dC(); const f=gF(),d=fil(rawData,f); render(d,f); }
+function resetFiltros(){ ['f-asesor','f-mes','f-semana'].forEach(id=>document.getElementById(id).value=''); document.getElementById('f-año').value='2025'; aplicarFiltros(); }
+function setVista(v,el){ vista=v; document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); aplicarFiltros(); }
+function dC(){ Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}}); charts={}; }
+
+function agA(data){ const m={}; data.forEach(r=>{ const k=(r.asesor_codigo||'').trim(); if(!m[k]) m[k]={codigo:k,nombre:(r.asesor_nombre||k).trim(),neto:0,bruto:0,facturas:0}; m[k].neto+=parseFloat(r.venta_neta||0); m[k].bruto+=parseFloat(r.venta_bruta||0); m[k].facturas+=parseInt(r.num_facturas||0); }); return Object.values(m).filter(a=>a.codigo!=='9999').sort((a,b)=>b.neto-a.neto); }
+
+function render(d,f){
+  const c=document.getElementById('content');
+  if(!d.length){c.innerHTML='<div class="loading">Sin datos para los filtros seleccionados.</div>';return;}
+  if(vista==='resumen') rResumen(d,f,c);
+  if(vista==='comparativo') rComp(f,c);
+  if(vista==='tendencia') rTend(d,f,c);
+  if(vista==='ranking') rRank(d,f,c);
 }
 
-function setPeriod(p, el) {
-  currentPeriod = p;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  if (globalData) renderAll(globalData);
-}
+// ── RESUMEN ──
+function rResumen(d,f,c){
+  const a=agA(d), tot=a.reduce((s,x)=>s+x.neto,0), totB=a.reduce((s,x)=>s+x.bruto,0), totF=a.reduce((s,x)=>s+x.facturas,0), top=a[0];
+  let prev=[], pLabel='';
+  if(f.semana&&f.año){prev=fil(rawData,{...f,semana:f.semana-1});pLabel='sem '+(f.semana-1);}
+  else if(f.mes&&f.año){const pm=f.mes===1?12:f.mes-1,pa=f.mes===1?f.año-1:f.año;prev=fil(rawData,{...f,mes:pm,año:pa});pLabel=MESES[pm];}
+  else if(f.año){prev=fil(rawData,{...f,año:f.año-1});pLabel=''+(f.año-1);}
+  const pTot=prev.reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);
+  const cam=pctObj(tot,pTot);
 
-function getVal(a) {
-  if (currentPeriod === 'semana') return { v: a.acum_semana, f: a.fact_semana };
-  if (currentPeriod === 'mes')    return { v: a.acum_mes,    f: a.fact_mes    };
-  return                                 { v: a.acum_año,    f: a.fact_año    };
-}
-
-function periodoLabel() {
-  if (currentPeriod === 'semana') return `Semana ${globalData.semana}`;
-  if (currentPeriod === 'mes') {
-    const meses = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    return meses[globalData.mes] + ' ' + globalData.año;
-  }
-  return 'Año ' + globalData.año;
-}
-
-function renderAll(d) {
-  const sorted = [...d.asesores].sort((a,b) => getVal(b).v - getVal(a).v);
-  const total = sorted.reduce((s,a) => s + getVal(a).v, 0);
-  const totalF = sorted.reduce((s,a) => s + getVal(a).f, 0);
-  const top = sorted[0];
-  const totalAño = sorted.reduce((s,a) => s + a.acum_año, 0);
-
-  document.getElementById('content').innerHTML = `
+  c.innerHTML=`
     <div class="kpis">
-      <div class="kpi">
-        <div class="kpi-label">Total ventas · ${periodoLabel()}</div>
-        <div class="kpi-value">${formatM(total)}</div>
-        <div class="kpi-sub">${formatCOP(total)}</div>
-      </div>
-      <div class="kpi green">
-        <div class="kpi-label">Líder · ${periodoLabel()}</div>
-        <div class="kpi-value" style="font-size:17px">${top ? top.nombre.split(' ').slice(-2).join(' ') : '-'}</div>
-        <div class="kpi-sub">${top ? formatM(getVal(top).v) : ''}</div>
-      </div>
-      <div class="kpi amber">
-        <div class="kpi-label">Facturas · ${periodoLabel()}</div>
-        <div class="kpi-value">${totalF.toLocaleString('es-CO')}</div>
-        <div class="kpi-sub">${sorted.length} asesores activos</div>
-      </div>
-      <div class="kpi red">
-        <div class="kpi-label">Acumulado año ${d.año}</div>
-        <div class="kpi-value">${formatM(totalAño)}</div>
-        <div class="kpi-sub">${formatCOP(totalAño)}</div>
-      </div>
+      <div class="kpi"><div class="kpi-label">Venta neta</div><div class="kpi-value">${fM(tot)}</div><div class="kpi-sub">${fCOP(tot)}</div>${pTot>0?`<div class="kpi-change ${cam.c}">${cam.t} vs ${pLabel}</div>`:''}</div>
+      <div class="kpi amber"><div class="kpi-label">Venta bruta</div><div class="kpi-value">${fM(totB)}</div><div class="kpi-sub">${fCOP(totB)}</div></div>
+      <div class="kpi green"><div class="kpi-label">Líder</div><div class="kpi-value" style="font-size:15px">${top?top.nombre.split(' ').slice(-2).join(' '):'-'}</div><div class="kpi-sub">${top?fM(top.neto):''}</div></div>
+      <div class="kpi teal"><div class="kpi-label">Facturas</div><div class="kpi-value">${totF.toLocaleString('es-CO')}</div><div class="kpi-sub">${a.length} asesores</div></div>
+      <div class="kpi red"><div class="kpi-label">Ticket prom.</div><div class="kpi-value">${fM(totF>0?tot/totF:0)}</div><div class="kpi-sub">por factura</div></div>
     </div>
-
     <div class="grid-2">
-      <div class="card">
-        <h2>Ventas por asesor · ${periodoLabel()}</h2>
-        <div class="chart-wrap"><canvas id="chartBar"></canvas></div>
-      </div>
-      <div class="card">
-        <h2>Participación del total</h2>
-        <div class="chart-wrap"><canvas id="chartDona"></canvas></div>
-      </div>
+      <div class="card"><div class="card-title">Venta neta por asesor</div><div class="chart-wrap h260"><canvas id="cB"></canvas></div></div>
+      <div class="card"><div class="card-title">Participación %</div><div class="chart-wrap h260"><canvas id="cD"></canvas></div></div>
     </div>
+    <div class="card"><div class="card-title">Detalle asesores</div><div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Asesor</th><th class="num">Venta neta</th><th class="num">Bruta</th><th class="num">Facturas</th><th class="num">Ticket</th><th class="num">%</th></tr></thead>
+      <tbody>${a.map((x,i)=>{const p=tot>0?((x.neto/tot)*100).toFixed(1):0,bw=a[0].neto>0?Math.round((x.neto/a[0].neto)*100):0,ic=['🥇','🥈','🥉'];return`<tr><td>${ic[i]||i+1}</td><td><strong>${x.nombre}</strong><br><small style="color:#9ca3af">${x.codigo}</small></td><td class="num">${fM(x.neto)}</td><td class="num">${fM(x.bruto)}</td><td class="num">${x.facturas}</td><td class="num">${fM(x.facturas>0?x.neto/x.facturas:0)}</td><td class="num"><strong style="color:#4f46e5">${p}%</strong><div class="bar-bg"><div class="bar-fill" style="width:${bw}%"></div></div></td></tr>`;}).join('')}</tbody>
+    </table></div></div>`;
 
-    <div class="table-card">
-      <h2>Ranking completo · ${periodoLabel()}</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Asesor</th>
-            <th class="num">Esta semana</th>
-            <th class="num">Este mes</th>
-            <th class="num">Este año</th>
-            <th class="num">Facturas</th>
-            <th>Participación</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${sorted.map((a, i) => {
-            const pct = total > 0 ? ((getVal(a).v / total)*100).toFixed(1) : 0;
-            const barW = sorted[0] && getVal(sorted[0]).v > 0
-              ? Math.round((getVal(a).v / getVal(sorted[0]).v) * 100) : 0;
-            const rankClass = i===0?'top1':i===1?'top2':i===2?'top3':'';
-            const rankIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-            return `<tr>
-              <td class="rank ${rankClass}">${rankIcon}</td>
-              <td class="name-cell">
-                <strong>${a.nombre}</strong>
-                <small>Cód. ${a.codigo}</small>
-              </td>
-              <td class="num">${formatM(a.acum_semana)}</td>
-              <td class="num">${formatM(a.acum_mes)}</td>
-              <td class="num">${formatM(a.acum_año)}</td>
-              <td class="num">${getVal(a).f}</td>
-              <td class="pct-cell">
-                <span style="font-size:12px;font-weight:600;color:#4f46e5">${pct}%</span>
-                <div class="bar-bg"><div class="bar-fill" style="width:${barW}%"></div></div>
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-
-  const top8 = sorted.slice(0, 8);
-  const colores = ['#4f46e5','#7c3aed','#2563eb','#0891b2','#059669','#d97706','#dc2626','#9333ea'];
-
-  const ctx1 = document.getElementById('chartBar').getContext('2d');
-  if (chartBar) chartBar.destroy();
-  chartBar = new Chart(ctx1, {
-    type: 'bar',
-    data: {
-      labels: top8.map(a => a.nombre.split(' ').slice(-2).join(' ')),
-      datasets: [{ label: 'Venta neta', data: top8.map(a => getVal(a).v), backgroundColor: colores, borderRadius: 6 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { ticks: { callback: v => formatM(v), font: {size:11} }, grid: { color: '#f3f4f6' } },
-        x: { ticks: { font: {size:10} }, grid: { display: false } }
-      }
-    }
-  });
-
-  const ctx2 = document.getElementById('chartDona').getContext('2d');
-  if (chartDona) chartDona.destroy();
-  chartDona = new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-      labels: top8.map(a => a.nombre.split(' ').slice(-2).join(' ')),
-      datasets: [{ data: top8.map(a => getVal(a).v), backgroundColor: colores, borderWidth: 2, borderColor: '#fff' }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'right', labels: { font: {size:11}, padding: 10, boxWidth: 12 } },
-        tooltip: { callbacks: { label: ctx => ` ${formatM(ctx.raw)} (${((ctx.raw/total)*100).toFixed(1)}%)` } }
-      }
-    }
-  });
+  const t8=a.slice(0,8);
+  charts.b=new Chart(document.getElementById('cB'),{type:'bar',data:{labels:t8.map(x=>x.nombre.split(' ').slice(-2).join(' ')),datasets:[{label:'Venta neta',data:t8.map(x=>x.neto),backgroundColor:COLS,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:10}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+  charts.d=new Chart(document.getElementById('cD'),{type:'doughnut',data:{labels:t8.map(x=>x.nombre.split(' ').slice(-2).join(' ')),datasets:[{data:t8.map(x=>x.neto),backgroundColor:COLS,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8,boxWidth:10}},tooltip:{callbacks:{label:ctx=>` ${fM(ctx.raw)} (${((ctx.raw/tot)*100).toFixed(1)}%)`}}}}});
 }
 
-// Cargar al inicio
-cargarDatos();
+// ── COMPARATIVOS ──
+function rComp(f,c){
+  const mA=f.mes||new Date().getMonth()+1, yA=f.año||2025;
+  const mAnt=mA===1?12:mA-1, yAnt=mA===1?yA-1:yA, yP=yA-1;
+  const ase=f.asesor||'';
+  const s=(d)=>d.reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);
+  const nA=s(fil(rawData,{asesor:ase,año:yA,mes:mA,semana:null}));
+  const nAnt=s(fil(rawData,{asesor:ase,año:yAnt,mes:mAnt,semana:null}));
+  const nAP=s(fil(rawData,{asesor:ase,año:yP,mes:mA,semana:null}));
+  const nYA=s(fil(rawData,{asesor:ase,año:yA,mes:null,semana:null}));
+  const nYP=s(fil(rawData,{asesor:ase,año:yP,mes:null,semana:null}));
+  const c1=pctObj(nA,nAnt),c2=pctObj(nA,nAP),c3=pctObj(nYA,nYP);
 
-// Auto-refresh cada 30 minutos
-setInterval(cargarDatos, 30 * 60 * 1000);
+  const names=[...new Set(rawData.map(r=>(r.asesor_nombre||'').trim()).filter(x=>x&&x!=='JOTA MUNDIAL SAS'))];
+  const comp=names.map(n=>({
+    n:n.split(' ').slice(-2).join(' '),
+    a:s(fil(rawData,{asesor:n,año:yA,mes:mA,semana:null})),
+    ant:s(fil(rawData,{asesor:n,año:yAnt,mes:mAnt,semana:null})),
+    ap:s(fil(rawData,{asesor:n,año:yP,mes:mA,semana:null}))
+  })).filter(x=>x.a>0||x.ant>0).sort((a,b)=>b.a-a.a);
+
+  c.innerHTML=`
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-label">${MESES[mA]} ${yA}</div><div class="kpi-value">${fM(nA)}</div><div class="kpi-sub">${fCOP(nA)}</div><div class="kpi-change ${c1.c}">${c1.t} vs ${MESES[mAnt]}</div></div>
+      <div class="kpi amber"><div class="kpi-label">${MESES[mAnt]} ${yAnt}</div><div class="kpi-value">${fM(nAnt)}</div><div class="kpi-sub">Mes anterior</div></div>
+      <div class="kpi teal"><div class="kpi-label">${MESES[mA]} ${yP}</div><div class="kpi-value">${fM(nAP)}</div><div class="kpi-sub">Mismo mes año pasado</div><div class="kpi-change ${c2.c}">${c2.t} interanual</div></div>
+      <div class="kpi green"><div class="kpi-label">Año ${yA}</div><div class="kpi-value">${fM(nYA)}</div><div class="kpi-sub">${fCOP(nYA)}</div><div class="kpi-change ${c3.c}">${c3.t} vs ${yP}</div></div>
+      <div class="kpi red"><div class="kpi-label">Año ${yP}</div><div class="kpi-value">${fM(nYP)}</div><div class="kpi-sub">Año anterior</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="card-title">${MESES[mA]} ${yA} vs ${MESES[mAnt]} ${yAnt}</div><div class="chart-wrap h300"><canvas id="cC1"></canvas></div></div>
+      <div class="card"><div class="card-title">${MESES[mA]} ${yA} vs ${MESES[mA]} ${yP}</div><div class="chart-wrap h300"><canvas id="cC2"></canvas></div></div>
+    </div>
+    <div class="card"><div class="card-title">Tabla comparativa</div><div class="table-wrap"><table>
+      <thead><tr><th>Asesor</th><th class="num">${MESES[mA]} ${yA}</th><th class="num">${MESES[mAnt]} ${yAnt}</th><th class="num">Var.</th><th class="num">${MESES[mA]} ${yP}</th><th class="num">Var. interanual</th></tr></thead>
+      <tbody>${comp.map(x=>`<tr><td><strong>${x.n}</strong></td><td class="num">${fM(x.a)}</td><td class="num">${fM(x.ant)}</td><td class="num">${pctHtml(x.a,x.ant)}</td><td class="num">${fM(x.ap)}</td><td class="num">${pctHtml(x.a,x.ap)}</td></tr>`).join('')}</tbody>
+    </table></div></div>`;
+
+  charts.c1=new Chart(document.getElementById('cC1'),{type:'bar',data:{labels:comp.map(x=>x.n),datasets:[{label:`${MESES[mA]} ${yA}`,data:comp.map(x=>x.a),backgroundColor:'#4f46e5',borderRadius:4},{label:`${MESES[mAnt]} ${yAnt}`,data:comp.map(x=>x.ant),backgroundColor:'#a5b4fc',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:8}},grid:{display:false}}}}});
+  charts.c2=new Chart(document.getElementById('cC2'),{type:'bar',data:{labels:comp.map(x=>x.n),datasets:[{label:`${MESES[mA]} ${yA}`,data:comp.map(x=>x.a),backgroundColor:'#0891b2',borderRadius:4},{label:`${MESES[mA]} ${yP}`,data:comp.map(x=>x.ap),backgroundColor:'#a5f3fc',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:8}},grid:{display:false}}}}});
+}
+
+// ── TENDENCIA ──
+function rTend(d,f,c){
+  const ase=f.asesor||'';
+  const base=ase?rawData.filter(r=>(r.asesor_nombre||'').trim()===ase):rawData;
+  const pm={};
+  base.forEach(r=>{const k=`${r.año}-${String(r.mes).padStart(2,'0')}`;if(!pm[k])pm[k]={l:`${MESES[r.mes]} ${r.año}`,n:0,f:0};pm[k].n+=parseFloat(r.venta_neta||0);pm[k].f+=parseInt(r.num_facturas||0);});
+  const mk=Object.keys(pm).sort();
+
+  const ps={};
+  base.filter(r=>parseInt(r.año)===2025).forEach(r=>{const k=`${r.año}-${String(r.semana).padStart(2,'0')}`;if(!ps[k])ps[k]={l:`S${r.semana}`,n:0};ps[k].n+=parseFloat(r.venta_neta||0);});
+  const sk=Object.keys(ps).sort().slice(-16);
+
+  const top5=agA(d).slice(0,5);
+  const td={};
+  top5.forEach(a=>{td[a.nombre]=mk.map(k=>{const[y,m]=k.split('-').map(Number);return base.filter(r=>(r.asesor_nombre||'').trim()===a.nombre&&parseInt(r.año)===y&&parseInt(r.mes)===m).reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);});});
+
+  c.innerHTML=`
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Venta neta mensual</div><div class="chart-wrap h260"><canvas id="cTM"></canvas></div></div>
+      <div class="card"><div class="card-title">Facturas por mes</div><div class="chart-wrap h260"><canvas id="cTF"></canvas></div></div>
+    </div>
+    <div class="card"><div class="card-title">Tendencia semanal 2025</div><div class="chart-wrap h200"><canvas id="cTS"></canvas></div></div>
+    <div class="card"><div class="card-title">Tendencia mensual — top 5 asesores</div><div class="chart-wrap h300"><canvas id="cTA"></canvas></div></div>`;
+
+  charts.tm=new Chart(document.getElementById('cTM'),{type:'line',data:{labels:mk.map(k=>pm[k].l),datasets:[{label:'Venta neta',data:mk.map(k=>pm[k].n),borderColor:'#4f46e5',backgroundColor:'rgba(79,70,229,0.07)',fill:true,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}}}});
+  charts.tf=new Chart(document.getElementById('cTF'),{type:'bar',data:{labels:mk.map(k=>pm[k].l),datasets:[{label:'Facturas',data:mk.map(k=>pm[k].f),backgroundColor:'#0891b2',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}}}});
+  charts.ts=new Chart(document.getElementById('cTS'),{type:'line',data:{labels:sk.map(k=>ps[k].l),datasets:[{label:'Venta neta',data:sk.map(k=>ps[k].n),borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.07)',fill:true,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+  charts.ta=new Chart(document.getElementById('cTA'),{type:'line',data:{labels:mk.map(k=>pm[k].l),datasets:top5.map((a,i)=>({label:a.nombre.split(' ').slice(-2).join(' '),data:td[a.nombre],borderColor:COLS[i],backgroundColor:'transparent',tension:0.3,pointRadius:3,borderWidth:2}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10}}},scales:{y:{ticks:{callback:v=>fM(v),font:{size:9}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}}}});
+}
+
+// ── RANKING ──
+function rRank(d,f,c){
+  const a=agA(d), tot=a.reduce((s,x)=>s+x.neto,0);
+  const mA=f.mes||new Date().getMonth()+1, yA=f.año||2025;
+  const mAnt=mA===1?12:mA-1, yAnt=mA===1?yA-1:yA;
+  const prev=agA(fil(rawData,{asesor:'',año:yAnt,mes:mAnt,semana:null}));
+  const pp={};prev.forEach((x,i)=>pp[x.codigo]=i+1);
+
+  c.innerHTML=`<div class="card"><div class="card-title">🏆 Ranking completo</div><div class="table-wrap"><table>
+    <thead><tr><th>Pos</th><th>Mov</th><th>Asesor</th><th class="num">Venta neta</th><th class="num">Bruta</th><th class="num">Facturas</th><th class="num">Ticket</th><th class="num">%</th><th>Barra</th></tr></thead>
+    <tbody>${a.map((x,i)=>{
+      const p=tot>0?((x.neto/tot)*100).toFixed(1):0,bw=a[0].neto>0?Math.round((x.neto/a[0].neto)*100):0;
+      const pos=i+1,prev2=pp[x.codigo];
+      let mov='<span class="neutral2">—</span>';
+      if(prev2){const d2=prev2-pos;mov=d2>0?`<span class="up">▲${d2}</span>`:d2<0?`<span class="down">▼${Math.abs(d2)}</span>`:'<span class="neutral2">=</span>';}
+      const ic=['🥇','🥈','🥉'];
+      return`<tr><td style="font-weight:700;color:#4f46e5">${ic[i]||pos}</td><td style="font-size:11px">${mov}</td><td><strong>${x.nombre}</strong><br><small style="color:#9ca3af">${x.codigo}</small></td><td class="num"><strong>${fM(x.neto)}</strong></td><td class="num">${fM(x.bruto)}</td><td class="num">${x.facturas}</td><td class="num">${fM(x.facturas>0?x.neto/x.facturas:0)}</td><td class="num" style="font-weight:700;color:#4f46e5">${p}%</td><td style="min-width:70px"><div class="bar-bg"><div class="bar-fill" style="width:${bw}%"></div></div></td></tr>`;
+    }).join('')}</tbody>
+  </table></div></div>`;
+}
+
+cargarDatos();
+setInterval(cargarDatos,30*60*1000);
 </script>
 </body>
 </html>

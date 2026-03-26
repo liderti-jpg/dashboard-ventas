@@ -139,22 +139,11 @@ async function cargarDatos() {
   document.getElementById('conn-text').textContent = 'Consultando SIESA...';
 
   try {
-    // Página 1
-    const r1 = await fetch(`${WEBHOOK_URL}?pagina=1`);
+    const r1 = await fetch(WEBHOOK_URL);
     if (!r1.ok) throw new Error(`HTTP ${r1.status}`);
     const d1 = await r1.json();
     const detalle = d1.detalle || d1;
-    let todos = [...(detalle.Datos || [])];
-    const totalPags = detalle.total_páginas || 1;
-
-    // Páginas restantes
-    for (let p = 2; p <= totalPags; p++) {
-      document.getElementById('content').innerHTML = `<div class="loading">⏳ Cargando página ${p} de ${totalPags}...</div>`;
-      const rp = await fetch(`${WEBHOOK_URL}?pagina=${p}`);
-      const dp = await rp.json();
-      const det = dp.detalle || dp;
-      todos = todos.concat(det.Datos || []);
-    }
+    const todos = detalle.Datos || [];
 
     globalData = procesarDatos(todos);
     renderAll(globalData);

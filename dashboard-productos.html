@@ -238,6 +238,14 @@ tr:hover td{background:var(--blue3)}
       </div>
       <div class="fg"><label>Desde</label><input type="date" id="fd"></div>
       <div class="fg"><label>Hasta</label><input type="date" id="fh"></div>
+      <div class="fg"><label>Estado</label>
+        <select id="festado">
+          <option value="">Todos</option>
+          <option value="Facturado">✅ Facturado</option>
+          <option value="Remisionado">📦 Remisionado</option>
+          <option value="En proceso">⏳ En proceso</option>
+        </select>
+      </div>
       <div class="fg"><label>Top N</label>
         <select id="ftop">
           <option value="10">Top 10</option>
@@ -284,8 +292,15 @@ const fQ=v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':Math.rou
 const pct=(a,b)=>b===0?null:((a-b)/b*100).toFixed(1);
 const pHtml=(a,b)=>{const p=pct(a,b);if(!p)return'<span class="tag neutral">—</span>';const u=parseFloat(p)>=0;return`<span class="tag ${u?'up':'down'}">${u?'▲':'▼'} ${Math.abs(p)}%</span>`};
 const pObj=(a,b)=>{const p=pct(a,b);if(!p)return{t:'—',c:'neutral'};const u=parseFloat(p)>=0;return{t:(u?'▲ +':'▼ ')+p+'%',c:u?'up':'down'}};
-const metVal=(r)=>metrica==='cantidad'?parseFloat(r.cantidad||0):parseFloat(r.venta_neta||0);
-const metLbl=()=>metrica==='cantidad'?'Cantidad':'Venta Neta';
+// Cantidad correcta según estado: Facturado=cantidad_facturada, otros=cantidad_pedida
+const cantR=(r)=>r.estado==='Facturado'?parseFloat(r.cantidad_facturada||0):parseFloat(r.cantidad_pedida||0);
+// Valor: solo usar si está facturado para ventas reales
+const netR=(r)=>r.estado==='Facturado'?parseFloat(r.venta_neta||0):0;
+const brutR=(r)=>r.estado==='Facturado'?parseFloat(r.venta_bruta||0):0;
+// Para "por salir" (remisionado+en proceso)
+const netPend=(r)=>r.estado!=='Facturado'?parseFloat(r.venta_neta||0):0;
+const metVal=(r)=>metrica==='cantidad'?cantR(r):netR(r);
+const metLbl=()=>metrica==='cantidad'?'Cantidad facturada':'Venta Neta';
 const metFmt=(v)=>metrica==='cantidad'?fQ(v)+' und':fCOP(v);
 const metFmtM=(v)=>metrica==='cantidad'?fQ(v):fM(v);
 
@@ -332,11 +347,12 @@ async function cargar(){
 }
 
 // FILTROS
-function gF(){return{cat:document.getElementById('fcat').value,tipo:document.getElementById('ftipo').value,año:parseInt(document.getElementById('fy').value)||null,mes:parseInt(document.getElementById('fm').value)||null,desde:document.getElementById('fd').value,hasta:document.getElementById('fh').value,top:parseInt(document.getElementById('ftop').value)}}
+function gF(){return{cat:document.getElementById('fcat').value,tipo:document.getElementById('ftipo').value,estado:document.getElementById('festado').value,año:parseInt(document.getElementById('fy').value)||null,mes:parseInt(document.getElementById('fm').value)||null,desde:document.getElementById('fd').value,hasta:document.getElementById('fh').value,top:parseInt(document.getElementById('ftop').value)}}
 function fil(data,f){
   return data.filter(r=>{
     if(f.cat&&r.categoria!==f.cat)return false;
     if(f.tipo&&!r.tipo_inventario.includes(f.tipo))return false;
+    if(f.estado&&r.estado!==f.estado)return false;
     if(f.desde||f.hasta){
       const fR=r.fecha||`${r.año}-${String(r.mes).padStart(2,'0')}-15`;
       if(f.desde&&fR<f.desde)return false;
@@ -349,20 +365,22 @@ function fil(data,f){
   });
 }
 function ap(){dC();const f=gF(),d=fil(raw,f);render(d,f)}
-function rst(){['fcat','ftipo','fm','fd','fh'].forEach(id=>document.getElementById(id).value='');document.getElementById('fy').value='2026';document.getElementById('ftop').value='10';ap()}
+function rst(){['fcat','ftipo','festado','fm','fd','fh'].forEach(id=>document.getElementById(id).value='');document.getElementById('fy').value='2026';document.getElementById('ftop').value='10';ap()}
 function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');const lbl={r:'Resumen',k:'Ranking',cat:'Por Categoría',t:'Tendencia',c:'Comparativo',p:'Predicción'};document.getElementById('bcVista').textContent=lbl[v]||v;ap()}
 function setMetric(m,el){metrica=m;document.querySelectorAll('.msb').forEach(b=>b.classList.remove('active'));el.classList.add('active');ap()}
 function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
 
-// AGG por producto
+// AGG por producto — usa cantidad_facturada para Facturado, cantidad_pedida para otros
 function agP(data,top){
   const m={};
   data.forEach(r=>{
     const k=r.referencia;
-    if(!m[k])m[k]={ref:k,desc:r.descripcion,cat:r.categoria,tipo:r.tipo_inventario,neto:0,bruto:0,cant:0};
-    m[k].neto+=parseFloat(r.venta_neta||0);
-    m[k].bruto+=parseFloat(r.venta_bruta||0);
-    m[k].cant+=parseFloat(r.cantidad||0);
+    if(!m[k])m[k]={ref:k,desc:r.descripcion,cat:r.categoria,tipo:r.tipo_inventario,neto:0,bruto:0,cant:0,cantPend:0,netoPend:0};
+    m[k].neto+=netR(r);
+    m[k].bruto+=brutR(r);
+    m[k].cant+=cantR(r);
+    m[k].cantPend+=r.estado!=='Facturado'?parseFloat(r.cantidad_pedida||0):0;
+    m[k].netoPend+=netPend(r);
   });
   let arr=Object.values(m).sort((a,b)=>metrica==='cantidad'?b.cant-a.cant:b.neto-a.neto);
   if(top>0)arr=arr.slice(0,top);
@@ -374,10 +392,12 @@ function agCat(data){
   const m={};
   data.forEach(r=>{
     const k=r.categoria;
-    if(!m[k])m[k]={cat:k,tipo:r.tipo_inventario,neto:0,bruto:0,cant:0,prods:new Set()};
-    m[k].neto+=parseFloat(r.venta_neta||0);
-    m[k].bruto+=parseFloat(r.venta_bruta||0);
-    m[k].cant+=parseFloat(r.cantidad||0);
+    if(!m[k])m[k]={cat:k,tipo:r.tipo_inventario,neto:0,bruto:0,cant:0,cantPend:0,netoPend:0,prods:new Set()};
+    m[k].neto+=netR(r);
+    m[k].bruto+=brutR(r);
+    m[k].cant+=cantR(r);
+    m[k].cantPend+=r.estado!=='Facturado'?parseFloat(r.cantidad_pedida||0):0;
+    m[k].netoPend+=netPend(r);
     m[k].prods.add(r.referencia);
   });
   return Object.values(m).map(x=>({...x,prods:x.prods.size})).sort((a,b)=>metrica==='cantidad'?b.cant-a.cant:b.neto-a.neto);
@@ -410,25 +430,28 @@ function vR(d,f,c){
   const prods=agP(d,0);
   const tot=prods.reduce((s,x)=>s+x.neto,0);
   const totC=prods.reduce((s,x)=>s+x.cant,0);
-  const totB=prods.reduce((s,x)=>s+x.bruto,0);
+  const totPend=prods.reduce((s,x)=>s+x.netoPend,0);
+  const totCPend=prods.reduce((s,x)=>s+x.cantPend,0);
   const cats=agCat(d);
   const top1=prods[0];
   const catTop=cats[0];
   const imp=prods.filter(x=>x.tipo.includes('IMPORTADA'));
   const totImp=imp.reduce((s,x)=>s+x.neto,0);
 
+  // Solo facturado para comparativo
+  const dFact=d.filter(r=>r.estado==='Facturado');
   let prev=[],pL='';
-  if(f.mes&&f.año){const pm=f.mes===1?12:f.mes-1,pa=f.mes===1?f.año-1:f.año;prev=fil(raw,{...f,mes:pm,año:pa,desde:'',hasta:''});pL=`${MN[pm]} ${pa}`}
-  else if(f.año){prev=fil(raw,{...f,año:f.año-1,desde:'',hasta:''});pL=`${f.año-1}`}
-  const pT=prev.reduce((s,r)=>s+parseFloat(r.venta_neta||0),0);
+  if(f.mes&&f.año){const pm=f.mes===1?12:f.mes-1,pa=f.mes===1?f.año-1:f.año;prev=fil(raw,{...f,estado:'Facturado',mes:pm,año:pa,desde:'',hasta:''});pL=`${MN[pm]} ${pa}`}
+  else if(f.año){prev=fil(raw,{...f,estado:'Facturado',año:f.año-1,desde:'',hasta:''});pL=`${f.año-1}`}
+  const pT=agP(prev,0).reduce((s,x)=>s+x.neto,0);
   const cam=pObj(tot,pT);
 
   const kps=[
-    {icon:'💰',label:'Venta Neta Total',value:fCOP(tot),sub:pLbl(f),change:pT>0?cam.t:'',cc:cam.c},
-    {icon:'📦',label:'Unidades Vendidas',value:fQ(totC)+' und',sub:pLbl(f)},
+    {icon:'✅',label:'Venta Neta Facturada',value:fCOP(tot),sub:pLbl(f),change:pT>0?cam.t:'',cc:cam.c},
+    {icon:'📦',label:'Unidades Facturadas',value:fQ(totC)+' und',sub:pLbl(f)},
+    {icon:'⏳',label:'Por Facturar (rem.+proc.)',value:fCOP(totPend),sub:fQ(totCPend)+' und pendientes'},
     {icon:'🏆',label:'Producto Líder',value:top1?top1.desc.substring(0,22)+'…':'—',sub:top1?fCOP(top1.neto):''},
-    {icon:'🗂️',label:'Categoría Líder',value:catTop?catTop.cat.substring(0,20):'—',sub:catTop?fCOP(catTop.neto):''},
-    {icon:'✈️',label:'Venta Importados',value:fCOP(totImp),sub:tot>0?((totImp/tot)*100).toFixed(1)+'% del total':''},
+    {icon:'✈️',label:'Venta Importados',value:fCOP(totImp),sub:tot>0?((totImp/tot)*100).toFixed(1)+'% del total'},
     {icon:'📊',label:'vs Período Ant.',value:pT>0?cam.t:'—',sub:pT>0?`${pL}: ${fCOP(pT)}`:'Sin período ant.',cc:cam.c}
   ];
   const kj=JSON.stringify(kps).replace(/'/g,"\\'");
@@ -448,6 +471,15 @@ function vR(d,f,c){
           ${k.change?`<div class="kpi-ch ${k.cc}">${k.change} vs ${pL}</div>`:''}
         </div>`).join('')}
     </div>
+    ${totPend>0?`
+    <div style="background:linear-gradient(135deg,#FFF8E7,#fff);border:1.5px solid #D4A017;border-radius:var(--r);padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <span style="font-size:20px">⏳</span>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#856404;text-transform:uppercase;letter-spacing:.8px">Pendiente por facturar</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px">Hay <strong style="color:var(--gold)">${fCOP(totPend)}</strong> en pedidos remisionados o en proceso — <strong>${fQ(totCPend)} unidades</strong> por salir</div>
+      </div>
+      <button onclick="document.getElementById('festado').value='Remisionado';ap()" style="margin-left:auto;background:var(--gold);color:#fff;border:none;border-radius:var(--rs);padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Ver remisionados →</button>
+    </div>`:''}
     <div class="g2">
       <div class="card"><div class="ct">Top 8 productos — ${metLbl()} <span class="ct-line"></span></div><div class="cw h260"><canvas id="cTP"></canvas></div></div>
       <div class="card"><div class="ct">Venta por categoría <span class="ct-line"></span></div><div class="cw h260"><canvas id="cCat"></canvas></div></div>
@@ -457,7 +489,7 @@ function vR(d,f,c){
       <div class="card"><div class="ct">Top 5 categorías <span class="ct-line"></span>
         <span class="tag tag-blue">${pLbl(f)}</span>
       </div>
-        <div class="tw"><table><thead><tr><th>#</th><th>Categoría</th><th class="num">${metLbl()}</th><th>Part.%</th></tr></thead><tbody>
+        <div class="tw"><table><thead><tr><th>#</th><th>Categoría</th><th class="num">${metLbl()}</th><th class="num">Por salir</th><th>Part.%</th></tr></thead><tbody>
           ${cats.slice(0,5).map((x,i)=>{
             const v=metrica==='cantidad'?x.cant:x.neto;
             const vT=metrica==='cantidad'?cats.reduce((s,c)=>s+c.cant,0):tot;
@@ -469,6 +501,7 @@ function vR(d,f,c){
                 <span class="tag ${x.tipo.includes('IMPORTADA')?'tag-imp':'tag-nac'}" style="margin-top:3px;display:inline-flex">${x.tipo.includes('IMPORTADA')?'Importado':'Nacional'}</span>
               </td>
               <td class="num" style="color:var(--navy2);font-weight:700">${metrica==='cantidad'?fQ(x.cant)+' und':fCOP(x.neto)}</td>
+              <td class="num" style="color:var(--gold);font-weight:600">${metrica==='cantidad'?fQ(x.cantPend)+' und':fCOP(x.netoPend)}</td>
               <td style="min-width:70px"><span class="tag tag-blue">${p}%</span><div class="bb"><div class="bf" style="width:${bw}%"></div></div></td>
             </tr>`;
           }).join('')}

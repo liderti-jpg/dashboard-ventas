@@ -327,13 +327,28 @@ document.addEventListener('keydown',e=>{if(!document.getElementById('kpiMo').cla
 // CARGA
 async function cargar(){
   const btn=document.getElementById('br');btn.disabled=true;btn.textContent='⏳';
-  document.getElementById('ct').innerHTML='<div class="loading"><div class="ls"></div>Consultando SIESA…</div>';
+  document.getElementById('ct').innerHTML='<div class="loading"><div class="ls"></div>Conectando con SIESA…<br><small style="color:var(--text4);margin-top:8px;display:block">Cargando productos, esto puede tomar unos segundos</small></div>';
   try{
-    const r=await fetch(WH);if(!r.ok)throw new Error('HTTP '+r.status);
-    const j=await r.json();
-    raw=(j.detalle||j).Datos||[];
-    // Limpiar espacios en referencias
-    raw=raw.map(r=>({...r,referencia:(r.referencia||'').trim(),descripcion:(r.descripcion||'').trim(),categoria:(r.categoria||'Sin categoría').trim(),tipo_inventario:(r.tipo_inventario||'').trim()}));
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),90000); // 90s timeout
+    const r=await fetch(WH,{signal:ctrl.signal});
+    clearTimeout(timer);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    document.getElementById('ct').innerHTML='<div class="loading"><div class="ls"></div>Procesando datos…</div>';
+    const txt=await r.text();
+    let j;
+    try{j=JSON.parse(txt)}catch(e){throw new Error('Respuesta inválida del servidor')}
+    // Soportar respuesta directa o anidada en detalle
+    const datos=(j.detalle?.Datos)||(j.Datos)||j||[];
+    raw=Array.isArray(datos)?datos:[];
+    if(!raw.length)throw new Error('Sin datos — verifica que el workflow n8n esté activo y Connekta responda');
+    // Limpiar espacios
+    raw=raw.map(r=>({...r,
+      referencia:(r.referencia||'').trim(),
+      descripcion:(r.descripcion||'').trim(),
+      categoria:(r.categoria||'Sin categoría').trim(),
+      tipo_inventario:(r.tipo_inventario||'').trim()
+    }));
     // Poblar filtro de categorías
     const cats=[...new Set(raw.map(r=>r.categoria).filter(Boolean))].sort();
     const sel=document.getElementById('fcat');
@@ -342,7 +357,8 @@ async function cargar(){
     document.getElementById('bl').style.display='flex';
     ap();
   }catch(e){
-    document.getElementById('ct').innerHTML=`<div class="err">❌ Error: ${e.message}</div>`;
+    const msg=e.name==='AbortError'?'Tiempo de espera agotado — el servidor tardó más de 90s. Intenta de nuevo.':e.message;
+    document.getElementById('ct').innerHTML=`<div class="err">❌ ${msg}<br><small style="margin-top:6px;display:block">Verifica que el workflow n8n "ventas-productos" esté activo.</small><br><button onclick="cargar()" style="margin-top:10px;background:var(--navy);color:#fff;border:none;border-radius:var(--rs);padding:8px 18px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600">↻ Reintentar</button></div>`;
   }finally{btn.disabled=false;btn.textContent='↻ Actualizar'}
 }
 

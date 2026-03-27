@@ -502,7 +502,7 @@ function vR(d,f,c){
     {icon:'📦',label:'Unidades Facturadas',value:fQ(totC)+' und',sub:pLbl(f)},
     {icon:'⏳',label:'Por Facturar (rem.+proc.)',value:fCOP(totPend),sub:fQ(totCPend)+' und pendientes'},
     {icon:'🏆',label:'Producto Líder',value:top1?top1.desc.substring(0,22)+'…':'—',sub:top1?fCOP(top1.neto):''},
-    {icon:'✈️',label:'Venta Importados',value:fCOP(totImp),sub:tot>0?((totImp/tot)*100).toFixed(1)+'% del total'},
+    {icon:'🌍',label:'Venta Importados',value:fCOP(totImp),sub:tot>0?((totImp/tot)*100).toFixed(1)+'% del total':''},
     {icon:'📊',label:'vs Período Ant.',value:pT>0?cam.t:'—',sub:pT>0?`${pL}: ${fCOP(pT)}`:'Sin período ant.',cc:cam.c}
   ];
   const kj=JSON.stringify(kps).replace(/'/g,"\\'");

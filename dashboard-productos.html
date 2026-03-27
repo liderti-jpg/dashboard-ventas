@@ -236,8 +236,6 @@ tr:hover td{background:var(--blue3)}
           <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
         </select>
       </div>
-      <div class="fg"><label>Desde</label><input type="date" id="fd"></div>
-      <div class="fg"><label>Hasta</label><input type="date" id="fh"></div>
       <div class="fg"><label>Estado</label>
         <select id="festado">
           <option value="">Todos</option>
@@ -398,7 +396,7 @@ async function cargar(){
 }
 
 // FILTROS
-function gF(){return{cat:document.getElementById('fcat').value,tipo:document.getElementById('ftipo').value,estado:document.getElementById('festado').value,año:parseInt(document.getElementById('fy').value)||null,mes:parseInt(document.getElementById('fm').value)||null,desde:document.getElementById('fd').value,hasta:document.getElementById('fh').value,top:parseInt(document.getElementById('ftop').value)}}
+function gF(){return{cat:document.getElementById('fcat').value,tipo:document.getElementById('ftipo').value,estado:document.getElementById('festado').value,año:parseInt(document.getElementById('fy').value)||null,mes:parseInt(document.getElementById('fm').value)||null,desde:'',hasta:'',top:parseInt(document.getElementById('ftop').value)}}
 function fil(data,f){
   return data.filter(r=>{
     if(f.cat&&r.categoria!==f.cat)return false;
@@ -416,7 +414,7 @@ function fil(data,f){
   });
 }
 function ap(){dC();const f=gF(),d=fil(raw,f);render(d,f)}
-function rst(){['fcat','ftipo','festado','fm','fd','fh'].forEach(id=>document.getElementById(id).value='');document.getElementById('fy').value='2026';document.getElementById('ftop').value='10';ap()}
+function rst(){['fcat','ftipo','festado','fm'].forEach(id=>document.getElementById(id).value='');document.getElementById('fy').value='2026';document.getElementById('ftop').value='10';ap()}
 function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');const lbl={r:'Resumen',k:'Ranking',cat:'Por Categoría',t:'Tendencia',c:'Comparativo',p:'Predicción'};document.getElementById('bcVista').textContent=lbl[v]||v;ap()}
 function setMetric(m,el){metrica=m;document.querySelectorAll('.msb').forEach(b=>b.classList.remove('active'));el.classList.add('active');ap()}
 function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
@@ -455,7 +453,6 @@ function agCat(data){
 }
 
 function pLbl(f){
-  if(f.desde&&f.hasta)return`${f.desde} → ${f.hasta}`;
   if(f.mes&&f.año)return`${MF[f.mes]} ${f.año}`;
   if(f.año)return`Año ${f.año}`;
   return'Período completo';

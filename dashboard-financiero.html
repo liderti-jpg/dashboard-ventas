@@ -88,7 +88,9 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .vt:not(.active):hover{background:var(--bg3);color:var(--navy)}
 
 /* ── KPI CARDS ── */
-.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}}
 .kpi{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:15px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--kcol,var(--blue)),var(--navy));opacity:.7}
 .kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow2);border-color:var(--blue2)}

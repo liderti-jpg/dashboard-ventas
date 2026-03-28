@@ -624,20 +624,56 @@ function updateExecBand(fin,finAcum,mes,ano){
 
 // ── RESUMEN ──
 function vR(fin,finAcum,finAnt,mes,ano){
+  // El modo determina qué datos muestran las cards
+  const usaAcum = modoPyG==='acum'||modoPyG==='ambos';
+  const usaMes  = modoPyG==='mes' ||modoPyG==='ambos';
+  const fActivo = usaAcum ? finAcum : fin;  // Balance siempre del período final
+  const fPyG    = usaAcum ? finAcum : fin;  // P&G según modo
+  const fComp   = usaAcum ? finAcum : finAnt; // Comparativo relativo
+  const modoTag = modoPyG==='mes'?`Solo ${MF[mes]}`:modoPyG==='acum'?`Acum. Ene–${MN[mes]} ${ano}`:`${MF[mes]} + Acum.`;
+  const subVal  = (mes_v, acum_v) => usaAcum && !usaMes ? acum_v : usaMes && !usaAcum ? mes_v : `${mes_v} / ${acum_v}`;
+
   const kps=[
-    {icon:'💵',kcol:'#047857',kbg:'#ECFDF5',label:'Ingresos Brutos',value:fCOP(fin.ingBruto),sub:`Acum. ${ano}: ${fCOP(finAcum.ingBruto)}\nDevoluciones: ${fCOP(fin.devol)}`,...pObj(fin.ingBruto,finAnt.ingBruto)},
-    {icon:'💰',kcol:'#047857',kbg:'#D1FAE5',label:'Ingresos Op. Netos',value:fCOP(fin.ingOpNeto),sub:`Acum. ${ano}: ${fCOP(finAcum.ingOpNeto)}`,...pObj(fin.ingOpNeto,finAnt.ingOpNeto)},
-    {icon:'📦',kcol:'#D97706',kbg:'#FFFBEB',label:'Costo de Ventas',value:fCOP(fin.cosTotal),sub:`Ratio: ${fPct(fin.costoRatio)} sobre ingresos`,...pObj(fin.cosTotal,finAnt.cosTotal)},
-    {icon:'🏭',kcol:'#3B6FD4',kbg:'#EAF0FD',label:'Gastos Operacionales',value:fCOP(fin.gastoOp),sub:`Admón: ${fCOP(fin.gastoAdmon)}\nVentas: ${fCOP(fin.gastoVentas)}`,...pObj(fin.gastoOp,finAnt.gastoOp)},
-    {icon:'📈',kcol:fin.utilBruta>=0?'#047857':'#DC2626',kbg:fin.utilBruta>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Bruta',value:fCOP(fin.utilBruta),sub:`Margen: ${fPct(fin.margenBruto)}\nAcum.: ${fCOP(finAcum.utilBruta)}`,...pObj(fin.utilBruta,finAnt.utilBruta)},
-    {icon:'⚡',kcol:fin.utilOp>=0?'#047857':'#DC2626',kbg:fin.utilOp>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Operacional',value:fCOP(fin.utilOp),sub:`Margen op: ${fPct(fin.margenOp)}`,...pObj(fin.utilOp,finAnt.utilOp)},
-    {icon:'🎯',kcol:fin.utilNeta>=0?'#B8860B':'#DC2626',kbg:fin.utilNeta>=0?'#FFF8E7':'#FEF2F2',label:'Utilidad Neta',value:fCOP(fin.utilNeta),sub:`Margen neto: ${fPct(fin.margenNeta)}\nAcum.: ${fCOP(finAcum.utilNeta)}`,...pObj(fin.utilNeta,finAnt.utilNeta)},
-    {icon:'🏦',kcol:'#2E5199',kbg:'#EAF0FD',label:'Activo Total',value:fCOP(fin.activo),sub:`Cte: ${fCOP(fin.actCte)}\nNo cte: ${fCOP(fin.actNoCte)}`},
-    {icon:'💳',kcol:'#DC2626',kbg:'#FEF2F2',label:'Pasivo Total',value:fCOP(fin.pasivo),sub:`Endeud: ${fPct(fin.endeudamiento)}`},
-    {icon:'🏛️',kcol:'#B8860B',kbg:'#FFF8E7',label:'Patrimonio',value:fCOP(fin.patrimonio),sub:`TRM: ${fCOP(trm)}`},
+    {icon:'💵',kcol:'#047857',kbg:'#ECFDF5',label:'Ingresos Brutos',
+      value:fCOP(fPyG.ingBruto),
+      sub:`${modoTag}\nDevoluciones: ${fCOP(fPyG.devol)}`,...pObj(fPyG.ingBruto,finAnt.ingBruto)},
+    {icon:'💰',kcol:'#047857',kbg:'#D1FAE5',label:'Ingresos Op. Netos',
+      value:fCOP(fPyG.ingOpNeto),
+      sub:subVal(`Mes: ${fCOP(fin.ingOpNeto)}`,`Acum: ${fCOP(finAcum.ingOpNeto)}`),...pObj(fPyG.ingOpNeto,finAnt.ingOpNeto)},
+    {icon:'📦',kcol:'#D97706',kbg:'#FFFBEB',label:'Costo de Ventas',
+      value:fCOP(fPyG.cosTotal),
+      sub:`Ratio: ${fPct(fPyG.costoRatio)} sobre ingresos`,...pObj(fPyG.cosTotal,finAnt.cosTotal)},
+    {icon:'🏭',kcol:'#3B6FD4',kbg:'#EAF0FD',label:'Gastos Operacionales',
+      value:fCOP(fPyG.gastoOp),
+      sub:`Admón: ${fCOP(fPyG.gastoAdmon)}\nVentas: ${fCOP(fPyG.gastoVentas)}`,...pObj(fPyG.gastoOp,finAnt.gastoOp)},
+    {icon:'📈',kcol:fPyG.utilBruta>=0?'#047857':'#DC2626',kbg:fPyG.utilBruta>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Bruta',
+      value:fCOP(fPyG.utilBruta),
+      sub:`Margen: ${fPct(fPyG.margenBruto)}\n${subVal(`Mes: ${fCOP(fin.utilBruta)}`,`Acum: ${fCOP(finAcum.utilBruta)})`)}`,...pObj(fPyG.utilBruta,finAnt.utilBruta)},
+    {icon:'⚡',kcol:fPyG.utilOp>=0?'#047857':'#DC2626',kbg:fPyG.utilOp>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Operacional',
+      value:fCOP(fPyG.utilOp),
+      sub:`Margen op: ${fPct(fPyG.margenOp)}`,...pObj(fPyG.utilOp,finAnt.utilOp)},
+    {icon:'🎯',kcol:fPyG.utilNeta>=0?'#B8860B':'#DC2626',kbg:fPyG.utilNeta>=0?'#FFF8E7':'#FEF2F2',label:'Utilidad Neta',
+      value:fCOP(fPyG.utilNeta),
+      sub:`Margen neto: ${fPct(fPyG.margenNeto)}\n${subVal(`Mes: ${fCOP(fin.utilNeta)}`,`Acum: ${fCOP(finAcum.utilNeta)})`)}`,...pObj(fPyG.utilNeta,finAnt.utilNeta)},
+    {icon:'🏦',kcol:'#2E5199',kbg:'#EAF0FD',label:'Activo Total',
+      value:fCOP(fin.activo),
+      sub:`Cte: ${fCOP(fin.actCte)}\nNo cte: ${fCOP(fin.actNoCte)}`},
+    {icon:'💳',kcol:'#DC2626',kbg:'#FEF2F2',label:'Pasivo Total',
+      value:fCOP(fin.pasivo),
+      sub:`Endeud: ${fPct(fin.endeudamiento)}`},
+    {icon:'🏛️',kcol:'#B8860B',kbg:'#FFF8E7',label:'Patrimonio',
+      value:fCOP(fin.patrimonio),
+      sub:`TRM: ${fCOP(trm)}`},
   ];
+  // Etiqueta de modo visible en el resumen
+  const modoIndicador=`<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
+    <span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px">Vista:</span>
+    <span class="tag tag-blue">${modoTag}</span>
+    <span style="font-size:10px;color:var(--text3)">— Cambia con el selector de arriba</span>
+  </div>`;
   const kj=JSON.stringify(kps);
   document.getElementById('ct').innerHTML=`
+  ${modoIndicador}
   <div class="kpis">${kps.map((k,i)=>`<div class="kpi" style="--kcol:${k.kcol};--kbg:${k.kbg}" onclick='openMo(${JSON.stringify(kps)},${i})'>
     <div class="kpi-ic" style="background:${k.kbg}">${k.icon}</div>
     <div class="kpi-lbl">${k.label}</div>
@@ -658,14 +694,14 @@ function vR(fin,finAcum,finAnt,mes,ano){
   const c1=document.getElementById('cICG');
   ch.icg=new Chart(c1,{type:'bar',data:{
     labels:['Ing. Brutos','Ing. Op. Netos','Costos','G. Admón','G. Ventas','Ing. No Op'],
-    datasets:[{data:[fin.ingBruto,fin.ingOpNeto,fin.cosTotal,fin.gastoAdmon,fin.gastoVentas,fin.ingNoOp],
+    datasets:[{data:[fPyG.ingBruto,fPyG.ingOpNeto,fPyG.cosTotal,fPyG.gastoAdmon,fPyG.gastoVentas,fPyG.ingNoOp],
       backgroundColor:['rgba(4,120,87,.75)','rgba(4,120,87,.9)','rgba(220,38,38,.8)','rgba(59,111,212,.8)','rgba(91,143,232,.8)','rgba(184,134,11,.8)'],
       borderRadius:8,borderSkipped:false,borderWidth:0}]
   },options:tOpts()});
 
   ch.util=new Chart(document.getElementById('cUTIL'),{type:'bar',data:{
     labels:['Ing.Op','–Costo','=Ut.Bruta','–G.Op','=Ut.Op','ING NoOp','–G.NoOp','=Ut.Neta'],
-    datasets:[{data:[fin.ingOpNeto,-fin.cosTotal,fin.utilBruta,-fin.gastoOp,fin.utilOp,fin.ingNoOp,-fin.gastoNoOp,fin.utilNeta],
+    datasets:[{data:[fPyG.ingOpNeto,-fPyG.cosTotal,fPyG.utilBruta,-fPyG.gastoOp,fPyG.utilOp,fPyG.ingNoOp,-fPyG.gastoNoOp,fPyG.utilNeta],
       backgroundColor:ctx=>ctx.raw>=0?'rgba(4,120,87,.8)':'rgba(220,38,38,.8)',
       borderRadius:7,borderSkipped:false,borderWidth:0}]
   },options:tOpts()});

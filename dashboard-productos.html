@@ -246,8 +246,9 @@ const pHtml=(a,b)=>{const p=pct(a,b);if(!p)return'<span class="tag neutral">—<
 const pObj=(a,b)=>{const p=pct(a,b);if(!p)return{t:'—',c:'neutral'};const u=parseFloat(p)>=0;return{t:(u?'▲ +':'▼ ')+p+'%',c:u?'up':'down'}};
 
 // ── Helpers adaptados a la nueva fuente t470 ──────────────────────────────
-// El query ya consolidó todo: cantidad, venta_bruta, venta_neta son netos
-// (ventas menos devoluciones). No hay estados ni cantidades separadas.
+// El query agrupa por naturaleza: Facturado=venta, Nota/Devolución=resta
+// cantidad, venta_bruta, venta_neta ya vienen con signo correcto desde el query
+// (CASE naturaleza=2 THEN valor ELSE -valor END) — se suman directamente.
 const cantR=(r)=>parseFloat(r.cantidad||0);
 const netR=(r)=>parseFloat(r.venta_neta||0);
 const brutR=(r)=>parseFloat(r.venta_bruta||0);

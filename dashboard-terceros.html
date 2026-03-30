@@ -185,7 +185,7 @@ const WH_R='https://jotamundial2.app.n8n.cloud/webhook/ventas-ranking-clientes';
 const MN=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MF=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const CL=['#1A3A6E','#3B6FD4','#0A7A5A','#B8860B','#6B21A8','#C0392B','#0E6655','#D4851A','#1A5276','#6C3483','#148F77','#A04000'];
-let rawN=[],rawR=[],vista='r',ch={};
+let rawN=[],rawR=[],vista='r',ch={},dnActual=[],drActual=[];
 
 const fCOP=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
 const fM=v=>{if(v<0)return'-'+fM(-v);if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'MM';if(v>=1e6)return'$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString('es-CO')};
@@ -256,7 +256,7 @@ function filR(data,f){
   });
 }
 
-function ap(){dC();const f=gF();const dn=filN(rawN,f);const dr=filR(rawR,f);render(dn,dr,f)}
+function ap(){dC();const f=gF();const dn=filN(rawN,f);const dr=filR(rawR,f);dnActual=dn;drActual=dr;render(dn,dr,f)}
 function rst(){document.getElementById('fy').value='2026';['fm','ftipo'].forEach(id=>document.getElementById(id).value='');document.getElementById('ftop').value='10';ap()}
 function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');const lbl={r:'Resumen',n:'Clientes Nuevos',k:'Ranking Mes',h:'Ranking Histórico',t:'Tendencia',c:'Comparativo',b:'Historial Cliente'};document.getElementById('bcVista').textContent=lbl[v]||v;ap()}
 function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
@@ -330,12 +330,12 @@ function vR(dn,dr,f,c){
 
   c.innerHTML=`
     <div class="kpis">
-      <div class="kpi" onclick="kpiPanel('todos',dn)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">🆕</div><div class="kpi-lbl">Clientes Nuevos</div><div class="kpi-val">${fQ(totNuevos)}</div><div class="kpi-sub">${pLbl(f)}</div>${pL?`<div class="kpi-ch ${camN.c}">${camN.t} vs ${pL}</div>`:''}</div>
-      <div class="kpi" onclick="kpiPanel('nat',dn)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">👤</div><div class="kpi-lbl">Personas Naturales</div><div class="kpi-val">${fQ(natNuevos)}</div><div class="kpi-sub">${totNuevos>0?((natNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
-      <div class="kpi" onclick="kpiPanel('emp',dn)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">🏢</div><div class="kpi-lbl">Empresas</div><div class="kpi-val">${fQ(empNuevos)}</div><div class="kpi-sub">${totNuevos>0?((empNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
+      <div class="kpi" onclick="kpiPanel('todos')" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">🆕</div><div class="kpi-lbl">Clientes Nuevos</div><div class="kpi-val">${fQ(totNuevos)}</div><div class="kpi-sub">${pLbl(f)}</div>${pL?`<div class="kpi-ch ${camN.c}">${camN.t} vs ${pL}</div>`:''}</div>
+      <div class="kpi" onclick="kpiPanel('nat')" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">👤</div><div class="kpi-lbl">Personas Naturales</div><div class="kpi-val">${fQ(natNuevos)}</div><div class="kpi-sub">${totNuevos>0?((natNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
+      <div class="kpi" onclick="kpiPanel('emp')" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">🏢</div><div class="kpi-lbl">Empresas</div><div class="kpi-val">${fQ(empNuevos)}</div><div class="kpi-sub">${totNuevos>0?((empNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
       <div class="kpi"><div class="kpi-ic">💰</div><div class="kpi-lbl">Venta Neta (periodo)</div><div class="kpi-val">${fM(totVentaN)}</div><div class="kpi-sub">Bruta: ${fM(totVentaB)}</div></div>
       <div class="kpi"><div class="kpi-ic">🏆</div><div class="kpi-lbl">Cliente Top</div><div class="kpi-val" style="font-size:13px">${topCliente?topCliente.razon_social.substring(0,24):'—'}</div><div class="kpi-sub">${topCliente?fCOP(parseFloat(topCliente.venta_neta)):''}</div></div>
-      <div class="kpi" onclick="kpiPanel('compro',dn,dr)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">⚡</div><div class="kpi-lbl">Nuevos que compraron</div><div class="kpi-val">${fQ(compraronMismoMes)}</div><div class="kpi-sub">En su mes de registro</div></div>
+      <div class="kpi" onclick="kpiPanel('compro')" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">⚡</div><div class="kpi-lbl">Nuevos que compraron</div><div class="kpi-val">${fQ(compraronMismoMes)}</div><div class="kpi-sub">En su mes de registro</div></div>
     </div>
     <div id="kpiPanelBox" style="display:none;margin-bottom:16px"></div>
     <div class="g2">
@@ -638,12 +638,12 @@ function vCmp(f,c){
 
 // ══ PANEL EXPANDIBLE KPI ═════════════════════
 let kpiPanelActivo=null;
-function kpiPanel(tipo,dn,dr){
+function kpiPanel(tipo){const dn=dnActual;const dr=drActual;
   const box=document.getElementById('kpiPanelBox');
   if(!box)return;
 
   // Toggle: si ya está abierto el mismo, cerrar
-  if(kpiPanelActivo===tipo){
+  if(kpiPanelActivo===tipo&&tipo!==null){
     box.style.display='none';
     box.innerHTML='';
     kpiPanelActivo=null;

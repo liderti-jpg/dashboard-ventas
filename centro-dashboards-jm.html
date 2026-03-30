@@ -232,11 +232,51 @@ footer{
 .foot-tag{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2)}
 
 @media(max-width:768px){
-  header,main,.stats-bar,.hero{padding-left:18px;padding-right:18px}
-  .hero{padding-top:36px;padding-bottom:56px}
-  .stats-bar{gap:20px;flex-wrap:wrap}
+  /* Header */
+  header{padding:0 16px;height:60px}
+  .hdiv,.htag{display:none}
+  .logo-sb{display:none}
+  .hlogo img{height:36px}
+  #hclock{display:none}
+  .live-badge{padding:4px 10px;font-size:9px}
+
+  /* Hero */
+  .hero{padding:40px 18px 60px;min-height:280px}
+  h1.hero-title{font-size:28px}
+  .hero-sub{font-size:13px;margin-bottom:20px}
+  .hero-eyebrow{font-size:9px}
+  .hero-pills{gap:6px}
+  .pill{padding:5px 10px;font-size:9px}
+
+  /* Stats bar */
+  .stats-bar{padding:14px 18px;gap:0;display:grid;grid-template-columns:1fr 1fr;row-gap:14px}
   .sdiv{display:none}
-  footer{padding:16px 18px}
+  .stat-val{font-size:15px}
+  .stat-lbl{font-size:9px}
+
+  /* Main */
+  main{padding:24px 16px 48px}
+  .sec-label{font-size:9px}
+  .cards{grid-template-columns:1fr;gap:16px}
+
+  /* Cards */
+  .card-img{height:140px}
+  .card-body{padding:16px}
+  .card-title{font-size:16px}
+  .card-desc{font-size:12px}
+  .card-chips{gap:4px}
+  .chip{font-size:8px;padding:2px 7px}
+  .card-btn{padding:10px 14px;font-size:11px}
+
+  /* Footer */
+  footer{padding:16px 18px;flex-direction:column;gap:10px;text-align:center}
+  .foot-r{justify-content:center;gap:10px;flex-wrap:wrap}
+}
+
+@media(max-width:420px){
+  h1.hero-title{font-size:24px}
+  .stats-bar{grid-template-columns:1fr}
+  .hlogo img{height:30px}
 }
 </style>
 </head>

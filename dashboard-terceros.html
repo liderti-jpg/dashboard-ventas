@@ -98,6 +98,7 @@ tr:hover td{background:var(--blue3)}
 .loading{text-align:center;padding:80px 20px;color:var(--text3);font-size:14px}
 .ls{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 .err{background:var(--red2);border:1.5px solid rgba(192,57,43,.2);border-radius:var(--rs);padding:14px 18px;color:var(--red);font-size:13px}
 .prog-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:8px;width:180px}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--navy));border-radius:4px;transition:width .3s}
@@ -329,13 +330,14 @@ function vR(dn,dr,f,c){
 
   c.innerHTML=`
     <div class="kpis">
-      <div class="kpi"><div class="kpi-ic">🆕</div><div class="kpi-lbl">Clientes Nuevos</div><div class="kpi-val">${fQ(totNuevos)}</div><div class="kpi-sub">${pLbl(f)}</div>${pL?`<div class="kpi-ch ${camN.c}">${camN.t} vs ${pL}</div>`:''}</div>
-      <div class="kpi"><div class="kpi-ic">👤</div><div class="kpi-lbl">Personas Naturales</div><div class="kpi-val">${fQ(natNuevos)}</div><div class="kpi-sub">${totNuevos>0?((natNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
-      <div class="kpi"><div class="kpi-ic">🏢</div><div class="kpi-lbl">Empresas</div><div class="kpi-val">${fQ(empNuevos)}</div><div class="kpi-sub">${totNuevos>0?((empNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
+      <div class="kpi" onclick="kpiPanel('todos',dn)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">🆕</div><div class="kpi-lbl">Clientes Nuevos</div><div class="kpi-val">${fQ(totNuevos)}</div><div class="kpi-sub">${pLbl(f)}</div>${pL?`<div class="kpi-ch ${camN.c}">${camN.t} vs ${pL}</div>`:''}</div>
+      <div class="kpi" onclick="kpiPanel('nat',dn)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">👤</div><div class="kpi-lbl">Personas Naturales</div><div class="kpi-val">${fQ(natNuevos)}</div><div class="kpi-sub">${totNuevos>0?((natNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
+      <div class="kpi" onclick="kpiPanel('emp',dn)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">🏢</div><div class="kpi-lbl">Empresas</div><div class="kpi-val">${fQ(empNuevos)}</div><div class="kpi-sub">${totNuevos>0?((empNuevos/totNuevos)*100).toFixed(1)+'% del total':''}</div></div>
       <div class="kpi"><div class="kpi-ic">💰</div><div class="kpi-lbl">Venta Neta (periodo)</div><div class="kpi-val">${fM(totVentaN)}</div><div class="kpi-sub">Bruta: ${fM(totVentaB)}</div></div>
       <div class="kpi"><div class="kpi-ic">🏆</div><div class="kpi-lbl">Cliente Top</div><div class="kpi-val" style="font-size:13px">${topCliente?topCliente.razon_social.substring(0,24):'—'}</div><div class="kpi-sub">${topCliente?fCOP(parseFloat(topCliente.venta_neta)):''}</div></div>
-      <div class="kpi"><div class="kpi-ic">⚡</div><div class="kpi-lbl">Nuevos que compraron</div><div class="kpi-val">${fQ(compraronMismoMes)}</div><div class="kpi-sub">En su mes de registro</div></div>
+      <div class="kpi" onclick="kpiPanel('compro',dn,dr)" style="position:relative"><div style="position:absolute;top:10px;right:12px;font-size:9px;color:var(--text4);font-weight:600">VER LISTA ›</div><div class="kpi-ic">⚡</div><div class="kpi-lbl">Nuevos que compraron</div><div class="kpi-val">${fQ(compraronMismoMes)}</div><div class="kpi-sub">En su mes de registro</div></div>
     </div>
+    <div id="kpiPanelBox" style="display:none;margin-bottom:16px"></div>
     <div class="g2">
       <div class="card gf"><div class="ct">Nuevos clientes por mes (últimos 12) <span class="ct-line"></span></div><div class="cw h260"><canvas id="cNM"></canvas></div></div>
       <div class="card gf"><div class="ct">Natural vs Empresa por mes <span class="ct-line"></span></div><div class="cw h260"><canvas id="cNE"></canvas></div></div>
@@ -634,7 +636,86 @@ function vCmp(f,c){
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:11},boxWidth:10,padding:14}},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:10}},grid:{display:false},border:{display:false}}}}});
 }
 
-// ══ HISTORIAL POR CLIENTE ════════════════════
+// ══ PANEL EXPANDIBLE KPI ═════════════════════
+let kpiPanelActivo=null;
+function kpiPanel(tipo,dn,dr){
+  const box=document.getElementById('kpiPanelBox');
+  if(!box)return;
+
+  // Toggle: si ya está abierto el mismo, cerrar
+  if(kpiPanelActivo===tipo){
+    box.style.display='none';
+    box.innerHTML='';
+    kpiPanelActivo=null;
+    return;
+  }
+  kpiPanelActivo=tipo;
+
+  let lista=[];
+  let titulo='';
+  let tag='';
+
+  if(tipo==='todos'){
+    lista=dn;titulo='Todos los clientes nuevos';tag='tag-blue';
+  }else if(tipo==='nat'){
+    lista=dn.filter(r=>r.tipo_tercero==1);titulo='Personas Naturales nuevas';tag='tag-nat';
+  }else if(tipo==='emp'){
+    lista=dn.filter(r=>r.tipo_tercero==2);titulo='Empresas nuevas';tag='tag-emp';
+  }else if(tipo==='compro'&&dr){
+    const nitNuevos=new Set(dn.map(r=>r.nit));
+    const nitCompro=new Set(dr.filter(r=>nitNuevos.has(r.nit)).map(r=>r.nit));
+    lista=dn.filter(r=>nitCompro.has(r.nit));titulo='Clientes nuevos que compraron';tag='tag-gold';
+  }
+
+  // Enriquecer con venta neta si existe en rawR
+  const ventaMap={};
+  rawR.forEach(r=>{
+    if(!ventaMap[r.nit])ventaMap[r.nit]=0;
+    ventaMap[r.nit]+=parseFloat(r.venta_neta||0);
+  });
+
+  box.style.display='block';
+  box.innerHTML=`
+    <div class="card" style="border-color:var(--blue);animation:fadeIn .2s ease">
+      <div class="ct">${titulo} <span class="ct-line"></span><span class="tag ${tag}">${fQ(lista.length)} clientes</span>
+        <button onclick="kpiPanel(null)" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);line-height:1" title="Cerrar">✕</button>
+      </div>
+      <div class="tw"><table><thead><tr>
+        <th>NIT / CC</th><th>Nombre</th><th>Tipo</th><th>Fecha Registro</th><th class="num">Compras históricas</th><th></th>
+      </tr></thead><tbody>
+        ${lista.slice(0,30).map((r,i)=>{
+          const fc=new Date(r.fecha_creacion);
+          const vn=ventaMap[r.nit]||0;
+          const odd=i%2===0?'':'background:rgba(238,241,248,.5)';
+          return`<tr style="${odd}">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)">${r.nit.trim()}</td>
+            <td style="font-weight:600;font-size:12px">${r.razon_social.length>32?r.razon_social.substring(0,32)+'…':r.razon_social}</td>
+            <td><span class="tag ${tipoTag(r.tipo_tercero)}">${r.tipo_tercero==1?'Natural':'Empresa'}</span></td>
+            <td style="font-size:11px;color:var(--text2)">${fc.toLocaleDateString('es-CO')}</td>
+            <td class="num" style="font-weight:600;color:${vn>0?'var(--navy2)':'var(--text4)'}">${vn>0?fCOP(vn):'Sin compras'}</td>
+            <td><button onclick="irAHistorial('${r.nit.trim()}')" style="background:var(--blue3);border:1.5px solid var(--blue);border-radius:var(--rs);padding:5px 11px;font-size:11px;font-weight:600;color:var(--navy2);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s" onmouseover="this.style.background='var(--blue)';this.style.color='#fff'" onmouseout="this.style.background='var(--blue3)';this.style.color='var(--navy2)'">Ver historial →</button></td>
+          </tr>`;
+        }).join('')}
+        ${lista.length>30?`<tr><td colspan="6" style="text-align:center;color:var(--text3);font-size:12px;padding:10px">Mostrando 30 de ${fQ(lista.length)} · Usa la vista Clientes Nuevos para ver todos</td></tr>`:''}
+      </tbody></table></div>
+    </div>`;
+}
+
+function irAHistorial(nit){
+  // Cambiar a tab historial y buscar el cliente
+  const tabs=document.querySelectorAll('.vt');
+  tabs.forEach(t=>{
+    if(t.textContent.includes('Historial')){
+      t.click();
+      setTimeout(()=>{
+        const inp=document.getElementById('bq');
+        if(inp){inp.value=nit;bSearch();setTimeout(()=>bDetalle(nit),300);}
+      },100);
+    }
+  });
+}
+
+
 function vB(c){
   c.innerHTML=`
     <div class="card gf" style="margin-bottom:16px">

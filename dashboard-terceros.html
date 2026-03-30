@@ -172,6 +172,7 @@ tr:hover td{background:var(--blue3)}
     <button class="vt" onclick="sv('h',this)">👑 Ranking Histórico</button>
     <button class="vt" onclick="sv('t',this)">📈 Tendencia</button>
     <button class="vt" onclick="sv('c',this)">⚖️ Comparativo</button>
+    <button class="vt" onclick="sv('b',this)">🔍 Historial Cliente</button>
   </div>
 
   <div id="ct"><div class="loading"><div class="ls"></div>Cargando datos de clientes…</div></div>
@@ -256,7 +257,7 @@ function filR(data,f){
 
 function ap(){dC();const f=gF();const dn=filN(rawN,f);const dr=filR(rawR,f);render(dn,dr,f)}
 function rst(){document.getElementById('fy').value='2026';['fm','ftipo'].forEach(id=>document.getElementById(id).value='');document.getElementById('ftop').value='10';ap()}
-function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');const lbl={r:'Resumen',n:'Clientes Nuevos',k:'Ranking Mes',h:'Ranking Histórico',t:'Tendencia',c:'Comparativo'};document.getElementById('bcVista').textContent=lbl[v]||v;ap()}
+function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');const lbl={r:'Resumen',n:'Clientes Nuevos',k:'Ranking Mes',h:'Ranking Histórico',t:'Tendencia',c:'Comparativo',b:'Historial Cliente'};document.getElementById('bcVista').textContent=lbl[v]||v;ap()}
 function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
 function pLbl(f){if(f.mes&&f.año)return`${MF[f.mes]} ${f.año}`;if(f.año)return`Año ${f.año}`;return'Período completo'}
 
@@ -283,7 +284,7 @@ function render(dn,dr,f){
   else if(vista==='k')vK(dr,f,c);
   else if(vista==='h')vH(f,c);
   else if(vista==='t')vT(dn,f,c);
-  else if(vista==='c')vCmp(f,c);
+  else if(vista==='b')vB(c);
 }
 
 Chart.defaults.font.family="'Inter',sans-serif";
@@ -631,6 +632,164 @@ function vCmp(f,c){
     labels:meses.map(m=>MN[m]),
     datasets:años.map((a,i)=>({label:String(a),data:meses.map(m=>ventasAñoMes[a]?.[m]||0),borderColor:colors[i]||CL[i],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2,pointBackgroundColor:colors[i]||CL[i],pointBorderColor:'#fff',pointBorderWidth:1.5,pointHoverRadius:6}))
   },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:11},boxWidth:10,padding:14}},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:10}},grid:{display:false},border:{display:false}}}}});
+}
+
+// ══ HISTORIAL POR CLIENTE ════════════════════
+function vB(c){
+  c.innerHTML=`
+    <div class="card gf" style="margin-bottom:16px">
+      <div class="ct">🔍 Buscar cliente <span class="ct-line"></span></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div class="fg" style="flex:1;min-width:260px">
+          <label>Nombre o NIT / CC</label>
+          <input type="text" id="bq" placeholder="Ej: TUBOS Y PERFILES o 900352586…" oninput="bSearch()" style="width:100%;font-size:14px;padding:10px 14px">
+        </div>
+        <button class="ba" onclick="bSearch()">Buscar</button>
+        <button class="bcl" onclick="bClear()">Limpiar</button>
+      </div>
+      <div id="bSug" style="margin-top:8px"></div>
+    </div>
+    <div id="bRes"></div>`;
+}
+
+let bTimer=null;
+function bSearch(){
+  clearTimeout(bTimer);
+  bTimer=setTimeout(()=>{
+    const q=(document.getElementById('bq')?.value||'').trim().toLowerCase();
+    const sug=document.getElementById('bSug');
+    const res=document.getElementById('bRes');
+    if(!sug||!res)return;
+    if(q.length<2){sug.innerHTML='';res.innerHTML='';return;}
+    // Buscar en rawR (tiene ventas) y rawN (tiene fecha creación)
+    const matchMap={};
+    rawR.forEach(r=>{
+      const k=r.nit;
+      if(r.razon_social.toLowerCase().includes(q)||r.nit.includes(q)){
+        if(!matchMap[k])matchMap[k]={nit:r.nit,razon:r.razon_social,tipo:r.tipo_tercero};
+      }
+    });
+    const matches=Object.values(matchMap).slice(0,8);
+    if(matches.length===0){sug.innerHTML='<div style="font-size:12px;color:var(--text3);padding:6px 2px">Sin resultados</div>';res.innerHTML='';return;}
+    sug.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      ${matches.map(m=>`<button onclick="bDetalle('${m.nit}')" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:7px 13px;font-size:12px;font-family:inherit;cursor:pointer;color:var(--navy);font-weight:600;transition:all .15s" onmouseover="this.style.background='var(--blue3)'" onmouseout="this.style.background='var(--bg3)'">
+        <span class="tag ${m.tipo==1?'tag-nat':'tag-emp'}" style="margin-right:5px">${m.tipo==1?'Natural':'Empresa'}</span>${m.razon.length>35?m.razon.substring(0,35)+'…':m.razon} <span style="color:var(--text3);font-weight:400;font-size:10px">· ${m.nit.trim()}</span>
+      </button>`).join('')}
+    </div>`;
+  },220);
+}
+
+function bClear(){
+  const bq=document.getElementById('bq');
+  if(bq)bq.value='';
+  const bSug=document.getElementById('bSug');
+  if(bSug)bSug.innerHTML='';
+  const bRes=document.getElementById('bRes');
+  if(bRes)bRes.innerHTML='';
+}
+
+function bDetalle(nit){
+  dC();
+  const res=document.getElementById('bRes');
+  if(!res)return;
+
+  // Datos del cliente en rawR (historial ventas)
+  const ventasCliente=rawR.filter(r=>r.nit===nit);
+  if(ventasCliente.length===0){res.innerHTML='<div class="err">Sin datos de ventas para este cliente.</div>';return;}
+
+  const info=ventasCliente[0];
+  // Fecha primer registro en rawN
+  const regCliente=rawN.filter(r=>r.nit===nit);
+  const fechaReg=regCliente.length>0?new Date(regCliente[0].fecha_creacion):null;
+  const esNuevo=fechaReg&&(new Date()-fechaReg)<(12*30*24*60*60*1000);
+
+  // Agrupar por año_mes
+  const byMes={};
+  ventasCliente.forEach(r=>{
+    const k=r.año_mes;
+    if(!byMes[k])byMes[k]={k,l:`${MF[r.mes]} ${r.año}`,lc:`${MN[r.mes]} ${r.año}`,año:r.año,mes:r.mes,bruto:0,neto:0,facturas:0};
+    byMes[k].bruto+=parseFloat(r.venta_bruta||0);
+    byMes[k].neto+=parseFloat(r.venta_neta||0);
+    byMes[k].facturas+=parseInt(r.num_facturas||0);
+  });
+  const mks=Object.keys(byMes).sort();
+  const rows=mks.map(k=>byMes[k]);
+
+  const totNeto=rows.reduce((s,r)=>s+r.neto,0);
+  const totBruto=rows.reduce((s,r)=>s+r.bruto,0);
+  const totFact=rows.reduce((s,r)=>s+r.facturas,0);
+  const primMes=rows[0];
+  const ultMes=rows[rows.length-1];
+  const maxMes=rows.reduce((a,b)=>a.neto>b.neto?a:b,rows[0]);
+
+  // Comparativo vs mismo mes año anterior
+  const rowsConCmp=rows.map(r=>{
+    const añoAnt=r.año-1;
+    const kAnt=`${añoAnt}-${String(r.mes).padStart(2,'0')}`;
+    const ant=byMes[kAnt];
+    const cmp=ant?pObj(r.neto,ant.neto):null;
+    return{...r,ant,cmp};
+  });
+
+  res.innerHTML=`
+    <div class="card gf" style="margin-bottom:16px;border-color:var(--blue)">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👤</div>
+        <div style="flex:1">
+          <div style="font-size:18px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif">${info.razon_social}</div>
+          <div style="display:flex;gap:8px;margin-top:5px;flex-wrap:wrap;align-items:center">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);background:var(--bg3);padding:3px 9px;border-radius:6px">${nit.trim()}</span>
+            <span class="tag ${info.tipo_tercero==1?'tag-nat':'tag-emp'}">${tipoLbl(info.tipo_tercero)}</span>
+            ${esNuevo?'<span class="tag tag-gold">⭐ Cliente reciente</span>':''}
+            ${fechaReg?`<span style="font-size:11px;color:var(--text3)">Registrado: ${fechaReg.toLocaleDateString('es-CO')}</span>`:''}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:16px">
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">💰</div><div class="kpi-lbl">Total histórico neto</div><div class="kpi-val">${fM(totNeto)}</div><div class="kpi-sub">${fCOP(totNeto)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">🧾</div><div class="kpi-lbl">Total histórico bruto</div><div class="kpi-val">${fM(totBruto)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📋</div><div class="kpi-lbl">Facturas totales</div><div class="kpi-val">${fQ(totFact)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📅</div><div class="kpi-lbl">Meses activo</div><div class="kpi-val">${rows.length}</div><div class="kpi-sub">${primMes.lc} → ${ultMes.lc}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">🏆</div><div class="kpi-lbl">Mejor mes</div><div class="kpi-val" style="font-size:14px">${maxMes.lc}</div><div class="kpi-sub">${fCOP(maxMes.neto)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📊</div><div class="kpi-lbl">Promedio mensual</div><div class="kpi-val">${fM(totNeto/rows.length)}</div></div>
+    </div>
+
+    <div class="card gf" style="margin-bottom:16px"><div class="ct">Evolución de ventas — ${info.razon_social.substring(0,30)} <span class="ct-line"></span></div><div class="cw h280"><canvas id="cBV"></canvas></div></div>
+
+    <div class="card gf">
+      <div class="ct">Historial de compras por mes <span class="ct-line"></span><span class="tag tag-blue">${rows.length} períodos</span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Período</th>
+        <th class="num">Venta Bruta</th>
+        <th class="num">Venta Neta</th>
+        <th class="num">Facturas</th>
+        <th class="num">Prom/Factura</th>
+        <th>vs Mismo Mes Año Ant.</th>
+      </tr></thead><tbody>
+        ${rowsConCmp.slice().reverse().map((r,i)=>{
+          const odd=i%2===0?'':'background:rgba(238,241,248,.5)';
+          return`<tr style="${odd}">
+            <td style="font-weight:600">${r.l}</td>
+            <td class="num" style="color:var(--gold);font-weight:600">${fCOP(r.bruto)}</td>
+            <td class="num" style="color:var(--navy2);font-weight:700">${fCOP(r.neto)}</td>
+            <td class="num">${fQ(r.facturas)}</td>
+            <td class="num" style="font-size:11px">${fCOP(r.facturas>0?r.neto/r.facturas:0)}</td>
+            <td>${r.cmp?`<span class="kpi-ch ${r.cmp.c}" style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;background:${r.cmp.c==='up'?'var(--green2)':r.cmp.c==='down'?'var(--red2)':'var(--bg3)'};color:${r.cmp.c==='up'?'var(--green)':r.cmp.c==='down'?'var(--red)':'var(--text3)'}">${r.cmp.t}</span>`:'<span style="color:var(--text4);font-size:11px">Sin dato ant.</span>'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+
+  // Gráfica
+  ch.bv=new Chart(document.getElementById('cBV'),{type:'bar',data:{
+    labels:mks.map(k=>byMes[k].lc),
+    datasets:[
+      {type:'bar',label:'Venta Bruta',data:mks.map(k=>byMes[k].bruto),backgroundColor:'rgba(184,134,11,.25)',borderColor:'#B8860B',borderWidth:1.5,borderRadius:4,order:2},
+      {type:'line',label:'Venta Neta',data:mks.map(k=>byMes[k].neto),borderColor:'#1A3A6E',backgroundColor:'transparent',tension:.4,pointRadius:5,pointBackgroundColor:'#1A3A6E',pointBorderColor:'#fff',pointBorderWidth:2,pointHoverRadius:8,borderWidth:2.5,order:1}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{color:'#3D5280',font:{size:11},boxWidth:12,padding:14}},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:40},grid:{display:false},border:{display:false}}}}});
 }
 
 cargar();

@@ -113,6 +113,34 @@ tr.owner-row td .mora-badge{background:var(--owner3)!important;color:var(--owner
 .btn-wa{background:#25D366;color:#fff;border:none;border-radius:var(--rs);padding:9px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-top:10px;margin-left:8px}
 .bb{background:var(--bg4);border-radius:4px;height:5px;margin-top:5px;min-width:60px}
 .bf{background:linear-gradient(90deg,var(--red),#922B21);border-radius:4px;height:5px;transition:width .8s ease}
+
+.search-hero{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--shadow2)}
+.search-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+.search-wrap{display:flex;gap:10px}
+.search-wrap input{flex:1;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:var(--rs);padding:11px 16px;font-size:14px;color:#fff;font-family:inherit;outline:none;transition:all .2s}
+.search-wrap input::placeholder{color:rgba(255,255,255,.4)}
+.search-wrap input:focus{border-color:var(--gold2);background:rgba(255,255,255,.15);box-shadow:0 0 0 3px rgba(212,160,23,.15)}
+.search-wrap button{background:var(--gold2);color:#fff;border:none;border-radius:var(--rs);padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.search-wrap button:hover{background:var(--gold);transform:translateY(-1px)}
+.res-list{display:grid;gap:8px;margin-top:12px}
+.res-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--rs);padding:12px 16px;cursor:pointer;transition:all .15s;display:flex;justify-content:space-between;align-items:center}
+.res-item:hover{background:rgba(255,255,255,.15);border-color:var(--gold2)}
+.res-item.active{background:rgba(212,160,23,.2);border-color:var(--gold2)}
+.res-nm{font-size:13px;font-weight:700;color:#fff}
+.res-nit{font-size:10px;color:rgba(255,255,255,.5);font-family:"JetBrains Mono",monospace;margin-top:2px}
+.res-saldo{font-size:13px;font-weight:700;color:var(--gold2);white-space:nowrap}
+.ficha{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+.ficha-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.ficha-nm{font-size:20px;font-weight:700;color:var(--navy);font-family:"Playfair Display",serif}
+.ficha-nit{font-size:12px;color:var(--text3);font-family:"JetBrains Mono",monospace;margin-top:3px}
+.ficha-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.fkpi{background:var(--bg3);border-radius:var(--rs);padding:14px;text-align:center}
+.fkpi-v{font-size:16px;font-weight:700;color:var(--navy);font-family:"JetBrains Mono",monospace}
+.fkpi-l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.mora-bar{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.mora-seg{flex:1;min-width:60px;border-radius:var(--rs);padding:10px 8px;text-align:center}
+.mora-seg-v{font-size:13px;font-weight:700;font-family:"JetBrains Mono",monospace}
+.mora-seg-l{font-size:9px;margin-top:2px;opacity:.8}
 </style>
 </head>
 <body>
@@ -124,6 +152,7 @@ tr.owner-row td .mora-badge{background:var(--owner3)!important;color:var(--owner
     <span class="htag">SIESA SBS · Tiempo Real</span>
   </div>
   <div class="hright">
+    <a href="https://liderti-jpg.github.io/dashboard-ventas/centro-dashboards-jm.html" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--rs);padding:7px 14px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">← Centro</a>
     <span id="ts"></span>
     <div class="live-b" id="bl" style="display:none"><span class="dot-live"></span>EN VIVO</div>
     <button class="btn-ref" id="br" onclick="cargar()">↻ Actualizar</button>
@@ -167,6 +196,7 @@ tr.owner-row td .mora-badge{background:var(--owner3)!important;color:var(--owner
     <button class="vt" onclick="sv('d',this)">📋 Detalle Cartera</button>
     <button class="vt" onclick="sv('a',this)">👤 Por Asesor</button>
     <button class="vt" onclick="sv('c',this)">📊 Comparativo</button>
+    <button class="vt" onclick="sv('h',this)">🔍 Historial Cliente</button>
     <button class="vt" onclick="sv('m',this)">💬 Mensaje de Cobro</button>
   </div>
 
@@ -260,6 +290,7 @@ function render(d,f){
   else if(vista==='a')vA(d,c);
   else if(vista==='c')vC(d,c);
   else if(vista==='m')vM(d,c);
+  else if(vista==='h')vH(d,c);
 }
 
 // ══ RESUMEN ══════════════════════════════════
@@ -581,6 +612,141 @@ function copiarMsg(){
 function abrirWA(){
   const url='https://wa.me/?text='+encodeURIComponent(_msgActual);
   window.open(url,'_blank');
+}
+
+
+// ══ HISTORIAL CLIENTE ═════════════════════════
+function vH(d,c){
+  c.innerHTML=`
+    <div style="display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start">
+      <div>
+        <div class="search-hero">
+          <div class="search-title">🔍 Buscar cliente</div>
+          <div class="search-wrap">
+            <input type="text" id="hBuscar" placeholder="Nombre o NIT del cliente…" oninput="buscarCliente()">
+            <button onclick="buscarCliente()">Buscar</button>
+          </div>
+          <div id="hResultados" class="res-list"></div>
+        </div>
+      </div>
+      <div id="hFicha">
+        <div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:60px 30px;text-align:center;color:var(--text3)">
+          <div style="font-size:40px;margin-bottom:12px">🔍</div>
+          <div style="font-size:14px;font-weight:600">Busca un cliente para ver su historial de cartera</div>
+          <div style="font-size:12px;margin-top:6px;color:var(--text4)">Puedes buscar por nombre o número de NIT</div>
+        </div>
+      </div>
+    </div>`;
+  window._hData = d;
+}
+
+function buscarCliente(){
+  const q = document.getElementById('hBuscar').value.toLowerCase().trim();
+  if(!q || q.length < 2){ document.getElementById('hResultados').innerHTML=''; return; }
+  const d = window._hData || [];
+  // Agrupar por NIT
+  const map = {};
+  d.forEach(r=>{
+    const nit = r.nit.trim();
+    if(!map[nit]) map[nit]={nit, cliente:r.cliente, saldo:0, max_mora:0, registros:0};
+    map[nit].saldo += parseFloat(r.saldo_pendiente||0);
+    map[nit].max_mora = Math.max(map[nit].max_mora, r.dias_mora);
+    map[nit].registros++;
+  });
+  const res = Object.values(map).filter(x=>
+    x.cliente.toLowerCase().includes(q) || x.nit.includes(q)
+  ).sort((a,b)=>b.saldo-a.saldo).slice(0,8);
+
+  const cont = document.getElementById('hResultados');
+  if(!res.length){ cont.innerHTML='<div style="color:rgba(255,255,255,.4);font-size:12px;padding:8px 0">Sin resultados</div>'; return; }
+  cont.innerHTML = res.map(r=>`
+    <div class="res-item" onclick="verFichaCliente('${r.nit}')">
+      <div>
+        <div class="res-nm">${r.cliente.length>30?r.cliente.substring(0,30)+'…':r.cliente}</div>
+        <div class="res-nit">${r.nit}</div>
+      </div>
+      <div class="res-saldo">${fM(r.saldo)}</div>
+    </div>`).join('');
+}
+
+function verFichaCliente(nit){
+  // Resaltar seleccionado
+  document.querySelectorAll('.res-item').forEach(el=>el.classList.remove('active'));
+  const sel=document.getElementById('cli_h_'+nit);
+  if(sel) sel.classList.add('active');
+
+  const d = window._hData || [];
+  const rows = d.filter(r=>r.nit.trim()===nit.trim()).sort((a,b)=>b.dias_mora-a.dias_mora);
+  if(!rows.length) return;
+  const r0 = rows[0];
+  const own = isOwner(r0);
+
+  const totalSaldo = rows.reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+  const totalFact  = rows.reduce((s,r)=>s+parseFloat(r.valor_total),0);
+  const maxMora    = Math.max(...rows.map(r=>r.dias_mora));
+  const asesores   = [...new Set(rows.map(r=>r.asesor).filter(a=>a!=='Sin asesor'))];
+
+  const c0 = rows.filter(r=>moraCat(r.dias_mora)===0).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+  const c1 = rows.filter(r=>moraCat(r.dias_mora)===1).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+  const c2 = rows.filter(r=>moraCat(r.dias_mora)===2).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+  const c3 = rows.filter(r=>moraCat(r.dias_mora)===3).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+  const c4 = rows.filter(r=>moraCat(r.dias_mora)===4).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+
+  const catMax = moraCat(maxMora);
+
+  document.getElementById('hFicha').innerHTML=`
+    <div class="ficha${own?' owner-row':''}">
+      <div class="ficha-header">
+        <div>
+          <div class="ficha-nm">${r0.cliente}${own?'<span class="owner-badge">👑 Propietario</span>':''}</div>
+          <div class="ficha-nit">NIT ${nit} · ${r0.tipo_tercero===1?'Persona Natural':'Empresa'}</div>
+          ${asesores.length?`<div style="margin-top:6px;font-size:11px;color:var(--text2)">👤 ${asesores.join(', ')}</div>`:''}
+        </div>
+        <span class="mora-badge ${moraClass(catMax)}" style="font-size:12px;padding:6px 14px">${maxMora} días mora máx.</span>
+      </div>
+
+      <div class="ficha-kpis">
+        <div class="fkpi"><div class="fkpi-v" style="color:var(--red)">${fCOP(totalSaldo)}</div><div class="fkpi-l">Saldo pendiente</div></div>
+        <div class="fkpi"><div class="fkpi-v">${fCOP(totalFact)}</div><div class="fkpi-l">Valor facturado</div></div>
+        <div class="fkpi"><div class="fkpi-v">${rows.length}</div><div class="fkpi-l">Documentos</div></div>
+        <div class="fkpi"><div class="fkpi-v">${maxMora}d</div><div class="fkpi-l">Mora máxima</div></div>
+      </div>
+
+      <div class="mora-bar">
+        ${[[c0,'Al día','#0A7A5A'],[c1,'1–30d','#F39C12'],[c2,'31–60d','#E67E22'],[c3,'61–90d','#C0392B'],[c4,'+90d','#7B0000']].map(([v,l,color])=>`
+          <div class="mora-seg" style="background:${color}22;border:1px solid ${color}44">
+            <div class="mora-seg-v" style="color:${color}">${fM(v)}</div>
+            <div class="mora-seg-l" style="color:${color}">${l}</div>
+          </div>`).join('')}
+      </div>
+
+      <div class="ct">Detalle de documentos <span class="ct-line"></span><span class="tag tag-red">${rows.length} registros</span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Factura</th><th>Fecha Fact.</th><th>Vencimiento</th>
+        <th class="num">Valor Total</th><th class="num">Saldo Pendiente</th>
+        <th>Días Mora</th><th>Asesor</th><th>Cuenta</th>
+      </tr></thead><tbody>
+        ${rows.map((r,i)=>{
+          const cat=moraCat(r.dias_mora);
+          const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+          const nf=r.nro_factura.trim()||'—';
+          return`<tr style="${odd}">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--navy2);font-weight:600">${nf}</td>
+            <td style="font-size:11px;color:var(--text2)">${r.fecha_factura}</td>
+            <td style="font-size:11px;color:var(--text2)">${r.fecha_vcto}</td>
+            <td class="num" style="color:var(--text2)">${fCOP(parseFloat(r.valor_total))}</td>
+            <td class="num" style="color:${parseFloat(r.saldo_pendiente)>0?'var(--red)':'var(--green)'};font-weight:700">${fCOP(parseFloat(r.saldo_pendiente))}</td>
+            <td><span class="mora-badge ${moraClass(cat)}">${r.dias_mora}d</span></td>
+            <td style="font-size:11px;color:var(--text2)">${r.asesor==='Sin asesor'?'<span style="color:var(--text4);font-style:italic">Sin asesor</span>':r.asesor.split(' ')[0]+' '+r.asesor.split(' ')[1]}</td>
+            <td style="font-size:10px;color:var(--text3)">${r.cuenta_contable||''}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+        <button class="btn-wa" onclick="selCliente('${nit}');sv('m',document.querySelectorAll('.vt')[4])">💬 Generar mensaje de cobro</button>
+      </div>
+    </div>`;
 }
 
 cargar();

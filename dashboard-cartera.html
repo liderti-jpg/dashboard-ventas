@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartera — Jota Mundial SAS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F7FE;--bg2:#FFFFFF;--bg3:#EEF2FC;--bg4:#E4EAF8;
+  --navy:#0B1F4A;--navy2:#1A3A6E;--navy3:#2E5199;
+  --blue:#3B6FD4;--blue2:#5B8FE8;--blue3:#EAF0FD;
+  --gold:#B8860B;--gold2:#D4A017;
+  --teal:#0A7A5A;--teal2:#E6F7F2;
+  --purple:#6B21A8;--purple2:#F0E6FF;
+  --red:#C0392B;--red2:#FDECEA;--red3:#F5B7B1;
+  --orange:#E67E22;--orange2:#FDEBD0;
+  --yellow:#F39C12;--yellow2:#FEF9E7;
+  --green:#0A7A5A;--green2:#E6F7F2;
+  --owner:#7B341E;--owner2:#FFF5F0;--owner3:#FEBCBC;
+  --text:#0B1F4A;--text2:#3D5280;--text3:#7A90B8;--text4:#A8BAD8;
+  --border:#D8E4F5;--border2:#EEF2FC;
+  --shadow:0 2px 16px rgba(11,31,74,.07);
+  --shadow2:0 8px 40px rgba(11,31,74,.12);
+  --r:16px;--rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:var(--navy);padding:0 36px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(11,31,74,.25)}
+.hlogo{display:flex;align-items:center;gap:16px}
+.logo-ic{width:40px;height:40px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:#fff;box-shadow:0 4px 12px rgba(180,130,0,.3)}
+.logo-nm{font-size:15px;font-weight:700;color:#fff}
+.logo-sb{font-size:9px;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-top:1px}
+.hdiv{width:1px;height:28px;background:rgba(255,255,255,.12);margin:0 4px}
+.htag{font-size:12px;color:rgba(255,255,255,.45)}
+.hright{display:flex;align-items:center;gap:12px}
+.live-b{display:flex;align-items:center;gap:6px;background:rgba(192,57,43,.2);border:1px solid rgba(192,57,43,.4);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:600;color:#F1948A}
+.dot-live{width:6px;height:6px;border-radius:50%;background:#F1948A;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.btn-ref{background:linear-gradient(135deg,var(--red),#A93226);color:#fff;border:none;border-radius:var(--rs);padding:9px 20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;box-shadow:0 4px 12px rgba(192,57,43,.3)}
+.btn-ref:hover{opacity:.9;transform:translateY(-1px)}
+.btn-ref:disabled{opacity:.5;cursor:not-allowed;transform:none}
+#ts{font-size:11px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace}
+.main{padding:28px 36px;max-width:1700px;margin:0 auto}
+@media(max-width:700px){.main{padding:14px}}
+.fp{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-bottom:20px;box-shadow:var(--shadow)}
+.fph{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:10px;font-weight:700;color:var(--navy3);text-transform:uppercase;letter-spacing:1.2px}
+.fr{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+.fg select,.fg input{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:7px 11px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;min-width:130px;outline:none;transition:all .2s}
+.fg select:focus,.fg input:focus{border-color:var(--red);background:var(--bg2);box-shadow:0 0 0 3px rgba(192,57,43,.1)}
+.ba{background:var(--navy);color:#fff;border:none;border-radius:var(--rs);padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;height:36px;transition:all .2s}
+.ba:hover{background:var(--navy2)}
+.bcl{background:var(--bg3);color:var(--text2);border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 14px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;height:36px}
+.vtabs{display:flex;gap:4px;margin-bottom:22px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:5px;width:fit-content;box-shadow:var(--shadow);flex-wrap:wrap}
+.vt{padding:8px 16px;border-radius:11px;border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(--text3);font-family:'Inter',sans-serif;transition:all .2s}
+.vt.active{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.3)}
+.vt:not(.active):hover{background:var(--bg3);color:var(--navy)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;transition:all .25s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+.kpi-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
+.kpi-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.kpi-val{font-size:18px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace;line-height:1.1;margin-bottom:4px}
+.kpi-sub{font-size:11px;color:var(--text3)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.gf{margin-bottom:14px}
+@media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.ct{font-size:10px;font-weight:700;color:var(--navy3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ct-line{flex:1;height:1px;background:var(--border2)}
+.cw{position:relative}.h220{height:220px}.h260{height:260px}.h300{height:300px}.h340{height:340px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 13px;background:var(--bg3);color:var(--text3);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1.5px solid var(--border);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--border2);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--blue3)}
+/* Fila propietario */
+tr.owner-row td{background:var(--owner2)!important;color:var(--owner)!important}
+tr.owner-row:hover td{background:#FEEAEA!important}
+tr.owner-row td .mora-badge{background:var(--owner3)!important;color:var(--owner)!important}
+.owner-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;margin-left:6px;box-shadow:0 2px 6px rgba(180,130,0,.3)}
+.num{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px}
+.mora-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.mora-0{background:var(--green2);color:var(--green)}
+.mora-1{background:var(--yellow2);color:#7D6608}
+.mora-2{background:var(--orange2);color:#784212}
+.mora-3{background:var(--red2);color:var(--red)}
+.mora-4{background:#1C0A00;color:#FF6B6B}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.tag-blue{background:var(--blue3);color:var(--navy3)}
+.tag-red{background:var(--red2);color:var(--red)}
+.tag-green{background:var(--green2);color:var(--green)}
+.tag-gold{background:#FFF3CD;color:#856404}
+.loading{text-align:center;padding:80px 20px;color:var(--text3);font-size:14px}
+.ls{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Alerta banner */
+.alert-bar{background:linear-gradient(135deg,var(--red),#922B21);border-radius:var(--r);padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;color:#fff}
+.alert-ic{font-size:20px}
+.alert-txt{font-size:13px;font-weight:600}
+.alert-sub{font-size:11px;opacity:.8;margin-top:2px}
+/* Mensaje cobro */
+.msg-box{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:16px;font-size:13px;line-height:1.7;color:var(--navy);white-space:pre-wrap;font-family:'JetBrains Mono',monospace;margin-top:12px;min-height:120px}
+.btn-copy{background:var(--green);color:#fff;border:none;border-radius:var(--rs);padding:9px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-top:10px}
+.btn-copy:hover{opacity:.85}
+.btn-wa{background:#25D366;color:#fff;border:none;border-radius:var(--rs);padding:9px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-top:10px;margin-left:8px}
+.bb{background:var(--bg4);border-radius:4px;height:5px;margin-top:5px;min-width:60px}
+.bf{background:linear-gradient(90deg,var(--red),#922B21);border-radius:4px;height:5px;transition:width .8s ease}
+</style>
+</head>
+<body>
+<header>
+  <div class="hlogo">
+    <div class="logo-ic">JM</div>
+    <div><div class="logo-nm">JOTA MUNDIAL SAS</div><span class="logo-sb">Cartera · Cuentas por Cobrar</span></div>
+    <div class="hdiv"></div>
+    <span class="htag">SIESA SBS · Tiempo Real</span>
+  </div>
+  <div class="hright">
+    <span id="ts"></span>
+    <div class="live-b" id="bl" style="display:none"><span class="dot-live"></span>EN VIVO</div>
+    <button class="btn-ref" id="br" onclick="cargar()">↻ Actualizar</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="fp">
+    <div class="fph">⊞ Filtros</div>
+    <div class="fr">
+      <div class="fg"><label>Asesor</label>
+        <select id="fasesor"><option value="">Todos los asesores</option></select>
+      </div>
+      <div class="fg"><label>Rango mora</label>
+        <select id="fmora">
+          <option value="">Todos</option>
+          <option value="0">Al día (0 días)</option>
+          <option value="1">1–30 días</option>
+          <option value="2">31–60 días</option>
+          <option value="3">61–90 días</option>
+          <option value="4">+90 días</option>
+        </select>
+      </div>
+      <div class="fg"><label>Tipo cliente</label>
+        <select id="ftipo">
+          <option value="">Todos</option>
+          <option value="1">Persona Natural</option>
+          <option value="2">Empresa</option>
+        </select>
+      </div>
+      <div class="fg"><label>Buscar cliente</label>
+        <input type="text" id="fbuscar" placeholder="Nombre o NIT…" oninput="ap()">
+      </div>
+      <button class="ba" onclick="ap()">Aplicar</button>
+      <button class="bcl" onclick="rst()">Limpiar</button>
+    </div>
+  </div>
+
+  <div class="vtabs">
+    <button class="vt active" onclick="sv('r',this)">🚨 Resumen</button>
+    <button class="vt" onclick="sv('d',this)">📋 Detalle Cartera</button>
+    <button class="vt" onclick="sv('a',this)">👤 Por Asesor</button>
+    <button class="vt" onclick="sv('c',this)">📊 Comparativo</button>
+    <button class="vt" onclick="sv('m',this)">💬 Mensaje de Cobro</button>
+  </div>
+
+  <div id="ct"><div class="loading"><div class="ls"></div>Cargando cartera…</div></div>
+</div>
+
+<script>
+const WH = 'https://jotamundial2.app.n8n.cloud/webhook/ventas-cartera';
+const OWNER_NIT = '9874140';
+const MN=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MF=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+let raw=[], vista='r', ch={};
+
+const fCOP=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
+const fM=v=>{if(v<0)return'-'+fM(-v);if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'MM';if(v>=1e6)return'$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString('es-CO')};
+const fQ=v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':Math.round(v).toLocaleString('es-CO');
+const isOwner=r=>r.nit.trim()===OWNER_NIT;
+
+function moraCat(d){
+  if(d<=0)return 0;
+  if(d<=30)return 1;
+  if(d<=60)return 2;
+  if(d<=90)return 3;
+  return 4;
+}
+function moraLabel(cat){
+  return['Al día','1–30 días','31–60 días','61–90 días','+90 días'][cat];
+}
+function moraClass(cat){
+  return['mora-0','mora-1','mora-2','mora-3','mora-4'][cat];
+}
+function moraColor(cat){
+  return['#0A7A5A','#F39C12','#E67E22','#C0392B','#7B0000'][cat];
+}
+
+async function fetchAll(){
+  const r1=await fetch(`${WH}?pagina=1`);
+  const j1=await r1.json();
+  const total=j1?.detalle?.total_páginas||j1?.detalle?.total_paginas||1;
+  let datos=j1?.detalle?.Datos||[];
+  for(let p=2;p<=total;p++){
+    const rx=await fetch(`${WH}?pagina=${p}`);
+    const jx=await rx.json();
+    if(jx?.detalle?.Datos) datos=datos.concat(jx.detalle.Datos);
+  }
+  return datos;
+}
+
+async function cargar(){
+  const btn=document.getElementById('br');btn.disabled=true;btn.textContent='⏳';
+  document.getElementById('ct').innerHTML='<div class="loading"><div class="ls"></div>Cargando cartera…</div>';
+  try{
+    raw=await fetchAll();
+    document.getElementById('ts').textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('bl').style.display='flex';
+    // Poblar asesores
+    const asesores=[...new Set(raw.map(r=>r.asesor).filter(a=>a&&a!=='Sin asesor'))].sort();
+    const sel=document.getElementById('fasesor');
+    sel.innerHTML='<option value="">Todos los asesores</option>';
+    asesores.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;sel.appendChild(o);});
+    ap();
+  }catch(e){
+    document.getElementById('ct').innerHTML=`<div style="background:var(--red2);border:1.5px solid rgba(192,57,43,.2);border-radius:var(--rs);padding:14px 18px;color:var(--red);font-size:13px">❌ ${e.message}<br><button onclick="cargar()" style="margin-top:10px;background:var(--red);color:#fff;border:none;border-radius:var(--rs);padding:8px 18px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600">↻ Reintentar</button></div>`;
+  }finally{btn.disabled=false;btn.textContent='↻ Actualizar'}
+}
+
+function gF(){return{asesor:document.getElementById('fasesor').value,mora:document.getElementById('fmora').value,tipo:document.getElementById('ftipo').value,buscar:document.getElementById('fbuscar').value.toLowerCase().trim()}}
+
+function filD(data,f){
+  return data.filter(r=>{
+    if(f.asesor&&r.asesor!==f.asesor)return false;
+    if(f.mora!==''&&moraCat(r.dias_mora)!==parseInt(f.mora))return false;
+    if(f.tipo&&String(r.tipo_tercero)!==f.tipo)return false;
+    if(f.buscar&&!r.cliente.toLowerCase().includes(f.buscar)&&!r.nit.includes(f.buscar))return false;
+    return true;
+  });
+}
+
+function ap(){dC();const f=gF();const d=filD(raw,f);render(d,f)}
+function rst(){['fasesor','fmora','ftipo'].forEach(id=>document.getElementById(id).value='');document.getElementById('fbuscar').value='';ap()}
+function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');ap()}
+function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
+
+Chart.defaults.font.family="'Inter',sans-serif";
+const tBase=()=>({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(11,31,74,.92)',titleColor:'rgba(255,255,255,.6)',titleFont:{size:11},bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:12,cornerRadius:10}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:40},grid:{display:false},border:{display:false}}}});
+
+function render(d,f){
+  const c=document.getElementById('ct');
+  if(vista==='r')vR(d,c);
+  else if(vista==='d')vD(d,c);
+  else if(vista==='a')vA(d,c);
+  else if(vista==='c')vC(d,c);
+  else if(vista==='m')vM(d,c);
+}
+
+// ══ RESUMEN ══════════════════════════════════
+function vR(d,c){
+  const total=d.reduce((s,r)=>s+parseFloat(r.saldo_pendiente||0),0);
+  const totalOwner=d.filter(isOwner).reduce((s,r)=>s+parseFloat(r.saldo_pendiente||0),0);
+  const totalTerceros=total-totalOwner;
+  const c1_30=d.filter(r=>moraCat(r.dias_mora)===1).reduce((s,r)=>s+parseFloat(r.saldo_pendiente||0),0);
+  const c31_60=d.filter(r=>moraCat(r.dias_mora)===2).reduce((s,r)=>s+parseFloat(r.saldo_pendiente||0),0);
+  const c61_90=d.filter(r=>moraCat(r.dias_mora)===3).reduce((s,r)=>s+parseFloat(r.saldo_pendiente||0),0);
+  const cmas90=d.filter(r=>moraCat(r.dias_mora)===4).reduce((s,r)=>s+parseFloat(r.saldo_pendiente||0),0);
+  const maxMora=d.length>0?Math.max(...d.map(r=>r.dias_mora)):0;
+  const clientesUnicos=new Set(d.map(r=>r.nit)).size;
+  const criticos=d.filter(r=>moraCat(r.dias_mora)===4&&!isOwner(r));
+
+  c.innerHTML=`
+    ${criticos.length>0?`<div class="alert-bar"><div class="alert-ic">🚨</div><div><div class="alert-txt">${criticos.length} cliente${criticos.length>1?'s':''} con cartera mayor a 90 días</div><div class="alert-sub">Total crítico: ${fCOP(criticos.reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0))}</div></div></div>`:''}
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-ic" style="background:#FDECEA">💰</div><div class="kpi-lbl">Cartera Total</div><div class="kpi-val">${fM(total)}</div><div class="kpi-sub">${fQ(d.length)} registros · ${clientesUnicos} clientes</div></div>
+      <div class="kpi" style="border-color:var(--gold)"><div class="kpi-ic" style="background:#FFF3CD">👑</div><div class="kpi-lbl">Propietario (JOA)</div><div class="kpi-val" style="color:var(--owner)">${fM(totalOwner)}</div><div class="kpi-sub">Excluido del análisis de mora</div></div>
+      <div class="kpi"><div class="kpi-ic" style="background:var(--red2)">📊</div><div class="kpi-lbl">Cartera Terceros</div><div class="kpi-val">${fM(totalTerceros)}</div><div class="kpi-sub">Sin propietario</div></div>
+      <div class="kpi"><div class="kpi-ic" style="background:var(--yellow2)">⏱</div><div class="kpi-lbl">Mora Máxima</div><div class="kpi-val">${fQ(maxMora)} días</div></div>
+      <div class="kpi"><div class="kpi-ic" style="background:var(--red2)">🔴</div><div class="kpi-lbl">+90 días mora</div><div class="kpi-val" style="color:var(--red)">${fM(cmas90)}</div></div>
+    </div>
+    <div class="g2">
+      <div class="card gf"><div class="ct">Cartera por rango de mora <span class="ct-line"></span></div><div class="cw h260"><canvas id="cMora"></canvas></div></div>
+      <div class="card gf"><div class="ct">Top 10 clientes por cartera <span class="ct-line"></span><span class="tag tag-red">Sin propietario</span></div><div class="cw h260"><canvas id="cTop"></canvas></div></div>
+    </div>
+    <div class="card gf"><div class="ct">Distribución por rango <span class="ct-line"></span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+        ${[{l:'Al día',v:d.filter(r=>moraCat(r.dias_mora)===0).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0),c:'mora-0'},{l:'1–30 días',v:c1_30,c:'mora-1'},{l:'31–60 días',v:c31_60,c:'mora-2'},{l:'61–90 días',v:c61_90,c:'mora-3'},{l:'+90 días',v:cmas90,c:'mora-3'}].map(x=>`
+          <div style="background:var(--bg3);border-radius:var(--rs);padding:14px">
+            <span class="mora-badge ${x.c}" style="margin-bottom:8px;display:inline-block">${x.l}</span>
+            <div style="font-size:16px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace">${fM(x.v)}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:3px">${total>0?((x.v/total)*100).toFixed(1)+'% del total':''}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  // Gráfica mora
+  const catVals=[0,1,2,3,4].map(cat=>({
+    v:d.filter(r=>!isOwner(r)&&moraCat(r.dias_mora)===cat).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0),
+    c:moraColor(cat),l:moraLabel(cat)
+  }));
+  ch.mora=new Chart(document.getElementById('cMora'),{type:'doughnut',data:{
+    labels:catVals.map(x=>x.l),
+    datasets:[{data:catVals.map(x=>x.v),backgroundColor:catVals.map(x=>x.c),borderWidth:3,borderColor:'#fff',hoverOffset:8}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:11},padding:12,boxWidth:12}},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}},cutout:'55%'}});
+
+  // Top 10 sin propietario
+  const topClientes=Object.entries(d.filter(r=>!isOwner(r)).reduce((m,r)=>{if(!m[r.cliente])m[r.cliente]=0;m[r.cliente]+=parseFloat(r.saldo_pendiente);return m},{})).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  ch.top=new Chart(document.getElementById('cTop'),{type:'bar',data:{
+    labels:topClientes.map(([k])=>k.length>20?k.substring(0,20)+'…':k),
+    datasets:[{data:topClientes.map(([,v])=>v),backgroundColor:topClientes.map((_,i)=>i<3?'rgba(192,57,43,.85)':'rgba(192,57,43,.45)'),borderColor:topClientes.map((_,i)=>i<3?'#C0392B':'#E74C3C'),borderWidth:1.5,borderRadius:6,borderSkipped:false}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}},scales:{x:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},y:{ticks:{color:'#3D5280',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+}
+
+// ══ DETALLE CARTERA ═══════════════════════════
+function vD(d,c){
+  const sorted=[...d].sort((a,b)=>b.dias_mora-a.dias_mora);
+  c.innerHTML=`
+    <div class="card gf">
+      <div class="ct">Cartera detallada <span class="ct-line"></span><span class="tag tag-red">${fQ(d.length)} registros</span><span class="tag tag-gold" style="margin-left:auto">Total: ${fCOP(d.reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0))}</span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Cliente</th><th>NIT</th><th>Asesor</th>
+        <th class="num">Saldo Pendiente</th><th class="num">Valor Total Fact.</th>
+        <th>Vence</th><th>Días Mora</th><th>Categoría</th>
+      </tr></thead><tbody>
+        ${sorted.map((r,i)=>{
+          const cat=moraCat(r.dias_mora);
+          const own=isOwner(r);
+          const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+          return`<tr class="${own?'owner-row':''}" style="${own?'':''+odd}">
+            <td style="font-weight:600;font-size:12px;max-width:180px">
+              ${r.cliente.length>28?r.cliente.substring(0,28)+'…':r.cliente}
+              ${own?'<span class="owner-badge">👑 Propietario</span>':''}
+            </td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)">${r.nit.trim()}</td>
+            <td style="font-size:11px;color:var(--text2)">${r.asesor==='Sin asesor'?'<span style="color:var(--text4);font-style:italic">Sin asesor</span>':r.asesor.split(' ')[0]+' '+r.asesor.split(' ')[1]||r.asesor}</td>
+            <td class="num" style="color:${own?'var(--owner)':'var(--red)'};font-weight:700">${fCOP(parseFloat(r.saldo_pendiente))}</td>
+            <td class="num" style="color:var(--text2)">${fCOP(parseFloat(r.valor_total))}</td>
+            <td style="font-size:11px;color:var(--text2)">${r.fecha_vcto}</td>
+            <td class="num"><span class="mora-badge ${moraClass(cat)}">${r.dias_mora}d</span></td>
+            <td><span class="mora-badge ${moraClass(cat)}">${moraLabel(cat)}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+}
+
+// ══ POR ASESOR ════════════════════════════════
+function vA(d,c){
+  const byAsesor={};
+  d.filter(r=>!isOwner(r)).forEach(r=>{
+    const k=r.asesor==='Sin asesor'?'Sin asesor':r.asesor;
+    if(!byAsesor[k])byAsesor[k]={total:0,count:0,clientes:new Set(),critico:0,mora90:0};
+    byAsesor[k].total+=parseFloat(r.saldo_pendiente||0);
+    byAsesor[k].count++;
+    byAsesor[k].clientes.add(r.nit);
+    if(moraCat(r.dias_mora)>=3)byAsesor[k].critico+=parseFloat(r.saldo_pendiente||0);
+    if(moraCat(r.dias_mora)===4)byAsesor[k].mora90+=parseFloat(r.saldo_pendiente||0);
+  });
+  const sorted=Object.entries(byAsesor).sort((a,b)=>b[1].total-a[1].total);
+  const totGeneral=sorted.reduce((s,[,v])=>s+v.total,0);
+  const f=gF();
+  const asesorSel=f.asesor;
+
+  c.innerHTML=`
+    <div class="g2">
+      <div class="card gf"><div class="ct">Cartera por asesor <span class="ct-line"></span></div><div class="cw h300"><canvas id="cAsesor"></canvas></div></div>
+      <div class="card gf"><div class="ct">Resumen por asesor <span class="ct-line"></span></div>
+        <div class="tw"><table><thead><tr>
+          <th>Asesor</th><th class="num">Cartera</th><th class="num">Clientes</th><th class="num">Crítico (+60d)</th><th>% Total</th>
+        </tr></thead><tbody>
+          ${sorted.map(([k,v],i)=>{
+            const p=totGeneral>0?((v.total/totGeneral)*100).toFixed(1):0;
+            const bw=sorted[0]?Math.round((v.total/sorted[0][1].total)*100):0;
+            const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+            const isSel=asesorSel===k;
+            return`<tr style="${odd}${isSel?';outline:2px solid var(--red);outline-offset:-2px':''}">
+              <td style="font-weight:600;font-size:12px">${k}</td>
+              <td class="num" style="color:var(--red);font-weight:700">${fCOP(v.total)}<div class="bb"><div class="bf" style="width:${bw}%"></div></div></td>
+              <td class="num">${v.clientes.size}</td>
+              <td class="num" style="color:${v.critico>0?'var(--red)':'var(--text3)'}">${fCOP(v.critico)}</td>
+              <td><span class="tag tag-red">${p}%</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody></table></div>
+      </div>
+    </div>
+    ${asesorSel&&asesorSel!=='Sin asesor'?`
+    <div class="card gf"><div class="ct">Clientes de ${asesorSel} <span class="ct-line"></span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Cliente</th><th>NIT</th><th class="num">Saldo</th><th>Vence</th><th>Días Mora</th>
+      </tr></thead><tbody>
+        ${d.filter(r=>r.asesor===asesorSel&&!isOwner(r)).sort((a,b)=>b.dias_mora-a.dias_mora).map((r,i)=>{
+          const cat=moraCat(r.dias_mora);
+          const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+          return`<tr style="${odd}">
+            <td style="font-weight:600;font-size:12px">${r.cliente.length>30?r.cliente.substring(0,30)+'…':r.cliente}</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)">${r.nit.trim()}</td>
+            <td class="num" style="color:var(--red);font-weight:700">${fCOP(parseFloat(r.saldo_pendiente))}</td>
+            <td style="font-size:11px">${r.fecha_vcto}</td>
+            <td><span class="mora-badge ${moraClass(cat)}">${r.dias_mora}d · ${moraLabel(cat)}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`:''}`;
+
+  const colors=['#C0392B','#E74C3C','#E67E22','#F39C12','#3B6FD4','#0A7A5A','#6B21A8','#16A085','#8E44AD','#2C3E50'];
+  ch.asesor=new Chart(document.getElementById('cAsesor'),{type:'bar',data:{
+    labels:sorted.map(([k])=>k.split(' ')[0]),
+    datasets:[{data:sorted.map(([,v])=>v.total),backgroundColor:colors.map(c=>c+'99'),borderColor:colors,borderWidth:1.5,borderRadius:8,borderSkipped:false}]
+  },options:{...tBase(),plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+}
+
+// ══ COMPARATIVO ═══════════════════════════════
+function vC(d,c){
+  // Cartera por mes de vencimiento
+  const byMes={};
+  d.filter(r=>!isOwner(r)).forEach(r=>{
+    const k=r.año_mes;
+    const l=`${MN[r.mes]} ${r.año}`;
+    if(!byMes[k])byMes[k]={l,total:0,n:0};
+    byMes[k].total+=parseFloat(r.saldo_pendiente||0);
+    byMes[k].n++;
+  });
+  const mks=Object.keys(byMes).sort();
+
+  // Por año
+  const byAño={};
+  d.filter(r=>!isOwner(r)).forEach(r=>{
+    if(!byAño[r.año])byAño[r.año]=0;
+    byAño[r.año]+=parseFloat(r.saldo_pendiente||0);
+  });
+  const años=Object.keys(byAño).sort();
+
+  c.innerHTML=`
+    <div class="g2">
+      <div class="card gf"><div class="ct">Cartera por mes de vencimiento <span class="ct-line"></span></div><div class="cw h280"><canvas id="cMes"></canvas></div></div>
+      <div class="card gf"><div class="ct">Cartera por año <span class="ct-line"></span></div><div class="cw h280"><canvas id="cAño"></canvas></div></div>
+    </div>
+    <div class="card gf"><div class="ct">Concentración de mora por categoría <span class="ct-line"></span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Categoría</th><th class="num">Monto</th><th class="num">Registros</th><th class="num">Clientes únicos</th><th>% del total</th>
+      </tr></thead><tbody>
+        ${[0,1,2,3,4].map(cat=>{
+          const rows=d.filter(r=>!isOwner(r)&&moraCat(r.dias_mora)===cat);
+          const tot=rows.reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+          const totAll=d.filter(r=>!isOwner(r)).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0);
+          const p=totAll>0?((tot/totAll)*100).toFixed(1):0;
+          const cli=new Set(rows.map(r=>r.nit)).size;
+          return`<tr>
+            <td><span class="mora-badge ${moraClass(cat)}">${moraLabel(cat)}</span></td>
+            <td class="num" style="font-weight:700;color:var(--navy)">${fCOP(tot)}</td>
+            <td class="num">${fQ(rows.length)}</td>
+            <td class="num">${fQ(cli)}</td>
+            <td><span class="tag tag-red">${p}%</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+
+  ch.mes=new Chart(document.getElementById('cMes'),{type:'bar',data:{
+    labels:mks.map(k=>byMes[k].l),
+    datasets:[{data:mks.map(k=>byMes[k].total),backgroundColor:'rgba(192,57,43,.3)',borderColor:'#C0392B',borderWidth:2,borderRadius:6,borderSkipped:false}]
+  },options:{...tBase(),plugins:{...tBase().plugins,tooltip:{...tBase().plugins.tooltip,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+
+  ch.año=new Chart(document.getElementById('cAño'),{type:'doughnut',data:{
+    labels:años,
+    datasets:[{data:años.map(a=>byAño[a]),backgroundColor:['rgba(192,57,43,.8)','rgba(231,76,60,.8)','rgba(230,126,34,.8)'],borderWidth:3,borderColor:'#fff',hoverOffset:8}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:11},padding:12,boxWidth:12}},tooltip:{backgroundColor:'rgba(11,31,74,.92)',bodyColor:'#fff',bodyFont:{size:12,weight:'600'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}},cutout:'50%'}});
+}
+
+// ══ MENSAJE DE COBRO ══════════════════════════
+function vM(d,c){
+  const clientes=[...new Map(d.filter(r=>!isOwner(r)).map(r=>[r.nit,r])).values()].sort((a,b)=>b.dias_mora-a.dias_mora);
+
+  c.innerHTML=`
+    <div class="g2">
+      <div class="card gf">
+        <div class="ct">Seleccionar cliente <span class="ct-line"></span></div>
+        <div class="fg" style="margin-bottom:12px">
+          <label>Buscar cliente</label>
+          <input type="text" id="mBuscar" placeholder="Nombre o NIT…" oninput="filtrarClientes()" style="width:100%;font-size:13px;padding:9px 12px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);outline:none;font-family:inherit">
+        </div>
+        <div id="mLista" style="max-height:400px;overflow-y:auto;border:1.5px solid var(--border);border-radius:var(--rs)">
+          ${clientes.map((r,i)=>{
+            const cat=moraCat(r.dias_mora);
+            const totalCliente=d.filter(x=>x.nit===r.nit).reduce((s,x)=>s+parseFloat(x.saldo_pendiente),0);
+            return`<div onclick="selCliente('${r.nit}')" id="cli_${r.nit.trim()}" style="padding:12px 14px;border-bottom:1px solid var(--border2);cursor:pointer;transition:background .15s${i%2===0?'':';background:rgba(238,241,248,.4)'}" onmouseover="this.style.background='var(--blue3)'" onmouseout="this.style.background=''">
+              <div style="font-weight:600;font-size:12px">${r.cliente.length>35?r.cliente.substring(0,35)+'…':r.cliente}</div>
+              <div style="display:flex;gap:8px;margin-top:4px;align-items:center">
+                <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.nit.trim()}</span>
+                <span class="mora-badge ${moraClass(cat)}" style="font-size:9px">${r.dias_mora}d</span>
+                <span style="font-size:11px;color:var(--red);font-weight:700;margin-left:auto">${fCOP(totalCliente)}</span>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="card gf">
+        <div class="ct">Mensaje de cobro generado <span class="ct-line"></span></div>
+        <div id="mInfo" style="color:var(--text3);font-size:13px;text-align:center;padding:30px 0">← Selecciona un cliente para generar el mensaje</div>
+        <div id="mMsg" style="display:none">
+          <div id="mDetalle" style="background:var(--bg3);border-radius:var(--rs);padding:14px;margin-bottom:12px;font-size:12px;color:var(--text2)"></div>
+          <div class="ct" style="margin-top:16px">Mensaje WhatsApp <span class="ct-line"></span></div>
+          <div class="msg-box" id="mTexto"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn-copy" onclick="copiarMsg()">📋 Copiar mensaje</button>
+            <button class="btn-wa" onclick="abrirWA()">📱 Abrir WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  window._mClientes=d;
+}
+
+let _msgActual='';
+let _nitActual='';
+
+function filtrarClientes(){
+  const q=document.getElementById('mBuscar').value.toLowerCase();
+  document.querySelectorAll('#mLista>div').forEach(el=>{
+    const txt=el.textContent.toLowerCase();
+    el.style.display=txt.includes(q)?'':'none';
+  });
+}
+
+function selCliente(nit){
+  document.querySelectorAll('#mLista>div').forEach(el=>el.style.background='');
+  const el=document.getElementById('cli_'+nit);
+  if(el)el.style.background='var(--blue3)';
+  _nitActual=nit;
+
+  const rows=window._mClientes.filter(r=>r.nit.trim()===nit.trim());
+  if(!rows.length)return;
+
+  const r=rows[0];
+  const totalSaldo=rows.reduce((s,x)=>s+parseFloat(x.saldo_pendiente),0);
+  const nFacturas=rows.length;
+  const maxMora=Math.max(...rows.map(x=>x.dias_mora));
+  const cat=moraCat(maxMora);
+  const fechaHoy=new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+
+  document.getElementById('mInfo').style.display='none';
+  document.getElementById('mMsg').style.display='block';
+  document.getElementById('mDetalle').innerHTML=`
+    <strong>${r.cliente}</strong> · NIT ${nit.trim()}<br>
+    Cartera total: <strong style="color:var(--red)">${fCOP(totalSaldo)}</strong> · 
+    ${nFacturas} factura${nFacturas>1?'s':''} · 
+    Mora máxima: <span class="mora-badge ${moraClass(cat)}" style="font-size:10px">${maxMora} días</span>`;
+
+  const saludo=maxMora>90?'Estimado(a) cliente':'Estimado(a)';
+  const urgencia=maxMora>90?'📢 URGENTE: ':maxMora>60?'⚠️ ':maxMora>30?'':'';
+  const msg=`${urgencia}${saludo} *${r.cliente}*,
+
+Le recordamos que a la fecha *${fechaHoy}*, registra una cartera pendiente con *Jota Mundial SAS* por valor de *${fCOP(totalSaldo)}*, correspondiente a *${nFacturas} factura${nFacturas>1?'s':''}* con una mora de *${maxMora} días*.
+
+Le solicitamos amablemente gestionar el pago a la brevedad posible para evitar el cobro de intereses de mora.
+
+Para cualquier acuerdo de pago o información adicional, comuníquese con nuestro equipo comercial.
+
+📍 Jota Mundial SAS — Soluciones Arquitectónicas
+📞 Pereira, Risaralda`;
+
+  _msgActual=msg;
+  document.getElementById('mTexto').textContent=msg;
+}
+
+function copiarMsg(){
+  navigator.clipboard.writeText(_msgActual).then(()=>{
+    const b=document.querySelector('.btn-copy');b.textContent='✅ Copiado!';
+    setTimeout(()=>b.textContent='📋 Copiar mensaje',2000);
+  });
+}
+
+function abrirWA(){
+  const url='https://wa.me/?text='+encodeURIComponent(_msgActual);
+  window.open(url,'_blank');
+}
+
+cargar();
+setInterval(cargar,30*60*1000);
+</script>
+</body>
+</html>

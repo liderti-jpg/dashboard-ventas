@@ -309,11 +309,11 @@ function vR(d,c){
   c.innerHTML=`
     ${criticos.length>0?`<div class="alert-bar"><div class="alert-ic">🚨</div><div><div class="alert-txt">${criticos.length} cliente${criticos.length>1?'s':''} con cartera mayor a 90 días</div><div class="alert-sub">Total crítico: ${fCOP(criticos.reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0))}</div></div></div>`:''}
     <div class="kpis">
-      <div class="kpi"><div class="kpi-ic" style="background:#FDECEA">💰</div><div class="kpi-lbl">Cartera Total</div><div class="kpi-val">${fM(total)}</div><div class="kpi-sub">${fQ(d.length)} registros · ${clientesUnicos} clientes</div></div>
-      <div class="kpi" style="border-color:var(--gold)"><div class="kpi-ic" style="background:#FFF3CD">👑</div><div class="kpi-lbl">Propietario (JOA)</div><div class="kpi-val" style="color:var(--owner)">${fM(totalOwner)}</div><div class="kpi-sub">Excluido del análisis de mora</div></div>
-      <div class="kpi"><div class="kpi-ic" style="background:var(--red2)">📊</div><div class="kpi-lbl">Cartera Terceros</div><div class="kpi-val">${fM(totalTerceros)}</div><div class="kpi-sub">Sin propietario</div></div>
+      <div class="kpi"><div class="kpi-ic" style="background:#FDECEA">💰</div><div class="kpi-lbl">Cartera Total</div><div class="kpi-val">${fCOP(total)}</div><div class="kpi-sub">${fQ(d.length)} registros · ${clientesUnicos} clientes</div></div>
+      <div class="kpi" style="border-color:var(--gold)"><div class="kpi-ic" style="background:#FFF3CD">👑</div><div class="kpi-lbl">Propietario (JOA)</div><div class="kpi-val" style="color:var(--owner)">${fCOP(totalOwner)}</div><div class="kpi-sub">Excluido del análisis de mora</div></div>
+      <div class="kpi"><div class="kpi-ic" style="background:var(--red2)">📊</div><div class="kpi-lbl">Cartera Terceros</div><div class="kpi-val">${fCOP(totalTerceros)}</div><div class="kpi-sub">Sin propietario</div></div>
       <div class="kpi"><div class="kpi-ic" style="background:var(--yellow2)">⏱</div><div class="kpi-lbl">Mora Máxima</div><div class="kpi-val">${fQ(maxMora)} días</div></div>
-      <div class="kpi"><div class="kpi-ic" style="background:var(--red2)">🔴</div><div class="kpi-lbl">+90 días mora</div><div class="kpi-val" style="color:var(--red)">${fM(cmas90)}</div></div>
+      <div class="kpi"><div class="kpi-ic" style="background:var(--red2)">🔴</div><div class="kpi-lbl">+90 días mora</div><div class="kpi-val" style="color:var(--red)">${fCOP(cmas90)}</div></div>
     </div>
     <div class="g2">
       <div class="card gf"><div class="ct">Cartera por rango de mora <span class="ct-line"></span></div><div class="cw h260"><canvas id="cMora"></canvas></div></div>
@@ -324,7 +324,7 @@ function vR(d,c){
         ${[{l:'Al día',v:d.filter(r=>moraCat(r.dias_mora)===0).reduce((s,r)=>s+parseFloat(r.saldo_pendiente),0),c:'mora-0'},{l:'1–30 días',v:c1_30,c:'mora-1'},{l:'31–60 días',v:c31_60,c:'mora-2'},{l:'61–90 días',v:c61_90,c:'mora-3'},{l:'+90 días',v:cmas90,c:'mora-3'}].map(x=>`
           <div style="background:var(--bg3);border-radius:var(--rs);padding:14px">
             <span class="mora-badge ${x.c}" style="margin-bottom:8px;display:inline-block">${x.l}</span>
-            <div style="font-size:16px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace">${fM(x.v)}</div>
+            <div style="font-size:16px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace">${fCOP(x.v)}</div>
             <div style="font-size:10px;color:var(--text3);margin-top:3px">${total>0?((x.v/total)*100).toFixed(1)+'% del total':''}</div>
           </div>`).join('')}
       </div>
@@ -665,7 +665,7 @@ function buscarCliente(){
         <div class="res-nm">${r.cliente.length>30?r.cliente.substring(0,30)+'…':r.cliente}</div>
         <div class="res-nit">${r.nit}</div>
       </div>
-      <div class="res-saldo">${fM(r.saldo)}</div>
+      <div class="res-saldo">${fCOP(r.saldo)}</div>
     </div>`).join('');
 }
 
@@ -715,7 +715,7 @@ function verFichaCliente(nit){
       <div class="mora-bar">
         ${[[c0,'Al día','#0A7A5A'],[c1,'1–30d','#F39C12'],[c2,'31–60d','#E67E22'],[c3,'61–90d','#C0392B'],[c4,'+90d','#7B0000']].map(([v,l,color])=>`
           <div class="mora-seg" style="background:${color}22;border:1px solid ${color}44">
-            <div class="mora-seg-v" style="color:${color}">${fM(v)}</div>
+            <div class="mora-seg-v" style="color:${color}">${fCOP(v)}</div>
             <div class="mora-seg-l" style="color:${color}">${l}</div>
           </div>`).join('')}
       </div>

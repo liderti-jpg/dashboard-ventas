@@ -744,9 +744,22 @@ function verFichaCliente(nit){
       </tbody></table></div>
 
       <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
-        <button class="btn-wa" onclick="selCliente('${nit}');sv('m',document.querySelectorAll('.vt')[4])">💬 Generar mensaje de cobro</button>
+        <button class="btn-wa" onclick="irAMensaje('${nit}')">💬 Generar mensaje de cobro</button>
       </div>
     </div>`;
+}
+
+
+function irAMensaje(nit){
+  // Cambiar a vista mensaje
+  vista='m';
+  document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.vt').forEach(t=>{
+    if(t.textContent.includes('Mensaje')) t.classList.add('active');
+  });
+  ap();
+  // Esperar a que renderice y seleccionar el cliente
+  setTimeout(()=>{ selCliente(nit); }, 200);
 }
 
 cargar();

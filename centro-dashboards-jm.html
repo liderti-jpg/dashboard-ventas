@@ -140,7 +140,7 @@ main{padding:40px 48px 64px;max-width:1500px;margin:0 auto}
 
 /* Imagen superior con overlay de color */
 .card-img{
-  height:200px;position:relative;overflow:hidden;flex-shrink:0;
+  height:160px;position:relative;overflow:hidden;flex-shrink:0;
 }
 .card-img-bg{
   position:absolute;inset:0;
@@ -260,7 +260,7 @@ footer{
   .cards{grid-template-columns:1fr;gap:16px}
 
   /* Cards */
-  .card-img{height:160px}
+  .card-img{height:140px}
   .card-body{padding:16px}
   .card-title{font-size:16px}
   .card-desc{font-size:12px}
@@ -316,7 +316,7 @@ footer{
 <div class="stats-bar">
   <div class="stat">
     <div class="stat-icon" style="background:#EAF0FD">📊</div>
-    <div><div class="stat-val">4</div><div class="stat-lbl">Módulos activos</div></div>
+    <div><div class="stat-val">5</div><div class="stat-lbl">Módulos activos</div></div>
   </div>
   <div class="sdiv"></div>
   <div class="stat">
@@ -347,7 +347,7 @@ footer{
     <!-- VENTAS ASESORES -->
     <a class="card" href="https://liderti-jpg.github.io/dashboard-ventas/" target="_blank">
       <div class="card-img">
-        <div class="card-img-bg" style="background-image:url('https://i.ibb.co/wNSQGhqh/equipocomercialjm.jpg');background-position:center top"></div>
+        <div class="card-img-bg" style="background-image:url('https://i.ibb.co/wNSQGhqh/equipocomercialjm.jpg')"></div>
         <div class="card-img-overlay" style="background:linear-gradient(135deg,rgba(26,58,110,.75),rgba(59,111,212,.5))"></div>
         <div class="card-mod">Comercial</div>
         <div class="card-st"><span class="live-dot"></span>ACTIVO</div>
@@ -377,7 +377,7 @@ footer{
     <!-- PRODUCTOS VENDIDOS -->
     <a class="card" href="https://liderti-jpg.github.io/dashboard-ventas/dashboard-productos.html" target="_blank">
       <div class="card-img">
-        <div class="card-img-bg" style="background-image:url('https://i.ibb.co/1GqrhWNv/bodegajm.jpg');background-position:center center"></div>
+        <div class="card-img-bg" style="background-image:url('https://i.ibb.co/1GqrhWNv/bodegajm.jpg')"></div>
         <div class="card-img-overlay" style="background:linear-gradient(135deg,rgba(10,78,58,.75),rgba(10,122,90,.5))"></div>
         <div class="card-mod">Inventario</div>
         <div class="card-st"><span class="live-dot"></span>ACTIVO</div>
@@ -407,7 +407,7 @@ footer{
     <!-- CLIENTES TERCEROS -->
     <a class="card" href="https://liderti-jpg.github.io/dashboard-ventas/dashboard-terceros.html" target="_blank">
       <div class="card-img">
-        <div class="card-img-bg" style="background-image:url('https://i.ibb.co/zVPsLq8H/fachadajm.jpg');background-position:center center"></div>
+        <div class="card-img-bg" style="background-image:url('https://i.ibb.co/zVPsLq8H/fachadajm.jpg')"></div>
         <div class="card-img-overlay" style="background:linear-gradient(135deg,rgba(120,80,0,.75),rgba(184,134,11,.5))"></div>
         <div class="card-mod">Clientes</div>
         <div class="card-st"><span class="live-dot"></span>ACTIVO</div>
@@ -433,6 +433,36 @@ footer{
         </div>
       </div>
     </a>
+
+    <!-- CARTERA -->
+      <a class="card" href="https://liderti-jpg.github.io/dashboard-ventas/dashboard-cartera.html" target="_blank">
+        <div class="card-img">
+          <div class="card-img-bg" style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80')"></div>
+          <div class="card-img-overlay" style="background:linear-gradient(135deg,rgba(120,20,20,.75),rgba(192,57,43,.5))"></div>
+          <div class="card-mod">Cobranza</div>
+          <div class="card-st"><span class="live-dot"></span>ACTIVO</div>
+        </div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-ico-wrap" style="background:linear-gradient(135deg,#922B21,#C0392B)">🚨</div>
+            <div class="card-title-wrap">
+              <div class="card-title">Cartera & Cobros</div>
+              <div class="card-subtitle">Módulo de cartera</div>
+            </div>
+          </div>
+          <p class="card-desc">Saldos pendientes por cliente, días de mora, ranking por asesor, alertas de vencimiento y generación de mensajes de cobro para WhatsApp.</p>
+          <div class="card-chips">
+            <span class="chip">Mora</span>
+            <span class="chip">Por asesor</span>
+            <span class="chip">Alertas</span>
+            <span class="chip">Cobros WA</span>
+          </div>
+          <div class="card-btn" style="background:linear-gradient(135deg,#922B21,#C0392B)">
+            <span>Abrir dashboard</span>
+            <span class="btn-arrow">→</span>
+          </div>
+        </div>
+      </a>
 
     <!-- FINANCIERO -->
     <a class="card" href="https://liderti-jpg.github.io/dashboard-ventas/dashboard-financiero.html" target="_blank">

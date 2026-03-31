@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="https://i.ibb.co/BKyTpZ1g/logo-JOTA-MUNDIAL-SAS-original-mundoo.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Financiero — Jota Mundial SAS</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
@@ -24,8 +25,6 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* ── HEADER ── */
 header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 24px rgba(0,0,0,.3)}
 .hlogo{display:flex;align-items:center;gap:13px}
 .logo-ic{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:#fff;box-shadow:0 3px 10px rgba(180,130,0,.4);flex-shrink:0}
@@ -41,8 +40,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .btn-ref:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .btn-ref:disabled{opacity:.5;cursor:not-allowed;transform:none}
 #ts{font-size:10px;color:rgba(255,255,255,.25);font-family:'JetBrains Mono',monospace}
-
-/* ── TICKER BLOOMBERG ── */
 .ticker-wrap{background:#050F1F;border-bottom:1px solid rgba(59,111,212,.25);height:34px;overflow:hidden;position:sticky;top:62px;z-index:99;display:flex;align-items:center}
 .ticker-badge{background:linear-gradient(90deg,var(--gold),#E8B800);color:#000;font-size:9px;font-weight:800;padding:0 14px;height:100%;display:flex;align-items:center;letter-spacing:2px;text-transform:uppercase;flex-shrink:0;border-right:1px solid rgba(255,255,255,.1)}
 .ticker-trm{padding:0 16px;height:100%;display:flex;align-items:center;gap:6px;border-right:1px solid rgba(255,255,255,.08);flex-shrink:0}
@@ -58,17 +55,11 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .tk-sep{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.15);margin:0 4px}
 .tk-up{color:#34D399}.tk-dn{color:#F87171}.tk-neu{color:rgba(255,255,255,.7)}
 .tk-arrow{font-size:8px}
-
-/* ── MAIN ── */
 .main{padding:22px 32px;max-width:1700px;margin:0 auto}
 @media(max-width:680px){.main{padding:10px}}
-
-/* ── BREADCRUMB ── */
 .bcb{display:flex;align-items:center;gap:7px;margin-bottom:16px;font-size:11px;color:var(--text3);font-weight:500}
 .bcb a{color:var(--text3);text-decoration:none;transition:color .15s}.bcb a:hover{color:var(--navy)}
 .bcs{color:var(--text4)}.bcc{color:var(--navy);font-weight:700}
-
-/* ── PERIODO + MODO ── */
 .psec{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 20px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
 .fg{display:flex;flex-direction:column;gap:3px}
 .fg label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
@@ -80,14 +71,10 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .modo-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
 .modo-btn{padding:5px 11px;border-radius:7px;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;font-size:10px;font-weight:700;color:var(--text3);font-family:'Inter',sans-serif;transition:all .2s;letter-spacing:.2px}
 .modo-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 2px 8px rgba(11,31,74,.2)}
-
-/* ── TABS ── */
 .vtabs{display:flex;gap:2px;margin-bottom:16px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:4px;width:fit-content;box-shadow:var(--shadow);flex-wrap:wrap}
 .vt{padding:7px 15px;border-radius:9px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;letter-spacing:.2px}
 .vt.active{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 3px 12px rgba(11,31,74,.22)}
 .vt:not(.active):hover{background:var(--bg3);color:var(--navy)}
-
-/* ── KPI CARDS ── */
 .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}}
@@ -101,8 +88,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .kpi-sub{font-size:9px;color:var(--text3);line-height:1.4}
 .kpi-ch{font-size:10px;font-weight:700;margin-top:5px;display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px}
 .ch-up{color:var(--green);background:var(--green2)}.ch-dn{color:var(--red);background:var(--red2)}.ch-ne{color:var(--text3);background:var(--bg3)}
-
-/* ── MODAL ── */
 .mo{position:fixed;inset:0;background:rgba(5,15,31,.6);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
 .mo.open{opacity:1;pointer-events:all}
 .mc{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:26px;width:88%;max-width:420px;position:relative;transform:translateY(24px) scale(.97);transition:transform .25s;box-shadow:0 24px 80px rgba(0,0,0,.2)}
@@ -120,22 +105,16 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .mc-dot.active{background:var(--navy);width:20px;border-radius:3px}
 .mc-prog{height:2px;background:var(--bg4);border-radius:2px;margin-top:12px;overflow:hidden}
 .mc-prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--navy));border-radius:2px;transition:width .3s}
-
-/* ── GRID ── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 .gf{margin-bottom:12px}
 @media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
-
-/* ── CARD ── */
 .card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
 .ct{font-size:9px;font-weight:800;color:var(--navy3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .ct-line{flex:1;height:1px;background:var(--border2);min-width:16px}
 .cw{position:relative}
 .h200{height:200px}.h240{height:240px}.h260{height:260px}.h280{height:280px}.h300{height:300px}.h320{height:320px}
-
-/* ── P&G TABLE ── */
 .pyg-hdr{display:flex;padding:3px 10px 6px;border-bottom:2px solid var(--border)}
 .pyg-sec-title{font-size:9px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:1px;background:linear-gradient(90deg,var(--bg3),transparent);padding:5px 10px;border-radius:6px;margin:5px 0 3px;display:flex;align-items:center;gap:5px}
 .pyg-row{display:flex;align-items:center;padding:4px 10px;border-radius:5px;transition:background .12s}
@@ -152,8 +131,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .pyg-tot .pv{font-weight:800;color:#fff;font-size:13px}
 .pyg-tot .pa{color:rgba(255,255,255,.55);font-size:11px}
 .pyg-tot .pp{color:rgba(255,255,255,.35)}
-
-/* ── BALANCE TABLE ── */
 .bal-grp-title{background:linear-gradient(90deg,var(--navy),var(--navy2));border-radius:8px;padding:7px 12px;display:flex;justify-content:space-between;margin-bottom:3px;color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;box-shadow:0 2px 8px rgba(11,31,74,.15)}
 .bal-sub{background:var(--bg3);padding:4px 12px;display:flex;justify-content:space-between;border-radius:4px;margin-bottom:2px;font-size:9px;font-weight:700;color:var(--navy3);text-transform:uppercase;letter-spacing:.5px}
 .bal-row{display:flex;justify-content:space-between;padding:3px 12px;border-radius:5px;transition:background .12s}
@@ -163,8 +140,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .bal-tot{background:linear-gradient(90deg,var(--gold3),#FFF3C4);border:1.5px solid var(--gold2);border-radius:8px;padding:7px 12px;display:flex;justify-content:space-between;margin-top:8px;box-shadow:0 2px 8px rgba(184,134,11,.1)}
 .bal-tot-nm{font-size:12px;font-weight:800;color:var(--navy)}
 .bal-tot-vl{font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--gold)}
-
-/* ── INDICADORES ── */
 .ind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px;margin-bottom:12px}
 .ind{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);padding:13px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .2s}
 .ind:hover{transform:translateY(-2px)}
@@ -174,8 +149,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .ind-ref{font-size:9px;color:var(--text3);line-height:1.3}
 .ind-bar-bg{height:3px;background:var(--bg4);border-radius:3px;margin-top:6px;overflow:hidden}
 .ind-bar-fill{height:100%;border-radius:3px;transition:width 1s ease;background:var(--ibar,var(--blue))}
-
-/* ── CARTERA ── */
 .cartera-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px}
 .cr-card{border-radius:10px;padding:12px;border:1.5px solid transparent;position:relative;overflow:hidden}
 .cr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
@@ -192,8 +165,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .cr-naranja .cr-lbl,.cr-naranja .cr-val{color:var(--orange)}
 .cr-rojo .cr-lbl,.cr-rojo .cr-val{color:var(--red)}
 .cr-critico .cr-lbl{color:#FCA5A5}.cr-critico .cr-val{color:#F87171}
-
-/* ── ALERT BADGES ── */
 .alert-row{display:flex;align-items:center;padding:7px 10px;border-radius:7px;margin-bottom:4px;border:1px solid transparent;transition:all .2s}
 .alert-row:hover{opacity:.85}
 .alert-verde{background:var(--green2);border-color:rgba(4,120,87,.15)}
@@ -207,8 +178,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .alert-monto{font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;min-width:150px;text-align:right}
 .pulse-ring{animation:alertpulse 2s infinite}
 @keyframes alertpulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.4)}50%{box-shadow:0 0 0 6px rgba(220,38,38,0)}}
-
-/* ── PROYECCION ── */
 .proy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
 .proy-card{border-radius:12px;padding:16px;border:1.5px solid transparent;text-align:center}
 .proy-cons{background:var(--red2);border-color:rgba(220,38,38,.2)}
@@ -219,8 +188,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .proy-val{font-size:17px;font-weight:800;font-family:'JetBrains Mono',monospace}
 .proy-cons .proy-val{color:var(--red)}.proy-base .proy-val{color:var(--blue)}.proy-opt .proy-val{color:var(--green)}
 .proy-lbl{font-size:9px;margin-top:3px;opacity:.7}
-
-/* ── BARRA EJECUTIVA ── */
 .exec-band{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);border-radius:var(--r);padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:0;overflow-x:auto;box-shadow:0 4px 20px rgba(11,31,74,.18);border:1px solid rgba(59,111,212,.2)}
 .eb-item{display:flex;flex-direction:column;padding:0 20px;border-right:1px solid rgba(255,255,255,.1);flex-shrink:0;min-width:0}
 .eb-item:last-child{border-right:none}
@@ -230,8 +197,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .eb-sub{font-size:9px;color:rgba(255,255,255,.35);margin-top:2px;white-space:nowrap}
 .eb-div{width:1px;background:rgba(255,255,255,.06);align-self:stretch}
 .eb-period{background:rgba(59,111,212,.2);border:1px solid rgba(59,111,212,.3);border-radius:8px;padding:4px 12px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7);margin-right:16px;flex-shrink:0;white-space:nowrap}
-
-/* ── TABLE ── */
 .tbl{width:100%;border-collapse:collapse}
 .tbl th{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:7px 10px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;text-align:right}
 .tbl th:first-child{text-align:left}
@@ -240,14 +205,10 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .tbl tr:hover td{background:var(--blue3)}
 .tbl .tot td{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;font-weight:800;font-family:'JetBrains Mono',monospace;font-size:12px}
 .tbl .mono{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--navy)}
-
-/* ── TAG ── */
 .tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:800;letter-spacing:.3px}
 .tag-blue{background:var(--blue3);color:var(--navy3)}.tag-green{background:var(--green2);color:var(--green)}
 .tag-red{background:var(--red2);color:var(--red)}.tag-gold{background:var(--gold3);color:var(--gold)}
 .tag-orange{background:var(--orange2);color:var(--orange)}
-
-/* ── LOADING ── */
 .loading{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px}
 .ls{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -274,12 +235,13 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 
 <header>
   <div class="hlogo">
-    <div class="logo-ic">JM</div>
+    <img src="https://i.ibb.co/gbVD1bq5/logo-JOTA-MUNDIAL-SAS-original.png" alt="Jota Mundial SAS" style="height:42px;width:auto;object-fit:contain;display:block;mix-blend-mode:lighten">
     <div><div class="logo-nm">JOTA MUNDIAL SAS</div><span class="logo-sb">Dashboard Financiero</span></div>
     <div class="hdiv"></div>
     <span class="htitle">SIESA SBS · PUC Colombia</span>
   </div>
   <div class="hright">
+    <a href="https://liderti-jpg.github.io/dashboard-ventas/centro-dashboards-jm.html" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--rs);padding:7px 14px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">← Centro</a>
     <span id="ts"></span>
     <div class="badge-live" id="bl"><span class="dot-live"></span>EN VIVO</div>
     <button class="btn-ref" id="br" onclick="cargar()">↻ Actualizar</button>
@@ -329,7 +291,6 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
     </div>
   </div>
 
-  <!-- BARRA EJECUTIVA -->
   <div class="exec-band" id="execBand">
     <div class="eb-period" id="ebPeriod">— / —</div>
     <div class="eb-item"><div class="eb-lbl">Ingresos brutos acum.</div><div class="eb-val gold" id="ebIngBrutoAcum">—</div><div class="eb-sub" id="ebIngBrutoAcumSub">Año completo</div></div>
@@ -362,7 +323,6 @@ const MN=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','
 const MF=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let raw=[],vista='r',ch={},kpArr=[],kpIdx=0,modoPyG='mes',trm=0;
 
-// ── HELPERS ──
 const fCOP=v=>{if(v===null||isNaN(v))return'—';const s=Math.abs(v);return(v<0?'-':'')+new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(s)};
 const fSh=v=>{if(!v||isNaN(v))return'—';const s=Math.abs(v);let r;if(s>=1e12)r=(v/1e12).toFixed(2)+'B';else if(s>=1e9)r=(v/1e9).toFixed(2)+'MM';else if(s>=1e6)r=(v/1e6).toFixed(1)+'M';else if(s>=1e3)r=(v/1e3).toFixed(0)+'K';else r=Math.round(s).toLocaleString('es-CO');return(v<0?'-$':'$')+r};
 const fPct=v=>v===null||isNaN(v)?'—':(v>=0?'+':'')+v.toFixed(1)+'%';
@@ -370,7 +330,6 @@ const pObj=(a,b)=>{if(!b)return{t:'—',c:'ne'};const p=((a-b)/Math.abs(b)*100);
 const pHtml=(a,b)=>{const o=pObj(a,b);return`<span class="tag tag-${o.c==='up'?'green':o.c==='dn'?'red':'blue'}">${o.t}</span>`};
 const setModo=m=>{modoPyG=m;['mes','acum','ambos'].forEach(x=>{const el=document.getElementById('modo'+x.charAt(0).toUpperCase()+x.slice(1));if(el)el.classList.toggle('active',x===m)});ap()};
 
-// ── TRM ──
 async function fetchTRM(){
   try{
     const r=await fetch('https://www.datos.gov.co/resource/32sa-8pi3.json?$limit=1&$order=vigenciadesde DESC',{signal:AbortSignal.timeout(8000)});
@@ -381,7 +340,6 @@ async function fetchTRM(){
   return trm;
 }
 
-// ── TICKER ──
 function buildTicker(fin,finAcum,mes,ano){
   const items=[
     {l:'Ing. Op. Netos',v:fCOP(fin.ingOpNeto),c:fin.ingOpNeto>=0?'up':'dn'},
@@ -409,7 +367,6 @@ function buildTicker(fin,finAcum,mes,ano){
   const el=document.getElementById('tkc');el.innerHTML=html+html;
 }
 
-// ── MODAL ──
 function openMo(arr,i){kpArr=arr;kpIdx=i;rkm();document.getElementById('kpiMo').classList.add('open')}
 function closeMo(e){if(e.target.id==='kpiMo')closeMoBtn()}
 function closeMoBtn(){document.getElementById('kpiMo').classList.remove('open')}
@@ -429,7 +386,6 @@ document.getElementById('kpiMo').addEventListener('touchstart',e=>{tx=e.touches[
 document.getElementById('kpiMo').addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)sk(dx<0?1:-1)},{passive:true});
 document.addEventListener('keydown',e=>{if(!document.getElementById('kpiMo').classList.contains('open'))return;if(e.key==='ArrowLeft')sk(-1);if(e.key==='ArrowRight')sk(1);if(e.key==='Escape')closeMoBtn()});
 
-// ── CARGA ──
 async function fetchPag(p){
   const r=await fetch(`${WH}?pagina=${p}`,{signal:AbortSignal.timeout(60000)});
   if(!r.ok)throw new Error('HTTP '+r.status);
@@ -461,25 +417,12 @@ function setLoad(msg,p,t){
   document.getElementById('ct').innerHTML=`<div class="loading"><div class="ls"></div><div>${msg}</div>${t>0?`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><small style="color:var(--text4);font-size:10px">Página ${p} de ${t}</small>`:''}</div>`;
 }
 
-// ── PERÍODO ──
 const getPer=()=>parseInt(`${+document.getElementById('fano').value}${String(+document.getElementById('fmes').value).padStart(2,'0')}`);
 const getAno=()=>+document.getElementById('fano').value;
 const getMes=()=>+document.getElementById('fmes').value;
 const getAcumPers=()=>Array.from({length:getMes()},(_,i)=>parseInt(`${getAno()}${String(i+1).padStart(2,'0')}`));
 const filPer=(data,ps)=>data.filter(r=>(Array.isArray(ps)?ps:[ps]).includes(r.periodo));
 
-// ═══════════════════════════════════════════════════════
-// LÓGICA PUC COLOMBIA
-// P&G: solo debitos/creditos del período
-//   Ingresos (4,41 sin 417501): creditos - debitos
-//   Devoluciones (417501): debitos - creditos
-//   Ing.No.Op (42): creditos - debitos
-//   Costos (6): debitos - creditos
-//   Gastos (5): debitos - creditos
-// Balance: saldo_inicial + movimientos
-//   Activo (1): + debitos - creditos
-//   Pasivo/Patrimonio (2,3): + creditos - debitos → valor absoluto
-// ═══════════════════════════════════════════════════════
 function getFinanciero(datos){
   const byKey={};
   datos.forEach(r=>{
@@ -495,7 +438,6 @@ function getFinanciero(datos){
   const RC=c=>rows.filter(r=>r.codigo_mayor===c);
   const sumDC=(rs,f)=>rs.reduce((s,r)=>s+f(r),0);
 
-  // P&G — solo movimientos
   const ing41=rows.filter(r=>r.grupo==='4'&&r.subgrupo==='41'&&r.codigo_mayor!=='417501');
   const devRows=RC('417501');
   const ing42=RS('4','42');
@@ -514,7 +456,6 @@ function getFinanciero(datos){
   const utilAntImp=utilOp+ingNoOp-gastoNoOp;
   const utilNeta=utilAntImp-impRenta;
 
-  // Balance — saldo final
   const sf1=(g,sg)=>{const r2=sg?RS(g,sg):R(g);return sumDC(r2,r=>r.saldo_inicial+r.debitos-r.creditos)};
   const sf2=(g,sg)=>{const r2=sg?RS(g,sg):R(g);return Math.abs(sumDC(r2,r=>r.saldo_inicial+r.creditos-r.debitos))};
   const activo=sf1('1');
@@ -528,7 +469,6 @@ function getFinanciero(datos){
   const pasCte=pas22+pas23+pas24+pas25;
   const patrimonio=sf2('3');
 
-  // Indicadores
   const liquidez=pasCte>0?actCte/pasCte:null;
   const endeudamiento=activo>0?pasivo/activo*100:null;
   const margenBruto=ingOpNeto>0?utilBruta/ingOpNeto*100:null;
@@ -545,12 +485,9 @@ function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classLis
 function ap(){if(!raw.length)return;dC();render()}
 function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
 
-// ── CHART CONFIG ──
 Chart.defaults.font.family="'Inter',sans-serif";
 Chart.defaults.animation.duration=600;
 Chart.defaults.animation.easing='easeOutQuart';
-
-const gradBar=(ctx,from,to)=>{try{const g=ctx.getContext('2d').createLinearGradient(0,0,0,ctx.height||300);g.addColorStop(0,from);g.addColorStop(1,to);return g;}catch{return from;}};
 
 const tOpts=(cb,leg)=>({
   responsive:true,maintainAspectRatio:false,
@@ -583,95 +520,52 @@ function render(){
   else if(vista==='proy')vProy(mes,ano);
 }
 
-// ── BARRA EJECUTIVA ──
 function updateExecBand(fin,finAcum,mes,ano){
   const s=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
-  const sc=(id,val)=>{const el=document.getElementById(id);if(el){el.textContent=val;el.className='eb-val'+(val&&val.startsWith('-')?' neg':val&&val.includes('$')&&!val.startsWith('-')?' pos':' gold');}};
-
   s('ebPeriod',`${MF[mes]} ${ano}`);
-  // Ingresos brutos acumulados = saldo_inicial del grupo 4 (acumulado previo) + créditos del mes
   const ingBrutoAcum=Math.abs(finAcum.ingBruto);
   document.getElementById('ebIngBrutoAcum').textContent=fCOP(ingBrutoAcum);
   document.getElementById('ebIngBrutoAcum').className='eb-val gold';
   s('ebIngBrutoAcumSub',`Ene–${MN[mes]} ${ano}`);
-
   document.getElementById('ebIngBrutoMes').textContent=fCOP(fin.ingBruto);
   document.getElementById('ebIngBrutoMes').className='eb-val'+(fin.ingBruto<0?' neg':'');
-
   document.getElementById('ebIngNeto').textContent=fCOP(fin.ingOpNeto);
   document.getElementById('ebIngNeto').className='eb-val'+(fin.ingOpNeto<0?' neg':'');
   s('ebIngNetoSub',`Dev: ${fCOP(fin.devol)}`);
-
   document.getElementById('ebUtilBruta').textContent=fCOP(fin.utilBruta);
   document.getElementById('ebUtilBruta').className='eb-val'+(fin.utilBruta>=0?' pos':' neg');
   s('ebUtilBrutaSub',`Margen: ${fPct(fin.margenBruto)}`);
-
   document.getElementById('ebUtilNeta').textContent=fCOP(fin.utilNeta);
   document.getElementById('ebUtilNeta').className='eb-val'+(fin.utilNeta>=0?' pos':' neg');
   s('ebUtilNetaSub',`Margen: ${fPct(fin.margenNeto)}`);
-
   document.getElementById('ebUtilNetaAcum').textContent=fCOP(finAcum.utilNeta);
   document.getElementById('ebUtilNetaAcum').className='eb-val'+(finAcum.utilNeta>=0?' pos':' neg');
   s('ebUtilNetaAcumSub',`Acum. Ene–${MN[mes]}`);
-
   document.getElementById('ebActivo').textContent=fCOP(fin.activo);
   document.getElementById('ebActivo').className='eb-val';
   s('ebActivoSub',`Pasivo: ${fCOP(fin.pasivo)}`);
-
   document.getElementById('ebCartera').textContent=fCOP(fin.act13);
   document.getElementById('ebCartera').className='eb-val gold';
 }
 
-// ── RESUMEN ──
 function vR(fin,finAcum,finAnt,mes,ano){
-  // El modo determina qué datos muestran las cards
-  const usaAcum = modoPyG==='acum'||modoPyG==='ambos';
-  const usaMes  = modoPyG==='mes' ||modoPyG==='ambos';
-  const fActivo = usaAcum ? finAcum : fin;  // Balance siempre del período final
-  const fPyG    = usaAcum ? finAcum : fin;  // P&G según modo
-  const fComp   = usaAcum ? finAcum : finAnt; // Comparativo relativo
-  const modoTag = modoPyG==='mes'?`Solo ${MF[mes]}`:modoPyG==='acum'?`Acum. Ene–${MN[mes]} ${ano}`:`${MF[mes]} + Acum.`;
-  const subVal  = (mes_v, acum_v) => usaAcum && !usaMes ? acum_v : usaMes && !usaAcum ? mes_v : `${mes_v} / ${acum_v}`;
-
+  const usaAcum=modoPyG==='acum'||modoPyG==='ambos';
+  const fPyG=usaAcum?finAcum:fin;
+  const modoTag=modoPyG==='mes'?`Solo ${MF[mes]}`:modoPyG==='acum'?`Acum. Ene–${MN[mes]} ${ano}`:`${MF[mes]} + Acum.`;
+  const subVal=(mes_v,acum_v)=>usaAcum&&!(modoPyG==='ambos')?acum_v:!(modoPyG==='ambos')?mes_v:`${mes_v} / ${acum_v}`;
   const kps=[
-    {icon:'💵',kcol:'#047857',kbg:'#ECFDF5',label:'Ingresos Brutos',
-      value:fCOP(fPyG.ingBruto),
-      sub:`${modoTag}\nDevoluciones: ${fCOP(fPyG.devol)}`,...pObj(fPyG.ingBruto,finAnt.ingBruto)},
-    {icon:'💰',kcol:'#047857',kbg:'#D1FAE5',label:'Ingresos Op. Netos',
-      value:fCOP(fPyG.ingOpNeto),
-      sub:subVal(`Mes: ${fCOP(fin.ingOpNeto)}`,`Acum: ${fCOP(finAcum.ingOpNeto)}`),...pObj(fPyG.ingOpNeto,finAnt.ingOpNeto)},
-    {icon:'📦',kcol:'#D97706',kbg:'#FFFBEB',label:'Costo de Ventas',
-      value:fCOP(fPyG.cosTotal),
-      sub:`Ratio: ${fPct(fPyG.costoRatio)} sobre ingresos`,...pObj(fPyG.cosTotal,finAnt.cosTotal)},
-    {icon:'🏭',kcol:'#3B6FD4',kbg:'#EAF0FD',label:'Gastos Operacionales',
-      value:fCOP(fPyG.gastoOp),
-      sub:`Admón: ${fCOP(fPyG.gastoAdmon)}\nVentas: ${fCOP(fPyG.gastoVentas)}`,...pObj(fPyG.gastoOp,finAnt.gastoOp)},
-    {icon:'📈',kcol:fPyG.utilBruta>=0?'#047857':'#DC2626',kbg:fPyG.utilBruta>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Bruta',
-      value:fCOP(fPyG.utilBruta),
-      sub:`Margen: ${fPct(fPyG.margenBruto)}\n${subVal(`Mes: ${fCOP(fin.utilBruta)}`,`Acum: ${fCOP(finAcum.utilBruta)})`)}`,...pObj(fPyG.utilBruta,finAnt.utilBruta)},
-    {icon:'⚡',kcol:fPyG.utilOp>=0?'#047857':'#DC2626',kbg:fPyG.utilOp>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Operacional',
-      value:fCOP(fPyG.utilOp),
-      sub:`Margen op: ${fPct(fPyG.margenOp)}`,...pObj(fPyG.utilOp,finAnt.utilOp)},
-    {icon:'🎯',kcol:fPyG.utilNeta>=0?'#B8860B':'#DC2626',kbg:fPyG.utilNeta>=0?'#FFF8E7':'#FEF2F2',label:'Utilidad Neta',
-      value:fCOP(fPyG.utilNeta),
-      sub:`Margen neto: ${fPct(fPyG.margenNeto)}\n${subVal(`Mes: ${fCOP(fin.utilNeta)}`,`Acum: ${fCOP(finAcum.utilNeta)})`)}`,...pObj(fPyG.utilNeta,finAnt.utilNeta)},
-    {icon:'🏦',kcol:'#2E5199',kbg:'#EAF0FD',label:'Activo Total',
-      value:fCOP(fin.activo),
-      sub:`Cte: ${fCOP(fin.actCte)}\nNo cte: ${fCOP(fin.actNoCte)}`},
-    {icon:'💳',kcol:'#DC2626',kbg:'#FEF2F2',label:'Pasivo Total',
-      value:fCOP(fin.pasivo),
-      sub:`Endeud: ${fPct(fin.endeudamiento)}`},
-    {icon:'🏛️',kcol:'#B8860B',kbg:'#FFF8E7',label:'Patrimonio',
-      value:fCOP(fin.patrimonio),
-      sub:`TRM: ${fCOP(trm)}`},
+    {icon:'💵',kcol:'#047857',kbg:'#ECFDF5',label:'Ingresos Brutos',value:fCOP(fPyG.ingBruto),sub:`${modoTag}\nDevoluciones: ${fCOP(fPyG.devol)}`,...pObj(fPyG.ingBruto,finAnt.ingBruto)},
+    {icon:'💰',kcol:'#047857',kbg:'#D1FAE5',label:'Ingresos Op. Netos',value:fCOP(fPyG.ingOpNeto),sub:subVal(`Mes: ${fCOP(fin.ingOpNeto)}`,`Acum: ${fCOP(finAcum.ingOpNeto)}`),...pObj(fPyG.ingOpNeto,finAnt.ingOpNeto)},
+    {icon:'📦',kcol:'#D97706',kbg:'#FFFBEB',label:'Costo de Ventas',value:fCOP(fPyG.cosTotal),sub:`Ratio: ${fPct(fPyG.costoRatio)} sobre ingresos`,...pObj(fPyG.cosTotal,finAnt.cosTotal)},
+    {icon:'🏭',kcol:'#3B6FD4',kbg:'#EAF0FD',label:'Gastos Operacionales',value:fCOP(fPyG.gastoOp),sub:`Admón: ${fCOP(fPyG.gastoAdmon)}\nVentas: ${fCOP(fPyG.gastoVentas)}`,...pObj(fPyG.gastoOp,finAnt.gastoOp)},
+    {icon:'📈',kcol:fPyG.utilBruta>=0?'#047857':'#DC2626',kbg:fPyG.utilBruta>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Bruta',value:fCOP(fPyG.utilBruta),sub:`Margen: ${fPct(fPyG.margenBruto)}`,...pObj(fPyG.utilBruta,finAnt.utilBruta)},
+    {icon:'⚡',kcol:fPyG.utilOp>=0?'#047857':'#DC2626',kbg:fPyG.utilOp>=0?'#ECFDF5':'#FEF2F2',label:'Utilidad Operacional',value:fCOP(fPyG.utilOp),sub:`Margen op: ${fPct(fPyG.margenOp)}`,...pObj(fPyG.utilOp,finAnt.utilOp)},
+    {icon:'🎯',kcol:fPyG.utilNeta>=0?'#B8860B':'#DC2626',kbg:fPyG.utilNeta>=0?'#FFF8E7':'#FEF2F2',label:'Utilidad Neta',value:fCOP(fPyG.utilNeta),sub:`Margen neto: ${fPct(fPyG.margenNeto)}`,...pObj(fPyG.utilNeta,finAnt.utilNeta)},
+    {icon:'🏦',kcol:'#2E5199',kbg:'#EAF0FD',label:'Activo Total',value:fCOP(fin.activo),sub:`Cte: ${fCOP(fin.actCte)}\nNo cte: ${fCOP(fin.actNoCte)}`},
+    {icon:'💳',kcol:'#DC2626',kbg:'#FEF2F2',label:'Pasivo Total',value:fCOP(fin.pasivo),sub:`Endeud: ${fPct(fin.endeudamiento)}`},
+    {icon:'🏛️',kcol:'#B8860B',kbg:'#FFF8E7',label:'Patrimonio',value:fCOP(fin.patrimonio),sub:`TRM: ${fCOP(trm)}`},
   ];
-  // Etiqueta de modo visible en el resumen
-  const modoIndicador=`<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
-    <span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px">Vista:</span>
-    <span class="tag tag-blue">${modoTag}</span>
-    <span style="font-size:10px;color:var(--text3)">— Cambia con el selector de arriba</span>
-  </div>`;
-  const kj=JSON.stringify(kps);
+  const modoIndicador=`<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px"><span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px">Vista:</span><span class="tag tag-blue">${modoTag}</span><span style="font-size:10px;color:var(--text3)">— Cambia con el selector de arriba</span></div>`;
   document.getElementById('ct').innerHTML=`
   ${modoIndicador}
   <div class="kpis">${kps.map((k,i)=>`<div class="kpi" style="--kcol:${k.kcol};--kbg:${k.kbg}" onclick='openMo(${JSON.stringify(kps)},${i})'>
@@ -691,79 +585,35 @@ function vR(fin,finAcum,finAnt,mes,ano){
     <div class="card"><div class="ct">Activo · Pasivo · Patrimonio<span class="ct-line"></span></div><div class="cw h260"><canvas id="cBAL"></canvas></div></div>
   </div>`;
 
-  const c1=document.getElementById('cICG');
-  ch.icg=new Chart(c1,{type:'bar',data:{
-    labels:['Ing. Brutos','Ing. Op. Netos','Costos','G. Admón','G. Ventas','Ing. No Op'],
-    datasets:[{data:[fPyG.ingBruto,fPyG.ingOpNeto,fPyG.cosTotal,fPyG.gastoAdmon,fPyG.gastoVentas,fPyG.ingNoOp],
-      backgroundColor:['rgba(4,120,87,.75)','rgba(4,120,87,.9)','rgba(220,38,38,.8)','rgba(59,111,212,.8)','rgba(91,143,232,.8)','rgba(184,134,11,.8)'],
-      borderRadius:8,borderSkipped:false,borderWidth:0}]
-  },options:tOpts()});
-
-  ch.util=new Chart(document.getElementById('cUTIL'),{type:'bar',data:{
-    labels:['Ing.Op','–Costo','=Ut.Bruta','–G.Op','=Ut.Op','ING NoOp','–G.NoOp','=Ut.Neta'],
-    datasets:[{data:[fPyG.ingOpNeto,-fPyG.cosTotal,fPyG.utilBruta,-fPyG.gastoOp,fPyG.utilOp,fPyG.ingNoOp,-fPyG.gastoNoOp,fPyG.utilNeta],
-      backgroundColor:ctx=>ctx.raw>=0?'rgba(4,120,87,.8)':'rgba(220,38,38,.8)',
-      borderRadius:7,borderSkipped:false,borderWidth:0}]
-  },options:tOpts()});
-
-  ch.act=new Chart(document.getElementById('cACT'),{type:'doughnut',data:{
-    labels:['Disponible','Inversiones','Deudores','Inventarios','PP&E','Intangibles','Diferidos'],
-    datasets:[{data:[fin.act11,fin.act12,fin.act13,fin.act14,fin.act15,fin.act16,fin.act17].map(v=>Math.max(0,v)),
-      backgroundColor:['#1A3A6E','#3B6FD4','#5B8FE8','#B8860B','#047857','#6B21A8','#D97706'],
-      borderWidth:5,borderColor:'#fff',hoverOffset:12}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
-    plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},
-    tooltip:{backgroundColor:'rgba(7,21,48,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:10,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}},
-    animation:{animateRotate:true,duration:800}}});
+  ch.icg=new Chart(document.getElementById('cICG'),{type:'bar',data:{labels:['Ing. Brutos','Ing. Op. Netos','Costos','G. Admón','G. Ventas','Ing. No Op'],datasets:[{data:[fPyG.ingBruto,fPyG.ingOpNeto,fPyG.cosTotal,fPyG.gastoAdmon,fPyG.gastoVentas,fPyG.ingNoOp],backgroundColor:['rgba(4,120,87,.75)','rgba(4,120,87,.9)','rgba(220,38,38,.8)','rgba(59,111,212,.8)','rgba(91,143,232,.8)','rgba(184,134,11,.8)'],borderRadius:8,borderSkipped:false,borderWidth:0}]},options:tOpts()});
+  ch.util=new Chart(document.getElementById('cUTIL'),{type:'bar',data:{labels:['Ing.Op','–Costo','=Ut.Bruta','–G.Op','=Ut.Op','ING NoOp','–G.NoOp','=Ut.Neta'],datasets:[{data:[fPyG.ingOpNeto,-fPyG.cosTotal,fPyG.utilBruta,-fPyG.gastoOp,fPyG.utilOp,fPyG.ingNoOp,-fPyG.gastoNoOp,fPyG.utilNeta],backgroundColor:ctx=>ctx.raw>=0?'rgba(4,120,87,.8)':'rgba(220,38,38,.8)',borderRadius:7,borderSkipped:false,borderWidth:0}]},options:tOpts()});
+  ch.act=new Chart(document.getElementById('cACT'),{type:'doughnut',data:{labels:['Disponible','Inversiones','Deudores','Inventarios','PP&E','Intangibles','Diferidos'],datasets:[{data:[fin.act11,fin.act12,fin.act13,fin.act14,fin.act15,fin.act16,fin.act17].map(v=>Math.max(0,v)),backgroundColor:['#1A3A6E','#3B6FD4','#5B8FE8','#B8860B','#047857','#6B21A8','#D97706'],borderWidth:5,borderColor:'#fff',hoverOffset:12}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(7,21,48,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:10,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}},animation:{animateRotate:true,duration:800}}});
 
   const acPers=getAcumPers();
   const meses=acPers.map(p=>MN[p%100]);
   const evI=[],evC=[],evU=[];
   acPers.forEach(p=>{const f=getFinanciero(filPer(raw,[p]));evI.push(f.ingOpNeto);evC.push(f.cosTotal);evU.push(f.utilNeta);});
 
-  const c4=document.getElementById('cEVOL');
-  ch.evol=new Chart(c4,{type:'line',data:{labels:meses,datasets:[
+  ch.evol=new Chart(document.getElementById('cEVOL'),{type:'line',data:{labels:meses,datasets:[
     {label:'Ingresos',data:evI,borderColor:'#047857',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,260);g.addColorStop(0,'rgba(4,120,87,.18)');g.addColorStop(1,'rgba(4,120,87,.01)');return g;},fill:true,tension:.45,pointRadius:5,pointBackgroundColor:'#047857',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5},
     {label:'Costos',data:evC,borderColor:'#DC2626',backgroundColor:'transparent',fill:false,tension:.45,pointRadius:4,pointBackgroundColor:'#DC2626',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5},
     {label:'Ut. Neta',data:evU,borderColor:'#B8860B',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,260);g.addColorStop(0,'rgba(184,134,11,.12)');g.addColorStop(1,'rgba(184,134,11,.01)');return g;},fill:true,tension:.45,pointRadius:5,pointBackgroundColor:'#B8860B',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5,borderDash:[6,3]}
-  ]},options:{...tOpts(undefined,true),plugins:{...tOpts(undefined,true).plugins}}});
+  ]},options:{...tOpts(undefined,true)}});
 
-  ch.bal=new Chart(document.getElementById('cBAL'),{type:'doughnut',data:{
-    labels:['Activo','Pasivo','Patrimonio'],
-    datasets:[{data:[fin.activo,fin.pasivo,fin.patrimonio].map(v=>Math.max(0,v)),
-      backgroundColor:['#1A3A6E','#DC2626','#B8860B'],borderWidth:5,borderColor:'#fff',hoverOffset:12}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
-    plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:10},padding:12,boxWidth:10}},
-    tooltip:{backgroundColor:'rgba(7,21,48,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:10,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+  ch.bal=new Chart(document.getElementById('cBAL'),{type:'doughnut',data:{labels:['Activo','Pasivo','Patrimonio'],datasets:[{data:[fin.activo,fin.pasivo,fin.patrimonio].map(v=>Math.max(0,v)),backgroundColor:['#1A3A6E','#DC2626','#B8860B'],borderWidth:5,borderColor:'#fff',hoverOffset:12}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:10},padding:12,boxWidth:10}},tooltip:{backgroundColor:'rgba(7,21,48,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:10,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
 }
 
-// ── P&G ──
 function vPyG(fin,finAcum,finAnt,mes,ano){
   const mM=modoPyG==='mes'||modoPyG==='ambos',mA=modoPyG==='acum'||modoPyG==='ambos';
-  const base=fin.ingOpNeto,baseA=finAcum.ingOpNeto;
-  const row=(n,m,a)=>`<div class="pyg-row"><span class="pn">${n}</span>
-    ${mM?`<span class="pv" style="color:${m>=0?'var(--navy)':'var(--red)'}">${fCOP(m)}</span>`:''}
-    ${mA?`<span class="pa" style="color:${a>=0?'var(--text2)':'var(--red)'}">${fCOP(a)}</span>`:''}
-    ${mM?`<span class="pp">${base>0?((m/base)*100).toFixed(1)+'%':'—'}</span>`:''}
-  </div>`;
-  const sub=(n,m,a)=>`<div class="pyg-sub"><span class="pn">${n}</span>
-    ${mM?`<span class="pv">${fCOP(m)}</span>`:''}${mA?`<span class="pa">${fCOP(a)}</span>`:''}
-    ${mM?`<span class="pp">${base>0?((m/base)*100).toFixed(1)+'%':'—'}</span>`:''}
-  </div>`;
-  const tot=(n,m,a)=>`<div class="pyg-tot"><span class="pn">${n}</span>
-    ${mM?`<span class="pv">${fCOP(m)}</span>`:''}${mA?`<span class="pa">${fCOP(a)}</span>`:''}
-    ${mM?`<span class="pp"></span>`:''}
-  </div>`;
+  const base=fin.ingOpNeto;
+  const row=(n,m,a)=>`<div class="pyg-row"><span class="pn">${n}</span>${mM?`<span class="pv" style="color:${m>=0?'var(--navy)':'var(--red)'}">${fCOP(m)}</span>`:''} ${mA?`<span class="pa" style="color:${a>=0?'var(--text2)':'var(--red)'}">${fCOP(a)}</span>`:''} ${mM?`<span class="pp">${base>0?((m/base)*100).toFixed(1)+'%':'—'}</span>`:''}</div>`;
+  const sub=(n,m,a)=>`<div class="pyg-sub"><span class="pn">${n}</span>${mM?`<span class="pv">${fCOP(m)}</span>`:''} ${mA?`<span class="pa">${fCOP(a)}</span>`:''} ${mM?`<span class="pp">${base>0?((m/base)*100).toFixed(1)+'%':'—'}</span>`:''}</div>`;
+  const tot=(n,m,a)=>`<div class="pyg-tot"><span class="pn">${n}</span>${mM?`<span class="pv">${fCOP(m)}</span>`:''} ${mA?`<span class="pa">${fCOP(a)}</span>`:''} ${mM?`<span class="pp"></span>`:''}</div>`;
   document.getElementById('ct').innerHTML=`
   <div class="g2 gf">
     <div class="card" style="overflow:auto;max-height:640px">
       <div class="ct">Estado de Resultados — ${MF[mes]} ${ano}<span class="ct-line"></span><span class="tag tag-blue">PUC Colombia</span></div>
-      <div class="pyg-hdr">
-        <span class="pn" style="color:var(--text4);font-size:9px;font-weight:700">CONCEPTO</span>
-        ${mM?`<span class="pv" style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;text-align:right;min-width:160px">${MF[mes]} ${ano}</span>`:''}
-        ${mA?`<span class="pa" style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;text-align:right;min-width:160px">Acum. Ene–${MN[mes]} ${ano}</span>`:''}
-        ${mM?`<span class="pp" style="font-size:9px;font-weight:700;color:var(--text3);text-align:right">% Ing.</span>`:''}
-      </div>
+      <div class="pyg-hdr"><span class="pn" style="color:var(--text4);font-size:9px;font-weight:700">CONCEPTO</span>${mM?`<span class="pv" style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;text-align:right;min-width:160px">${MF[mes]} ${ano}</span>`:''} ${mA?`<span class="pa" style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;text-align:right;min-width:160px">Acum. Ene–${MN[mes]} ${ano}</span>`:''} ${mM?`<span class="pp" style="font-size:9px;font-weight:700;color:var(--text3);text-align:right">% Ing.</span>`:''}</div>
       <div class="pyg-sec-title">📥 INGRESOS OPERACIONALES</div>
       ${row('(+) Ventas brutas',fin.ingBruto,finAcum.ingBruto)}
       ${row('(−) Devoluciones y descuentos',-fin.devol,-finAcum.devol)}
@@ -787,28 +637,14 @@ function vPyG(fin,finAcum,finAnt,mes,ano){
       <div class="card"><div class="ct">Cascada P&G<span class="ct-line"></span></div><div class="cw h260"><canvas id="cPYGC"></canvas></div></div>
       <div class="card"><div class="ct">vs ${MN[mes===1?12:mes-1]||'mes ant.'}<span class="ct-line"></span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
-          ${[['Ing. Brutos',fin.ingBruto,finAnt.ingBruto],['Ing. Op. Netos',fin.ingOpNeto,finAnt.ingOpNeto],['Costos',fin.cosTotal,finAnt.cosTotal],['G. Admón',fin.gastoAdmon,finAnt.gastoAdmon],['G. Ventas',fin.gastoVentas,finAnt.gastoVentas],['Ut. Bruta',fin.utilBruta,finAnt.utilBruta],['Ut. Op.',fin.utilOp,finAnt.utilOp],['Ut. Neta',fin.utilNeta,finAnt.utilNeta]]
-            .map(([n,a,b])=>`<div style="background:var(--bg3);border-radius:8px;padding:9px">
-              <div style="font-size:8px;color:var(--text3);font-weight:800;text-transform:uppercase;margin-bottom:2px">${n}</div>
-              <div style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${a>=0?'var(--navy)':'var(--red)'};">${fCOP(a)}</div>
-              ${pHtml(a,b)}
-            </div>`).join('')}
+          ${[['Ing. Brutos',fin.ingBruto,finAnt.ingBruto],['Ing. Op. Netos',fin.ingOpNeto,finAnt.ingOpNeto],['Costos',fin.cosTotal,finAnt.cosTotal],['G. Admón',fin.gastoAdmon,finAnt.gastoAdmon],['G. Ventas',fin.gastoVentas,finAnt.gastoVentas],['Ut. Bruta',fin.utilBruta,finAnt.utilBruta],['Ut. Op.',fin.utilOp,finAnt.utilOp],['Ut. Neta',fin.utilNeta,finAnt.utilNeta]].map(([n,a,b])=>`<div style="background:var(--bg3);border-radius:8px;padding:9px"><div style="font-size:8px;color:var(--text3);font-weight:800;text-transform:uppercase;margin-bottom:2px">${n}</div><div style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${a>=0?'var(--navy)':'var(--red)'};">${fCOP(a)}</div>${pHtml(a,b)}</div>`).join('')}
         </div>
       </div>
     </div>
   </div>`;
-  setTimeout(()=>{
-    const c=document.getElementById('cPYGC');if(!c)return;
-    ch.pygc=new Chart(c,{type:'bar',data:{
-      labels:['Ing.Op','–Costo','Ut.Bruta','–G.Op','Ut.Op','ING NoOp','–G.NoOp','Ut.Neta'],
-      datasets:[{data:[fin.ingOpNeto,-fin.cosTotal,fin.utilBruta,-fin.gastoOp,fin.utilOp,fin.ingNoOp,-fin.gastoNoOp,fin.utilNeta],
-        backgroundColor:ctx=>ctx.raw>=0?'rgba(4,120,87,.85)':'rgba(220,38,38,.85)',
-        borderRadius:7,borderSkipped:false,borderWidth:0}]
-    },options:tOpts()});
-  },80);
+  setTimeout(()=>{const c=document.getElementById('cPYGC');if(!c)return;ch.pygc=new Chart(c,{type:'bar',data:{labels:['Ing.Op','–Costo','Ut.Bruta','–G.Op','Ut.Op','ING NoOp','–G.NoOp','Ut.Neta'],datasets:[{data:[fin.ingOpNeto,-fin.cosTotal,fin.utilBruta,-fin.gastoOp,fin.utilOp,fin.ingNoOp,-fin.gastoNoOp,fin.utilNeta],backgroundColor:ctx=>ctx.raw>=0?'rgba(4,120,87,.85)':'rgba(220,38,38,.85)',borderRadius:7,borderSkipped:false,borderWidth:0}]},options:tOpts()});},80);
 }
 
-// ── BALANCE ──
 function vBal(fin,mes,ano){
   const fv=v=>fCOP(Math.abs(v));
   const row=(n,v)=>`<div class="bal-row"><span class="bal-nm">${n}</span><span class="bal-vl">${fv(v)}</span></div>`;
@@ -840,46 +676,24 @@ function vBal(fin,mes,ano){
         ${fin.pas25>0?`<div class="bal-sub"><span>25 · Oblig. laborales</span><span>${fv(fin.pas25)}</span></div>${row('Nómina, cesantías, vacaciones',fin.pas25)}`:''}
         ${fin.pas26>0?`<div class="bal-sub"><span>26 · Pasivos estimados</span><span>${fv(fin.pas26)}</span></div>${row('Provisiones',fin.pas26)}`:''}
         ${fin.pas28>0?`<div class="bal-sub"><span>28 · Otros pasivos</span><span>${fv(fin.pas28)}</span></div>${row('Anticipos de clientes',fin.pas28)}`:''}
-        <div style="margin-top:8px">
-          <div class="bal-grp-title" style="background:linear-gradient(90deg,#7B5E00,#B8860B)"><span>PATRIMONIO</span><span>${fv(fin.patrimonio)}</span></div>
-          ${row('Capital social y utilidades acumuladas',fin.patrimonio)}
-        </div>
+        <div style="margin-top:8px"><div class="bal-grp-title" style="background:linear-gradient(90deg,#7B5E00,#B8860B)"><span>PATRIMONIO</span><span>${fv(fin.patrimonio)}</span></div>${row('Capital social y utilidades acumuladas',fin.patrimonio)}</div>
         <div class="bal-tot"><span class="bal-tot-nm">TOTAL PASIVO + PATRIMONIO</span><span class="bal-tot-vl">${fv(fin.pasivo+fin.patrimonio)}</span></div>
       </div>
       <div class="card"><div class="ct">Estructura financiera<span class="ct-line"></span></div><div class="cw h200"><canvas id="cBST"></canvas></div></div>
     </div>
   </div>`;
-  setTimeout(()=>{
-    const c=document.getElementById('cBST');if(!c)return;
-    ch.bst=new Chart(c,{type:'bar',data:{
-      labels:['Act. corriente','Act. no cte','Pasivo','Patrimonio'],
-      datasets:[{data:[fin.actCte,fin.actNoCte,fin.pasivo,fin.patrimonio].map(v=>Math.abs(v)),
-        backgroundColor:['rgba(59,111,212,.85)','rgba(26,58,110,.85)','rgba(220,38,38,.85)','rgba(184,134,11,.85)'],
-        borderRadius:8,borderSkipped:false,borderWidth:0}]
-    },options:tOpts()});
-  },80);
+  setTimeout(()=>{const c=document.getElementById('cBST');if(!c)return;ch.bst=new Chart(c,{type:'bar',data:{labels:['Act. corriente','Act. no cte','Pasivo','Patrimonio'],datasets:[{data:[fin.actCte,fin.actNoCte,fin.pasivo,fin.patrimonio].map(v=>Math.abs(v)),backgroundColor:['rgba(59,111,212,.85)','rgba(26,58,110,.85)','rgba(220,38,38,.85)','rgba(184,134,11,.85)'],borderRadius:8,borderSkipped:false,borderWidth:0}]},options:tOpts()});},80);
 }
 
-// ── CARTERA ──
 function vCartera(mes,ano){
   const per=getPer();
-  // Cartera = cuenta 13xx (deudores). Comparamos saldos por período para estimar antigüedad
-  // Calculamos cuántos meses lleva cada saldo sin cancelarse
-  const pers=[...new Set(raw.map(r=>r.periodo))].filter(p=>{const m=p%100;return m>=1&&m<=12;}).sort();
   const carteraActual=raw.filter(r=>r.periodo===per&&r.grupo==='1'&&r.subgrupo==='13');
   const totalCartera=carteraActual.reduce((s,r)=>s+(r.saldo_inicial+r.debitos-r.creditos),0);
-
-  // Simulamos rangos basados en saldo_inicial vs movimientos
-  // Si saldo_inicial alto y pocos créditos → cartera antigua
-  // Rangos aproximados por análisis de saldo_inicial de períodos anteriores
   const ranges={porVencer:0,d20:0,d30:0,d45:0,d60:0,critico:0};
   const cnt={porVencer:0,d20:0,d30:0,d45:0,d60:0,critico:0};
-
-  // Analizar cada cuenta de deudores: ratio de rotación indica antigüedad
   carteraActual.forEach(r=>{
     const saldoFin=r.saldo_inicial+r.debitos-r.creditos;
     if(saldoFin<=0)return;
-    // Si tiene muchos movimientos (créditos) = rotando bien = por vencer/reciente
     const ratio=r.debitos>0?r.creditos/r.debitos:0;
     if(r.saldo_inicial<=0&&r.debitos>0){ranges.porVencer+=saldoFin;cnt.porVencer++;}
     else if(ratio>0.8){ranges.d20+=saldoFin;cnt.d20++;}
@@ -888,14 +702,8 @@ function vCartera(mes,ano){
     else if(r.creditos>0){ranges.d60+=saldoFin;cnt.d60++;}
     else{ranges.critico+=saldoFin;cnt.critico++;}
   });
-
-  // Historial de cartera por meses
-  const histPers=pers.filter(p=>Math.floor(p/100)>=2025).slice(-12);
-  const histCar=histPers.map(p=>{
-    const rows=raw.filter(r=>r.periodo===p&&r.grupo==='1'&&r.subgrupo==='13');
-    return rows.reduce((s,r)=>s+(r.saldo_inicial+r.debitos-r.creditos),0);
-  });
-
+  const pers=[...new Set(raw.map(r=>r.periodo))].filter(p=>{const m=p%100;return m>=1&&m<=12&&Math.floor(p/100)>=2025;}).sort().slice(-12);
+  const histCar=pers.map(p=>{const rows=raw.filter(r=>r.periodo===p&&r.grupo==='1'&&r.subgrupo==='13');return rows.reduce((s,r)=>s+(r.saldo_inicial+r.debitos-r.creditos),0);});
   document.getElementById('ct').innerHTML=`
   <div style="margin-bottom:10px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -905,7 +713,7 @@ function vCartera(mes,ano){
     </div>
     <div style="background:var(--red2);border:1.5px solid rgba(220,38,38,.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px">
       <span style="font-size:16px">⚠️</span>
-      <div style="font-size:11px;color:var(--red);font-weight:600">Los rangos de vencimiento son estimados basados en la rotación de débitos/créditos del período. Para ver el vencimiento exacto por factura, se requiere crear la consulta <strong>jotamundialsas_cartera_clientes</strong> en Connekta usando la tabla t461 con el campo f461_fecha_vencto.</div>
+      <div style="font-size:11px;color:var(--red);font-weight:600">Los rangos de vencimiento son estimados. Para detalle exacto por factura ver el <strong>Dashboard de Cartera</strong>.</div>
     </div>
   </div>
   <div class="cartera-summary">
@@ -919,57 +727,17 @@ function vCartera(mes,ano){
   <div class="g2 gf">
     <div class="card"><div class="ct">Composición de cartera<span class="ct-line"></span></div><div class="cw h260"><canvas id="cCARD"></canvas></div></div>
     <div class="card"><div class="ct">Evolución cartera mensual<span class="ct-line"></span></div><div class="cw h260"><canvas id="cCARM"></canvas></div></div>
-  </div>
-  <div class="card gf">
-    <div class="ct">Alertas de cartera por cobrar<span class="ct-line"></span>
-      <span class="tag tag-orange">Acción requerida en rangos rojos</span>
-    </div>
-    ${carteraActual.filter(r=>(r.saldo_inicial+r.debitos-r.creditos)>0).sort((a,b)=>(b.saldo_inicial+b.debitos-b.creditos)-(a.saldo_inicial+a.debitos-a.creditos)).slice(0,15).map(r=>{
-      const saldo=r.saldo_inicial+r.debitos-r.creditos;
-      const ratio=r.debitos>0?r.creditos/r.debitos:0;
-      let cls,dot,dias;
-      if(r.saldo_inicial<=0&&r.debitos>0){cls='alert-verde';dot='#047857';dias='Por vencer';}
-      else if(ratio>0.8){cls='alert-amarillo';dot='#CA8A04';dias='1–20 días';}
-      else if(ratio>0.5){cls='alert-naranja';dot='#D97706';dias='21–30 días';}
-      else if(ratio>0.2){cls='alert-rojo';dot='#DC2626';dias='31–45 días';}
-      else if(r.creditos>0){cls='alert-rojo pulse-ring';dot='#DC2626';dias='46–60 días';}
-      else{cls='alert-critico pulse-ring';dot='#7F1D1D';dias='+60 días';}
-      return`<div class="alert-row ${cls}">
-        <span class="alert-dot" style="background:${dot}"></span>
-        <span class="alert-nm" style="color:${dot==='#7F1D1D'?'#FCA5A5':'inherit'}">${r.nombre_cuenta}</span>
-        <span class="alert-dias" style="color:${dot}">${dias}</span>
-        <span class="alert-monto" style="color:${dot==='#7F1D1D'?'#F87171':'var(--navy)'}">${fCOP(saldo)}</span>
-      </div>`;
-    }).join('')}
   </div>`;
-
   setTimeout(()=>{
     const c1=document.getElementById('cCARD');if(!c1)return;
-    ch.card=new Chart(c1,{type:'doughnut',data:{
-      labels:['Por vencer','1–20 días','21–30 días','31–45 días','46–60 días','+60 días'],
-      datasets:[{data:Object.values(ranges).map(v=>Math.max(0,v)),
-        backgroundColor:['#047857','#CA8A04','#D97706','#DC2626','#991B1B','#450a0a'],
-        borderWidth:5,borderColor:'#fff',hoverOffset:10}]
-    },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
-      plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},
-      tooltip:{backgroundColor:'rgba(7,21,48,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:10,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+    ch.card=new Chart(c1,{type:'doughnut',data:{labels:['Por vencer','1–20 días','21–30 días','31–45 días','46–60 días','+60 días'],datasets:[{data:Object.values(ranges).map(v=>Math.max(0,v)),backgroundColor:['#047857','#CA8A04','#D97706','#DC2626','#991B1B','#450a0a'],borderWidth:5,borderColor:'#fff',hoverOffset:10}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(7,21,48,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:10,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
     const c2=document.getElementById('cCARM');if(!c2)return;
-    ch.carm=new Chart(c2,{type:'line',data:{
-      labels:histPers.map(p=>`${MN[p%100]} ${Math.floor(p/100)}`),
-      datasets:[{label:'Cartera total',data:histCar,borderColor:'#3B6FD4',
-        backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,260);g.addColorStop(0,'rgba(59,111,212,.2)');g.addColorStop(1,'rgba(59,111,212,.02)');return g;},
-        fill:true,tension:.45,pointRadius:5,pointBackgroundColor:'#3B6FD4',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}]
-    },options:{...tOpts(undefined,false)}});
+    ch.carm=new Chart(c2,{type:'line',data:{labels:pers.map(p=>`${MN[p%100]} ${Math.floor(p/100)}`),datasets:[{label:'Cartera total',data:histCar,borderColor:'#3B6FD4',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,260);g.addColorStop(0,'rgba(59,111,212,.2)');g.addColorStop(1,'rgba(59,111,212,.02)');return g;},fill:true,tension:.45,pointRadius:5,pointBackgroundColor:'#3B6FD4',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}]},options:{...tOpts(undefined,false)}});
   },80);
 }
 
-// ── INDICADORES ──
 function vInd(fin,finAcum,mes,ano){
-  const ind=(lbl,val,ref,col,bar,max)=>`<div class="ind" style="--ibar:${col};--icolor:${col}">
-    <div class="ind-lbl">${lbl}</div><div class="ind-val">${val}</div>
-    <div class="ind-ref">${ref}</div>
-    ${max?`<div class="ind-bar-bg"><div class="ind-bar-fill" style="width:${Math.min(100,Math.abs(parseFloat(val))/max*100)}%"></div></div>`:''}
-  </div>`;
+  const ind=(lbl,val,ref,col,bar,max)=>`<div class="ind" style="--ibar:${col};--icolor:${col}"><div class="ind-lbl">${lbl}</div><div class="ind-val">${val}</div><div class="ind-ref">${ref}</div>${max?`<div class="ind-bar-bg"><div class="ind-bar-fill" style="width:${Math.min(100,Math.abs(parseFloat(val))/max*100)}%"></div></div>`:''}</div>`;
   const acPers=getAcumPers();
   const meses=acPers.map(p=>MN[p%100]);
   const evMB=[],evMO=[],evMN=[];
@@ -995,22 +763,12 @@ function vInd(fin,finAcum,mes,ano){
   </div>`;
   setTimeout(()=>{
     const c1=document.getElementById('cMAR');if(!c1)return;
-    ch.mar=new Chart(c1,{type:'bar',data:{
-      labels:['Margen Bruto','Margen Operacional','Margen Neto'],
-      datasets:[{data:[fin.margenBruto||0,fin.margenOp||0,fin.margenNeto||0],
-        backgroundColor:['rgba(4,120,87,.8)','rgba(59,111,212,.8)','rgba(184,134,11,.8)'],
-        borderRadius:8,borderSkipped:false,borderWidth:0}]
-    },options:{...tOpts(ctx=>` ${ctx.raw?.toFixed(1)}%`),scales:{y:{ticks:{callback:v=>`${v.toFixed(0)}%`,color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+    ch.mar=new Chart(c1,{type:'bar',data:{labels:['Margen Bruto','Margen Operacional','Margen Neto'],datasets:[{data:[fin.margenBruto||0,fin.margenOp||0,fin.margenNeto||0],backgroundColor:['rgba(4,120,87,.8)','rgba(59,111,212,.8)','rgba(184,134,11,.8)'],borderRadius:8,borderSkipped:false,borderWidth:0}]},options:{...tOpts(ctx=>` ${ctx.raw?.toFixed(1)}%`),scales:{y:{ticks:{callback:v=>`${v.toFixed(0)}%`,color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
     const c2=document.getElementById('cMARE');if(!c2)return;
-    ch.mare=new Chart(c2,{type:'line',data:{labels:meses,datasets:[
-      {label:'Margen bruto',data:evMB,borderColor:'#047857',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,240);g.addColorStop(0,'rgba(4,120,87,.12)');g.addColorStop(1,'transparent');return g;},tension:.45,fill:true,pointRadius:4,borderWidth:2.5},
-      {label:'Margen op.',data:evMO,borderColor:'#3B6FD4',tension:.45,fill:false,pointRadius:3,borderWidth:2,borderDash:[5,3]},
-      {label:'Margen neto',data:evMN,borderColor:'#B8860B',tension:.45,fill:false,pointRadius:3,borderWidth:2,borderDash:[3,4]}
-    ]},options:{...tOpts(ctx=>` ${ctx.raw?.toFixed(1)}%`,true),scales:{y:{ticks:{callback:v=>`${v.toFixed(0)}%`,color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+    ch.mare=new Chart(c2,{type:'line',data:{labels:meses,datasets:[{label:'Margen bruto',data:evMB,borderColor:'#047857',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,240);g.addColorStop(0,'rgba(4,120,87,.12)');g.addColorStop(1,'transparent');return g;},tension:.45,fill:true,pointRadius:4,borderWidth:2.5},{label:'Margen op.',data:evMO,borderColor:'#3B6FD4',tension:.45,fill:false,pointRadius:3,borderWidth:2,borderDash:[5,3]},{label:'Margen neto',data:evMN,borderColor:'#B8860B',tension:.45,fill:false,pointRadius:3,borderWidth:2,borderDash:[3,4]}]},options:{...tOpts(ctx=>` ${ctx.raw?.toFixed(1)}%`,true),scales:{y:{ticks:{callback:v=>`${v.toFixed(0)}%`,color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
   },80);
 }
 
-// ── TENDENCIA ──
 function vTend(mes,ano){
   const pers=[...new Set(raw.map(r=>r.periodo))].filter(p=>{const m=p%100;return m>=1&&m<=12&&Math.floor(p/100)>=2024;}).sort();
   const lbls=pers.map(p=>`${MN[p%100]} ${String(Math.floor(p/100)).slice(2)}`);
@@ -1022,65 +780,31 @@ function vTend(mes,ano){
     <div class="card"><div class="ct">Utilidad neta — mensual<span class="ct-line"></span></div><div class="cw h280"><canvas id="cTUNE"></canvas></div></div>
   </div>
   <div class="card gf"><div class="ct">Comparativa mensual completa<span class="ct-line"></span></div><div class="cw h300"><canvas id="cTCOMP"></canvas></div></div>`;
-  ch.ting=new Chart(document.getElementById('cTING'),{type:'bar',data:{
-    labels:lbls,datasets:[{data:evI,
-      backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,280);g.addColorStop(0,'rgba(4,120,87,.85)');g.addColorStop(1,'rgba(4,120,87,.3)');return g;},
-      borderRadius:7,borderSkipped:false,borderWidth:0}]
-  },options:tOpts()});
-  ch.tune=new Chart(document.getElementById('cTUNE'),{type:'bar',data:{
-    labels:lbls,datasets:[{data:evUN,
-      backgroundColor:ctx=>{const v=ctx.raw;const g=ctx.chart.ctx.createLinearGradient(0,0,0,280);if(v>=0){g.addColorStop(0,'rgba(4,120,87,.85)');g.addColorStop(1,'rgba(4,120,87,.3)');}else{g.addColorStop(0,'rgba(220,38,38,.85)');g.addColorStop(1,'rgba(220,38,38,.3)');}return g;},
-      borderRadius:7,borderSkipped:false,borderWidth:0}]
-  },options:tOpts()});
-  ch.tcomp=new Chart(document.getElementById('cTCOMP'),{type:'line',data:{
-    labels:lbls,datasets:[
-      {label:'Ingresos op.',data:evI,borderColor:'#047857',backgroundColor:'transparent',tension:.45,pointRadius:3,borderWidth:2.5},
-      {label:'Costos',data:evC,borderColor:'#DC2626',backgroundColor:'transparent',tension:.45,pointRadius:3,borderWidth:2.5},
-      {label:'Gastos op.',data:evGO,borderColor:'#3B6FD4',backgroundColor:'transparent',tension:.45,pointRadius:3,borderWidth:2},
-      {label:'Ut. bruta',data:evUB,borderColor:'#B8860B',backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,'rgba(184,134,11,.12)');g.addColorStop(1,'transparent');return g;},fill:true,tension:.45,pointRadius:3,borderWidth:2,borderDash:[5,3]}
-    ]
-  },options:{...tOpts(undefined,true)}});
+  ch.ting=new Chart(document.getElementById('cTING'),{type:'bar',data:{labels:lbls,datasets:[{data:evI,backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,280);g.addColorStop(0,'rgba(4,120,87,.85)');g.addColorStop(1,'rgba(4,120,87,.3)');return g;},borderRadius:7,borderSkipped:false,borderWidth:0}]},options:tOpts()});
+  ch.tune=new Chart(document.getElementById('cTUNE'),{type:'bar',data:{labels:lbls,datasets:[{data:evUN,backgroundColor:ctx=>{const v=ctx.raw;const g=ctx.chart.ctx.createLinearGradient(0,0,0,280);if(v>=0){g.addColorStop(0,'rgba(4,120,87,.85)');g.addColorStop(1,'rgba(4,120,87,.3)');}else{g.addColorStop(0,'rgba(220,38,38,.85)');g.addColorStop(1,'rgba(220,38,38,.3)');}return g;},borderRadius:7,borderSkipped:false,borderWidth:0}]},options:tOpts()});
+  ch.tcomp=new Chart(document.getElementById('cTCOMP'),{type:'line',data:{labels:lbls,datasets:[{label:'Ingresos op.',data:evI,borderColor:'#047857',backgroundColor:'transparent',tension:.45,pointRadius:3,borderWidth:2.5},{label:'Costos',data:evC,borderColor:'#DC2626',backgroundColor:'transparent',tension:.45,pointRadius:3,borderWidth:2.5},{label:'Gastos op.',data:evGO,borderColor:'#3B6FD4',backgroundColor:'transparent',tension:.45,pointRadius:3,borderWidth:2},{label:'Ut. bruta',data:evUB,backgroundColor:ctx=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,'rgba(184,134,11,.12)');g.addColorStop(1,'transparent');return g;},fill:true,borderColor:'#B8860B',tension:.45,pointRadius:3,borderWidth:2,borderDash:[5,3]}]},options:{...tOpts(undefined,true)}});
 }
 
-// ── COMPARATIVO ──
 function vComp(fin,finAnt,mes,ano){
   const mA=mes===1?12:mes-1,aA=mes===1?ano-1:ano;
   const finMA=getFinanciero(filPer(raw,[parseInt(`${ano-1}${String(mes).padStart(2,'0')}`)]));
-  const fila=(lbl,a,b,c,neg)=>`<tr style="${neg?'':'background:linear-gradient(90deg,var(--navy),var(--navy2));'}">
-    <td style="font-size:${neg?11:12}px;font-weight:${neg?500:800};color:${neg?'var(--text2)':'#fff'};text-align:left">${lbl}</td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:${neg?11:12}px;font-weight:800;color:${neg?(a>=0?'var(--navy)':'var(--red)'):'#fff'}">${fCOP(a)}</td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${neg?'var(--text2)':'rgba(255,255,255,.6)'}">${fCOP(b)}</td>
-    <td>${pHtml(a,b)}</td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${neg?'var(--text2)':'rgba(255,255,255,.6)'}">${fCOP(c)}</td>
-    <td>${pHtml(a,c)}</td>
-  </tr>`;
+  const fila=(lbl,a,b,c,neg)=>`<tr style="${neg?'':'background:linear-gradient(90deg,var(--navy),var(--navy2));'}"><td style="font-size:${neg?11:12}px;font-weight:${neg?500:800};color:${neg?'var(--text2)':'#fff'};text-align:left">${lbl}</td><td style="font-family:'JetBrains Mono',monospace;font-size:${neg?11:12}px;font-weight:800;color:${neg?(a>=0?'var(--navy)':'var(--red)'):'#fff'}">${fCOP(a)}</td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${neg?'var(--text2)':'rgba(255,255,255,.6)'}">${fCOP(b)}</td><td>${pHtml(a,b)}</td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${neg?'var(--text2)':'rgba(255,255,255,.6)'}">${fCOP(c)}</td><td>${pHtml(a,c)}</td></tr>`;
   document.getElementById('ct').innerHTML=`
   <div class="card gf" style="overflow-x:auto">
-    <div class="ct">Comparativo P&G<span class="ct-line"></span>
-      <span class="tag tag-blue">${MF[mes]} ${ano}</span>
-      <span style="color:var(--text4)">vs</span><span class="tag tag-blue">${MF[mA]} ${aA}</span>
-      <span style="color:var(--text4)">vs</span><span class="tag tag-gold">${MF[mes]} ${ano-1}</span>
-    </div>
-    <table class="tbl">
-      <thead><tr>
-        <th style="text-align:left;min-width:210px">Concepto</th>
-        <th>${MF[mes]} ${ano}</th><th>${MF[mA]} ${aA}</th><th>Var.</th>
-        <th>${MF[mes]} ${ano-1}</th><th>Var.</th>
-      </tr></thead>
-      <tbody>
-        ${fila('Ingresos brutos',fin.ingBruto,finAnt.ingBruto,finMA.ingBruto,true)}
-        ${fila('Ingresos operacionales netos',fin.ingOpNeto,finAnt.ingOpNeto,finMA.ingOpNeto,true)}
-        ${fila('(−) Costo de ventas',fin.cosTotal,finAnt.cosTotal,finMA.cosTotal,true)}
-        ${fila('= UTILIDAD BRUTA',fin.utilBruta,finAnt.utilBruta,finMA.utilBruta,false)}
-        ${fila('(−) Gastos administración',fin.gastoAdmon,finAnt.gastoAdmon,finMA.gastoAdmon,true)}
-        ${fila('(−) Gastos de ventas',fin.gastoVentas,finAnt.gastoVentas,finMA.gastoVentas,true)}
-        ${fila('= UTILIDAD OPERACIONAL',fin.utilOp,finAnt.utilOp,finMA.utilOp,false)}
-        ${fila('(+) Ingresos no operacionales',fin.ingNoOp,finAnt.ingNoOp,finMA.ingNoOp,true)}
-        ${fila('(−) Gastos no operacionales',fin.gastoNoOp,finAnt.gastoNoOp,finMA.gastoNoOp,true)}
-        ${fila('(−) Impuesto de renta',fin.impRenta,finAnt.impRenta,finMA.impRenta,true)}
-        ${fila('= UTILIDAD NETA',fin.utilNeta,finAnt.utilNeta,finMA.utilNeta,false)}
-      </tbody>
-    </table>
+    <div class="ct">Comparativo P&G<span class="ct-line"></span><span class="tag tag-blue">${MF[mes]} ${ano}</span><span style="color:var(--text4)">vs</span><span class="tag tag-blue">${MF[mA]} ${aA}</span><span style="color:var(--text4)">vs</span><span class="tag tag-gold">${MF[mes]} ${ano-1}</span></div>
+    <table class="tbl"><thead><tr><th style="text-align:left;min-width:210px">Concepto</th><th>${MF[mes]} ${ano}</th><th>${MF[mA]} ${aA}</th><th>Var.</th><th>${MF[mes]} ${ano-1}</th><th>Var.</th></tr></thead><tbody>
+      ${fila('Ingresos brutos',fin.ingBruto,finAnt.ingBruto,finMA.ingBruto,true)}
+      ${fila('Ingresos operacionales netos',fin.ingOpNeto,finAnt.ingOpNeto,finMA.ingOpNeto,true)}
+      ${fila('(−) Costo de ventas',fin.cosTotal,finAnt.cosTotal,finMA.cosTotal,true)}
+      ${fila('= UTILIDAD BRUTA',fin.utilBruta,finAnt.utilBruta,finMA.utilBruta,false)}
+      ${fila('(−) Gastos administración',fin.gastoAdmon,finAnt.gastoAdmon,finMA.gastoAdmon,true)}
+      ${fila('(−) Gastos de ventas',fin.gastoVentas,finAnt.gastoVentas,finMA.gastoVentas,true)}
+      ${fila('= UTILIDAD OPERACIONAL',fin.utilOp,finAnt.utilOp,finMA.utilOp,false)}
+      ${fila('(+) Ingresos no operacionales',fin.ingNoOp,finAnt.ingNoOp,finMA.ingNoOp,true)}
+      ${fila('(−) Gastos no operacionales',fin.gastoNoOp,finAnt.gastoNoOp,finMA.gastoNoOp,true)}
+      ${fila('(−) Impuesto de renta',fin.impRenta,finAnt.impRenta,finMA.impRenta,true)}
+      ${fila('= UTILIDAD NETA',fin.utilNeta,finAnt.utilNeta,finMA.utilNeta,false)}
+    </tbody></table>
   </div>
   <div class="g2">
     <div class="card"><div class="ct">Resultados — 3 períodos<span class="ct-line"></span></div><div class="cw h260"><canvas id="cCMP1"></canvas></div></div>
@@ -1088,88 +812,41 @@ function vComp(fin,finAnt,mes,ano){
   </div>`;
   setTimeout(()=>{
     const c1=document.getElementById('cCMP1');if(!c1)return;
-    ch.c1=new Chart(c1,{type:'bar',data:{
-      labels:['Ing.Op','Ut.Bruta','Ut.Op','Ut.Neta'],
-      datasets:[
-        {label:`${MF[mes]} ${ano}`,data:[fin.ingOpNeto,fin.utilBruta,fin.utilOp,fin.utilNeta],backgroundColor:'rgba(26,58,110,.9)',borderRadius:6,borderSkipped:false,borderWidth:0},
-        {label:`${MF[mA]} ${aA}`,data:[finAnt.ingOpNeto,finAnt.utilBruta,finAnt.utilOp,finAnt.utilNeta],backgroundColor:'rgba(26,58,110,.3)',borderRadius:6,borderSkipped:false,borderWidth:0},
-        {label:`${MF[mes]} ${ano-1}`,data:[finMA.ingOpNeto,finMA.utilBruta,finMA.utilOp,finMA.utilNeta],backgroundColor:'rgba(184,134,11,.6)',borderRadius:6,borderSkipped:false,borderWidth:0}
-      ]},options:{...tOpts(undefined,true)}});
+    ch.c1=new Chart(c1,{type:'bar',data:{labels:['Ing.Op','Ut.Bruta','Ut.Op','Ut.Neta'],datasets:[{label:`${MF[mes]} ${ano}`,data:[fin.ingOpNeto,fin.utilBruta,fin.utilOp,fin.utilNeta],backgroundColor:'rgba(26,58,110,.9)',borderRadius:6,borderSkipped:false,borderWidth:0},{label:`${MF[mA]} ${aA}`,data:[finAnt.ingOpNeto,finAnt.utilBruta,finAnt.utilOp,finAnt.utilNeta],backgroundColor:'rgba(26,58,110,.3)',borderRadius:6,borderSkipped:false,borderWidth:0},{label:`${MF[mes]} ${ano-1}`,data:[finMA.ingOpNeto,finMA.utilBruta,finMA.utilOp,finMA.utilNeta],backgroundColor:'rgba(184,134,11,.6)',borderRadius:6,borderSkipped:false,borderWidth:0}]},options:{...tOpts(undefined,true)}});
     const c2=document.getElementById('cCMP2');if(!c2)return;
-    ch.c2=new Chart(c2,{type:'bar',data:{
-      labels:['Margen bruto','Margen op.','Margen neto'],
-      datasets:[
-        {label:`${MF[mes]} ${ano}`,data:[fin.margenBruto||0,fin.margenOp||0,fin.margenNeto||0],backgroundColor:'rgba(26,58,110,.9)',borderRadius:6,borderSkipped:false,borderWidth:0},
-        {label:`${MF[mA]} ${aA}`,data:[finAnt.margenBruto||0,finAnt.margenOp||0,finAnt.margenNeto||0],backgroundColor:'rgba(26,58,110,.3)',borderRadius:6,borderSkipped:false,borderWidth:0},
-        {label:`${MF[mes]} ${ano-1}`,data:[finMA.margenBruto||0,finMA.margenOp||0,finMA.margenNeto||0],backgroundColor:'rgba(184,134,11,.6)',borderRadius:6,borderSkipped:false,borderWidth:0}
-      ]},options:{...tOpts(ctx=>` ${ctx.raw?.toFixed(1)}%`,true),scales:{y:{ticks:{callback:v=>`${v.toFixed(0)}%`,color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+    ch.c2=new Chart(c2,{type:'bar',data:{labels:['Margen bruto','Margen op.','Margen neto'],datasets:[{label:`${MF[mes]} ${ano}`,data:[fin.margenBruto||0,fin.margenOp||0,fin.margenNeto||0],backgroundColor:'rgba(26,58,110,.9)',borderRadius:6,borderSkipped:false,borderWidth:0},{label:`${MF[mA]} ${aA}`,data:[finAnt.margenBruto||0,finAnt.margenOp||0,finAnt.margenNeto||0],backgroundColor:'rgba(26,58,110,.3)',borderRadius:6,borderSkipped:false,borderWidth:0},{label:`${MF[mes]} ${ano-1}`,data:[finMA.margenBruto||0,finMA.margenOp||0,finMA.margenNeto||0],backgroundColor:'rgba(184,134,11,.6)',borderRadius:6,borderSkipped:false,borderWidth:0}]},options:{...tOpts(ctx=>` ${ctx.raw?.toFixed(1)}%`,true),scales:{y:{ticks:{callback:v=>`${v.toFixed(0)}%`,color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
   },80);
 }
 
-// ── PROYECCIÓN ──
 function vProy(mes,ano){
   const mesProx=mes===12?1:mes+1,anoProx=mes===12?ano+1:ano;
   const pers=[...new Set(raw.map(r=>r.periodo))].filter(p=>{const m=p%100;return m>=1&&m<=12;}).sort().slice(-6);
   const hist=pers.map(p=>getFinanciero(filPer(raw,[p])));
   if(hist.length<2){document.getElementById('ct').innerHTML='<div class="loading" style="color:var(--text3)">Se necesitan al menos 2 meses de datos para proyectar.</div>';return;}
-
-  const prom=arr=>arr.reduce((a,b)=>a+b,0)/arr.length;
-  const ings=hist.map(f=>f.ingOpNeto),coss=hist.map(f=>f.cosTotal),gadms=hist.map(f=>f.gastoAdmon),gvts=hist.map(f=>f.gastoVentas),ingnops=hist.map(f=>f.ingNoOp),gnops=hist.map(f=>f.gastoNoOp);
-
-  // Modelo promedio ponderado (recientes pesan más)
   const wprom=arr=>{const n=arr.length;return arr.reduce((s,v,i)=>s+v*(i+1),0)/((n*(n+1))/2)};
+  const ings=hist.map(f=>f.ingOpNeto),coss=hist.map(f=>f.cosTotal),gadms=hist.map(f=>f.gastoAdmon),gvts=hist.map(f=>f.gastoVentas),ingnops=hist.map(f=>f.ingNoOp),gnops=hist.map(f=>f.gastoNoOp);
   const baseIng=wprom(ings),baseCos=wprom(coss),baseAdm=wprom(gadms),baseVts=wprom(gvts),baseIngNop=wprom(ingnops),baseGnop=wprom(gnops);
   const baseUtil=(ing,cos,adm,vts,inp,gnp)=>{const ub=ing-cos;const uop=ub-adm-vts;return uop+inp-gnp;};
-
-  const sc=[
-    {n:'Conservador',f:.9,cl:'proy-cons'},
-    {n:'Base',f:1,cl:'proy-base'},
-    {n:'Optimista',f:1.12,cl:'proy-opt'},
-  ].map(s=>({...s,ing:baseIng*s.f,cos:baseCos*(s.f<1?1.02:s.f>1?.98:1),adm:baseAdm,vts:baseVts*(s.f<1?0.98:1.05),util:0}));
+  const sc=[{n:'Conservador',f:.9,cl:'proy-cons'},{n:'Base',f:1,cl:'proy-base'},{n:'Optimista',f:1.12,cl:'proy-opt'}].map(s=>({...s,ing:baseIng*s.f,cos:baseCos*(s.f<1?1.02:s.f>1?.98:1),adm:baseAdm,vts:baseVts*(s.f<1?0.98:1.05),util:0}));
   sc.forEach(s=>{s.util=baseUtil(s.ing,s.cos,s.adm,s.vts,baseIngNop,baseGnop)});
-
   const lbls=pers.map(p=>`${MN[p%100]} ${String(Math.floor(p/100)).slice(2)}`);
   document.getElementById('ct').innerHTML=`
   <div class="card gf">
-    <div class="ct">🔮 Proyección ${MF[mesProx]} ${anoProx}<span class="ct-line"></span>
-      <span class="tag tag-blue">Prom. ponderado últimos ${hist.length} meses</span>
-    </div>
+    <div class="ct">🔮 Proyección ${MF[mesProx]} ${anoProx}<span class="ct-line"></span><span class="tag tag-blue">Prom. ponderado últimos ${hist.length} meses</span></div>
     <div class="proy-grid">
-      ${sc.map(s=>`<div class="proy-card ${s.cl}">
-        <div class="proy-sc">${s.n}</div>
-        <div style="font-size:9px;font-weight:700;opacity:.6;margin-bottom:6px">INGRESOS OP.</div>
-        <div class="proy-val">${fCOP(s.ing)}</div>
-        <div class="proy-lbl">Utilidad neta est.</div>
-        <div style="font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;margin-top:4px;color:${s.util>=0?'inherit':'var(--red)'}">${fCOP(s.util)}</div>
-        <div class="proy-lbl">Costo proyectado: ${fCOP(s.cos)}</div>
-        <div class="proy-lbl">Margen est.: ${s.ing>0?((s.util/s.ing)*100).toFixed(1)+'%':'—'}</div>
-      </div>`).join('')}
+      ${sc.map(s=>`<div class="proy-card ${s.cl}"><div class="proy-sc">${s.n}</div><div style="font-size:9px;font-weight:700;opacity:.6;margin-bottom:6px">INGRESOS OP.</div><div class="proy-val">${fCOP(s.ing)}</div><div class="proy-lbl">Utilidad neta est.</div><div style="font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;margin-top:4px;color:${s.util>=0?'inherit':'var(--red)'}">${fCOP(s.util)}</div><div class="proy-lbl">Margen est.: ${s.ing>0?((s.util/s.ing)*100).toFixed(1)+'%':'—'}</div></div>`).join('')}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div style="background:var(--bg3);border-radius:10px;padding:14px">
         <div class="ct" style="margin-bottom:8px">Detalle proyección base<span class="ct-line"></span></div>
-        ${[['Ingresos brutos proyectados',sc[1].ing],['(−) Costo de ventas',-sc[1].cos],['= Utilidad bruta',sc[1].ing-sc[1].cos],['(−) Gastos admón',-sc[1].adm],['(−) Gastos ventas',-sc[1].vts],['(+) Ing. no operacionales',baseIngNop],['(−) Gtos. no operacionales',-baseGnop],['= UTILIDAD NETA PROYECTADA',sc[1].util]]
-          .map(([n,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border2);font-size:11px">
-            <span style="color:var(--text2)">${n}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${v>=0?'var(--navy)':'var(--red)'}">${fCOP(v)}</span>
-          </div>`).join('')}
+        ${[['Ingresos brutos proyectados',sc[1].ing],['(−) Costo de ventas',-sc[1].cos],['= Utilidad bruta',sc[1].ing-sc[1].cos],['(−) Gastos admón',-sc[1].adm],['(−) Gastos ventas',-sc[1].vts],['(+) Ing. no operacionales',baseIngNop],['(−) Gtos. no operacionales',-baseGnop],['= UTILIDAD NETA PROYECTADA',sc[1].util]].map(([n,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border2);font-size:11px"><span style="color:var(--text2)">${n}</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${v>=0?'var(--navy)':'var(--red)'}">${fCOP(v)}</span></div>`).join('')}
       </div>
       <div class="cw h280"><canvas id="cPROY"></canvas></div>
     </div>
   </div>`;
-
   setTimeout(()=>{
     const c=document.getElementById('cPROY');if(!c)return;
-    ch.proy=new Chart(c,{type:'line',data:{
-      labels:[...lbls,`${MN[mesProx]} ${String(anoProx).slice(2)}★`],
-      datasets:[
-        {label:'Ingresos reales',data:[...ings,null],borderColor:'#047857',backgroundColor:'transparent',tension:.45,pointRadius:4,borderWidth:2.5},
-        {label:'Ut. neta real',data:[...hist.map(f=>f.utilNeta),null],borderColor:'#B8860B',backgroundColor:'transparent',tension:.45,pointRadius:4,borderWidth:2,borderDash:[5,3]},
-        {label:'Proy. conservador',data:[...Array(ings.length-1).fill(null),ings[ings.length-1],sc[0].ing],borderColor:'#DC2626',backgroundColor:'transparent',tension:.3,pointRadius:6,borderWidth:2,borderDash:[4,4],pointStyle:'rectRot'},
-        {label:'Proy. base',data:[...Array(ings.length-1).fill(null),ings[ings.length-1],sc[1].ing],borderColor:'#3B6FD4',backgroundColor:'transparent',tension:.3,pointRadius:7,borderWidth:2.5,pointStyle:'star'},
-        {label:'Proy. optimista',data:[...Array(ings.length-1).fill(null),ings[ings.length-1],sc[2].ing],borderColor:'#047857',backgroundColor:'transparent',tension:.3,pointRadius:6,borderWidth:2,borderDash:[4,4],pointStyle:'rectRot'},
-      ]
-    },options:{...tOpts(undefined,true),plugins:{...tOpts(undefined,true).plugins,annotation:{annotations:{line1:{type:'line',xMin:lbls.length-.5,xMax:lbls.length-.5,borderColor:'rgba(59,111,212,.3)',borderWidth:1,borderDash:[5,5]}}}}}});
+    ch.proy=new Chart(c,{type:'line',data:{labels:[...lbls,`${MN[mesProx]} ${String(anoProx).slice(2)}★`],datasets:[{label:'Ingresos reales',data:[...ings,null],borderColor:'#047857',backgroundColor:'transparent',tension:.45,pointRadius:4,borderWidth:2.5},{label:'Ut. neta real',data:[...hist.map(f=>f.utilNeta),null],borderColor:'#B8860B',backgroundColor:'transparent',tension:.45,pointRadius:4,borderWidth:2,borderDash:[5,3]},{label:'Proy. conservador',data:[...Array(ings.length-1).fill(null),ings[ings.length-1],sc[0].ing],borderColor:'#DC2626',backgroundColor:'transparent',tension:.3,pointRadius:6,borderWidth:2,borderDash:[4,4]},{label:'Proy. base',data:[...Array(ings.length-1).fill(null),ings[ings.length-1],sc[1].ing],borderColor:'#3B6FD4',backgroundColor:'transparent',tension:.3,pointRadius:7,borderWidth:2.5},{label:'Proy. optimista',data:[...Array(ings.length-1).fill(null),ings[ings.length-1],sc[2].ing],borderColor:'#047857',backgroundColor:'transparent',tension:.3,pointRadius:6,borderWidth:2,borderDash:[4,4]}]},options:{...tOpts(undefined,true)}});
   },80);
 }
 

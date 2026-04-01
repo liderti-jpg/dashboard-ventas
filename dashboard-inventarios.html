@@ -341,11 +341,32 @@ function mostrarModalBajoStock(data){
   abrirModal('modalBajoStock');
 }
 
-function mostrarModalSinMov(data,dias){
-  const sinMov=data.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>dias);
+function mostrarModalSinMov(data,diasMin,diasMax){
+  // diasMax = undefined significa "sin límite superior" (ej: +180d)
+  const sinMov=data.filter(r=>{
+    if(!(r.existencia_actual>0))return false;
+    const d=r.dias_sin_salida||9999;
+    if(d<=diasMin)return false;
+    if(diasMax!==undefined&&d>diasMax)return false;
+    return true;
+  });
   if(!sinMov.length)return;
-  document.getElementById('mSinTitulo').textContent=`💤 ${sinMov.length} productos sin movimiento +${dias}d`;
-  document.getElementById('mSinSub').textContent=`Capital inmovilizado: ${fCOP(sinMov.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}`;
+
+  // Configuración visual por rango
+  const cfg={
+    30:{emoji:'⏰',label:'31–60 días',color:'linear-gradient(135deg,#92400E,#D97706)',sub:'Atención temprana'},
+    60:{emoji:'⚡',label:'61–90 días',color:'linear-gradient(135deg,#78350F,#B45309)',sub:'Requiere revisión'},
+    90:{emoji:'🔴',label:'91–180 días',color:'linear-gradient(135deg,#7F1D1D,#C0392B)',sub:'Stock crítico'},
+    180:{emoji:'💀',label:'+180 días',color:'linear-gradient(135deg,#1e1b4b,#4c1d95)',sub:'Posiblemente obsoleto'},
+  }[diasMin]||{emoji:'💤',label:`+${diasMin}d`,color:'linear-gradient(135deg,#1A3A6E,#3B6FD4)',sub:''};
+
+  const totalVal=sinMov.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  document.getElementById('mSinTitulo').textContent=`${cfg.emoji} ${sinMov.length} productos sin movimiento — ${cfg.label}`;
+  document.getElementById('mSinSub').textContent=`Capital inmovilizado: ${fCOP(totalVal)}`;
+  // Cambiar color del header del modal dinámicamente
+  const head=document.querySelector('#modalSinMov .modal-head');
+  if(head)head.style.background=cfg.color;
+
   document.getElementById('mSinCuerpo').innerHTML=`
     <table style="width:100%;border-collapse:collapse;font-size:12px">
       <thead><tr>
@@ -356,7 +377,7 @@ function mostrarModalSinMov(data,dias){
       </tr></thead>
       <tbody>${sinMov.sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0)).map((r,i)=>{
         const d=r.dias_sin_salida||0;
-        const cls=d>180?'background:#7F1D1D;color:#FCA5A5':d>90?'background:var(--red2);color:var(--red)':'background:var(--orange2);color:var(--orange)';
+        const cls=d>180?'background:#4c1d95;color:#DDD6FE':d>90?'background:var(--red2);color:var(--red)':'background:var(--orange2);color:var(--orange)';
         const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
         return`<tr style="${odd}">
           <td style="padding:9px 10px;border-bottom:1px solid var(--border2)">
@@ -662,17 +683,17 @@ function vV(d,c){
 
   c.innerHTML=`
     <div class="g4" style="margin-bottom:16px">
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,30)" style="padding:16px;border-color:var(--orange)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,30,60)" style="padding:16px;border-color:var(--orange)">
         <div class="kpi-ic" style="background:var(--orange2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⏰</div>
         <div class="kpi-lbl">31–60 días</div><div class="kpi-val">${fQ(umb30.length)}</div>
         <div class="kpi-sub">${fCOP(v30)}</div><div class="kpi-hint">👁 Ver lista →</div>
       </div>
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,60)" style="padding:16px;border-color:var(--orange)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,60,90)" style="padding:16px;border-color:var(--orange)">
         <div class="kpi-ic" style="background:var(--orange2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⚡</div>
         <div class="kpi-lbl">61–90 días</div><div class="kpi-val">${fQ(umb60.length)}</div>
         <div class="kpi-sub">${fCOP(v60)}</div><div class="kpi-hint">👁 Ver lista →</div>
       </div>
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,90)" style="padding:16px;border-color:var(--red)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,90,180)" style="padding:16px;border-color:var(--red)">
         <div class="kpi-ic" style="background:var(--red2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">🔴</div>
         <div class="kpi-lbl">91–180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umb90.length)}</div>
         <div class="kpi-sub">${fCOP(v90)}</div><div class="kpi-hint">👁 Ver lista →</div>

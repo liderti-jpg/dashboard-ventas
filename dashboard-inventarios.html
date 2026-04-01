@@ -468,6 +468,7 @@ function render(d,f){
 /* ══ RESUMEN ═══════════════════════════════════════════════════ */
 function vR(d,c){
   const conStock=d.filter(r=>r.existencia_actual>0);
+  window._conStock=conStock; // para onclick del HTML
   const sinStock=d.filter(r=>r.existencia_actual<=0);
   const valorTotal=conStock.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
   const bajMin=d.filter(r=>r.stock_minimo>0&&r.disponible<r.stock_minimo);
@@ -488,7 +489,7 @@ function vR(d,c){
       </div>
       <span style="font-size:18px">›</span>
     </div>`:''}
-    ${sinMov90.length>0?`<div class="alert-bar alert-critico" onclick="mostrarModalSinMov(conStock,90)">
+    ${sinMov90.length>0?`<div class="alert-bar alert-critico" onclick="mostrarModalSinMov(window._conStock,90)">
       <span style="font-size:20px">🚨</span>
       <div style="flex:1">
         <div style="font-weight:700;font-size:13px">${sinMov90.length} producto${sinMov90.length>1?'s':''} sin movimiento hace más de 90 días — ${fCOP(valSinMov)} inmovilizado</div>
@@ -500,7 +501,7 @@ function vR(d,c){
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--navy),var(--blue));--kbg:var(--blue3)"><div class="kpi-ic">📦</div><div class="kpi-lbl">Total ítems</div><div class="kpi-val">${fQ(d.length)}</div><div class="kpi-sub">${fQ(conStock.length)} con stock · ${fQ(sinStock.length)} sin stock</div></div>
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--gold),var(--gold2));--kbg:var(--gold3)"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fM(valorTotal)}</div><div class="kpi-sub">${fCOP(valorTotal)}</div></div>
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--teal),#047857);--kbg:var(--teal2)"><div class="kpi-ic">📊</div><div class="kpi-lbl">Unidades en stock</div><div class="kpi-val">${fQ(totUnid)}</div><div class="kpi-sub">Prom. ${fQ(totUnid/Math.max(conStock.length,1))} und/ítem</div></div>
-      <div class="kpi kpi-clickable" style="--kbar:linear-gradient(90deg,var(--red),#922B21);--kbg:var(--red2)" onclick="mostrarModalSinMov(conStock,90)">
+      <div class="kpi kpi-clickable" style="--kbar:linear-gradient(90deg,var(--red),#922B21);--kbg:var(--red2)" onclick="mostrarModalSinMov(window._conStock,90)">
         <div class="kpi-ic" style="background:var(--red2)">💤</div><div class="kpi-lbl">Sin movimiento +90d</div><div class="kpi-val" style="color:var(--red)">${fQ(sinMov90.length)}</div>
         <div class="kpi-hint">👁 Ver lista →</div>
       </div>
@@ -656,24 +657,27 @@ function vV(d,c){
   const v180=umb180.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
   const criticos=[...umb90,...umb180].sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0));
 
+  // Asignar ANTES del innerHTML para que los onclick ya tengan el dato disponible
+  window._sinMovData=d.filter(r=>r.existencia_actual>0);
+
   c.innerHTML=`
     <div class="g4" style="margin-bottom:16px">
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,30)" style="padding:16px;border-color:var(--orange)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,30)" style="padding:16px;border-color:var(--orange)">
         <div class="kpi-ic" style="background:var(--orange2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⏰</div>
         <div class="kpi-lbl">31–60 días</div><div class="kpi-val">${fQ(umb30.length)}</div>
         <div class="kpi-sub">${fCOP(v30)}</div><div class="kpi-hint">👁 Ver lista →</div>
       </div>
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,60)" style="padding:16px;border-color:var(--orange)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,60)" style="padding:16px;border-color:var(--orange)">
         <div class="kpi-ic" style="background:var(--orange2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⚡</div>
         <div class="kpi-lbl">61–90 días</div><div class="kpi-val">${fQ(umb60.length)}</div>
         <div class="kpi-sub">${fCOP(v60)}</div><div class="kpi-hint">👁 Ver lista →</div>
       </div>
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,90)" style="padding:16px;border-color:var(--red)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,90)" style="padding:16px;border-color:var(--red)">
         <div class="kpi-ic" style="background:var(--red2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">🔴</div>
         <div class="kpi-lbl">91–180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umb90.length)}</div>
         <div class="kpi-sub">${fCOP(v90)}</div><div class="kpi-hint">👁 Ver lista →</div>
       </div>
-      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,180)" style="padding:16px;border-color:var(--red)">
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(window._sinMovData,180)" style="padding:16px;border-color:var(--red)">
         <div class="kpi-ic" style="background:var(--red2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">💀</div>
         <div class="kpi-lbl">+180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umb180.length)}</div>
         <div class="kpi-sub">${fCOP(v180)}</div><div class="kpi-hint">👁 Ver lista →</div>
@@ -707,7 +711,6 @@ function vV(d,c){
     </div>
     <div id="vmResult"></div>`;
 
-  window._sinMovData=d.filter(r=>r.existencia_actual>0);
   vmFil();
 
   ch.inmov=new Chart(document.getElementById('cInmov'),{type:'bar',data:{labels:['31–60d','61–90d','91–180d','+180d'],datasets:[{data:[v30,v60,v90,v180],backgroundColor:['rgba(217,119,6,.7)','rgba(217,119,6,.9)','rgba(192,57,43,.8)','rgba(127,29,29,.9)'],borderRadius:8,borderSkipped:false,borderWidth:0}]},options:tOpts()});

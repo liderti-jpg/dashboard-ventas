@@ -46,6 +46,24 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .btn-centro:hover{background:rgba(255,255,255,.15)}
 #ts{font-size:10px;color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace}
 
+/* MODAL POPUP */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(7,21,48,.7);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg2);border-radius:20px;width:90%;max-width:750px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.35);overflow:hidden;animation:mIn .25s ease}
+@keyframes mIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.modal-head{padding:20px 24px 16px;background:linear-gradient(135deg,#450a0a,#7F1D1D);display:flex;align-items:center;gap:14px;flex-shrink:0}
+.modal-head-icon{font-size:26px}
+.modal-head-title{font-size:16px;font-weight:700;color:#fff;font-family:'Playfair Display',serif}
+.modal-head-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+.modal-close{margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
+.modal-close:hover{background:rgba(255,255,255,.25)}
+.modal-body{overflow-y:auto;padding:20px 24px;flex:1}
+.modal-foot{padding:14px 24px;border-top:1px solid var(--border2);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+.btn-sm{padding:7px 16px;border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:.15s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2)}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1.5px solid var(--border)}
+
 /* MAIN */
 .main{padding:24px 36px;max-width:1700px;margin:0 auto}
 @media(max-width:700px){.main{padding:12px}.hlogo .logo-sb{display:none}}
@@ -77,6 +95,9 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .kpi-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .kpi-val{font-size:18px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace;line-height:1.1;margin-bottom:3px;word-break:break-all}
 .kpi-sub{font-size:10px;color:var(--text3)}
+.kpi-clickable{cursor:pointer;border-color:var(--red)!important}
+.kpi-clickable:hover{background:var(--red2)!important;transform:translateY(-3px)}
+.kpi-clickable .kpi-hint{font-size:9px;color:var(--red);margin-top:5px;font-weight:700;display:flex;align-items:center;gap:4px}
 
 /* GRIDS */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -91,6 +112,33 @@ header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);pa
 .ct{font-size:9px;font-weight:700;color:var(--navy3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .ct-line{flex:1;height:1px;background:var(--border2)}
 .cw{position:relative}.h200{height:200px}.h240{height:240px}.h260{height:260px}.h280{height:280px}.h300{height:300px}.h340{height:340px}
+
+/* FILTRO INTERNO (stock actual / sin movimiento) */
+.inner-filter{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 16px;margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.inner-filter input,.inner-filter select{background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;padding:6px 11px;font-size:12px;color:var(--text);font-family:'Inter',sans-serif;outline:none;transition:.2s}
+.inner-filter input:focus,.inner-filter select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,111,212,.1)}
+.inner-filter input{min-width:200px}
+.if-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:3px}
+
+/* GRUPOS DESPLEGABLE */
+.grupo-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.grupo-row{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;transition:.2s}
+.grupo-row.open{border-color:var(--blue)}
+.grupo-header{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:.2s}
+.grupo-header:hover{background:var(--blue3)}
+.grupo-row.open .grupo-header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff}
+.grupo-arrow{font-size:11px;margin-left:auto;transition:.2s;color:var(--text3)}
+.grupo-row.open .grupo-arrow{transform:rotate(90deg);color:#fff}
+.grupo-row.open .grupo-stats-lbl{color:rgba(255,255,255,.6)!important}
+.grupo-name{font-size:13px;font-weight:700}
+.grupo-stats{display:flex;gap:14px;margin-left:auto;margin-right:8px}
+.grupo-stat{text-align:right}
+.grupo-stats-lbl{font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+.grupo-stats-val{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.grupo-body{display:none;padding:0 0 4px}
+.grupo-row.open .grupo-body{display:block}
+.grupo-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.grupo-badge-dark{background:var(--blue3);color:var(--navy3)}
 
 /* TABLA */
 .tw{overflow-x:auto}
@@ -121,21 +169,16 @@ tr:hover td{background:var(--blue3)}
 .sf-low{color:var(--red);background:var(--red2);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;display:inline-block}
 .sf-zero{color:#fff;background:var(--red);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;display:inline-block}
 
-/* ALERTA BANNERS */
-.alert-bar{border-radius:var(--r);padding:12px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+/* ALERTAS BANNER */
+.alert-bar{border-radius:var(--r);padding:12px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s}
+.alert-bar:hover{opacity:.88;transform:translateX(3px)}
 .alert-critico{background:linear-gradient(135deg,#450a0a,#7F1D1D);color:#FCA5A5;border:1px solid rgba(220,38,38,.3)}
 .alert-warn{background:var(--orange2);color:var(--orange);border:1.5px solid rgba(217,119,6,.2)}
+.alert-hint{font-size:10px;font-weight:700;margin-top:3px;opacity:.8}
 
 /* BUSCADOR PRODUCTO */
 .prod-search{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 14px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;transition:all .2s;width:100%}
 .prod-search:focus{border-color:var(--blue);background:var(--bg2);box-shadow:0 0 0 3px rgba(59,111,212,.1)}
-
-/* CIERRES PERÍODO */
-.periodo-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px;transition:all .2s;cursor:pointer}
-.periodo-card:hover{border-color:var(--blue);background:var(--blue3)}
-.periodo-card.active{border-color:var(--navy);background:var(--blue3)}
-.periodo-lbl{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px}
-.periodo-stats{font-size:10px;color:var(--text3)}
 
 /* LOADING */
 .loading{text-align:center;padding:70px 20px;color:var(--text3);font-size:13px}
@@ -147,6 +190,45 @@ tr:hover td{background:var(--blue3)}
 </style>
 </head>
 <body>
+
+<!-- MODAL BAJO STOCK -->
+<div class="modal-overlay" id="modalBajoStock" onclick="if(event.target===this)cerrarModal('modalBajoStock')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-icon">⚠️</div>
+      <div>
+        <div class="modal-head-title" id="mBajoTitulo">Productos bajo stock mínimo</div>
+        <div class="modal-head-sub" id="mBajoSub"></div>
+      </div>
+      <button class="modal-close" onclick="cerrarModal('modalBajoStock')">✕</button>
+    </div>
+    <div class="modal-body" id="mBajoCuerpo"></div>
+    <div class="modal-foot">
+      <button class="btn-sm btn-ghost" onclick="cerrarModal('modalBajoStock')">Cerrar</button>
+      <button class="btn-sm btn-primary" onclick="irAStock()">Ver en Stock Actual →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SIN MOVIMIENTO -->
+<div class="modal-overlay" id="modalSinMov" onclick="if(event.target===this)cerrarModal('modalSinMov')">
+  <div class="modal-box">
+    <div class="modal-head" style="background:linear-gradient(135deg,#1e1b4b,#4c1d95)">
+      <div class="modal-head-icon">💀</div>
+      <div>
+        <div class="modal-head-title" id="mSinTitulo">Productos sin movimiento</div>
+        <div class="modal-head-sub" id="mSinSub"></div>
+      </div>
+      <button class="modal-close" onclick="cerrarModal('modalSinMov')">✕</button>
+    </div>
+    <div class="modal-body" id="mSinCuerpo"></div>
+    <div class="modal-foot">
+      <button class="btn-sm btn-ghost" onclick="cerrarModal('modalSinMov')">Cerrar</button>
+      <button class="btn-sm btn-primary" onclick="irASinMov()">Ver en Sin Movimiento →</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="hlogo">
     <img src="https://i.ibb.co/gbVD1bq5/logo-JOTA-MUNDIAL-SAS-original.png" alt="JM" style="height:42px;width:auto;object-fit:contain;display:block;mix-blend-mode:lighten">
@@ -163,9 +245,8 @@ tr:hover td{background:var(--blue3)}
 </header>
 
 <div class="main">
-  <!-- FILTROS -->
   <div class="fp">
-    <div class="fph">⊞ Filtros</div>
+    <div class="fph">⊞ Filtros globales</div>
     <div class="fr">
       <div class="fg"><label>Tipo inventario</label>
         <select id="ftipo"><option value="">Todos</option></select>
@@ -178,7 +259,7 @@ tr:hover td{background:var(--blue3)}
           <option value="C">C — Baja rotación</option>
         </select>
       </div>
-      <div class="fg"><label>Stock</label>
+      <div class="fg"><label>Estado stock</label>
         <select id="fstock">
           <option value="">Todos</option>
           <option value="con">Con stock</option>
@@ -195,7 +276,6 @@ tr:hover td{background:var(--blue3)}
     </div>
   </div>
 
-  <!-- TABS -->
   <div class="vtabs">
     <button class="vt active" onclick="sv('r',this)">📊 Resumen</button>
     <button class="vt" onclick="sv('s',this)">📦 Stock Actual</button>
@@ -214,38 +294,115 @@ const WH_S='https://jotamundial2.app.n8n.cloud/webhook/inventarios-stock';
 const WH_C='https://jotamundial2.app.n8n.cloud/webhook/inventarios-cierres';
 const MN=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MF=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-const CL=['#1A3A6E','#3B6FD4','#0A7A5A','#B8860B','#6B21A8','#C0392B','#0E6655','#D4851A','#1A5276','#6C3483','#148F77','#A04000'];
+const CL=['#1A3A6E','#3B6FD4','#0A7A5A','#B8860B','#6B21A8','#C0392B','#0E6655','#D4851A','#1A5276','#6C3483'];
 let rawS=[],rawC=[],vista='r',ch={};
 
 const fCOP=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
 const fM=v=>{if(v<0)return'-'+fM(-v);if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'MM';if(v>=1e6)return'$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString('es-CO')};
 const fQ=v=>{if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return parseFloat(v).toLocaleString('es-CO',{maximumFractionDigits:2})};
+const nrm=s=>(s||'').trim();
 
+/* ── MODAL ─────────────────────────────── */
+function abrirModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden'}
+function cerrarModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow=''}
+function irAStock(){cerrarModal('modalBajoStock');sv('s',document.querySelectorAll('.vt')[1]);document.getElementById('fstock').value='bajo';ap()}
+function irASinMov(){cerrarModal('modalSinMov');sv('v',document.querySelectorAll('.vt')[2]);ap()}
+
+function mostrarModalBajoStock(data){
+  const bajMin=data.filter(r=>r.stock_minimo>0&&r.disponible<r.stock_minimo);
+  if(!bajMin.length)return;
+  document.getElementById('mBajoTitulo').textContent=`⚠️ ${bajMin.length} producto${bajMin.length>1?'s':''} bajo stock mínimo`;
+  document.getElementById('mBajoSub').textContent=`Capital en riesgo: ${fCOP(bajMin.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}`;
+  document.getElementById('mBajoCuerpo').innerHTML=`
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr>
+        <th style="text-align:left;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Descripción</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Stock actual</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Mínimo</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Diferencia</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Valor</th>
+      </tr></thead>
+      <tbody>${bajMin.sort((a,b)=>(a.disponible/a.stock_minimo)-(b.disponible/b.stock_minimo)).map((r,i)=>{
+        const diff=r.disponible-r.stock_minimo;
+        const pct=Math.round((r.disponible/r.stock_minimo)*100);
+        const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+        return`<tr style="${odd}">
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2)">
+            <div style="font-weight:600;font-size:11px">${r.descripcion.length>38?r.descripcion.substring(0,38)+'…':r.descripcion}</div>
+            <div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.referencia}</div>
+          </td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--red)">${fQ(r.disponible)}</td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right;font-family:'JetBrains Mono',monospace">${fQ(r.stock_minimo)}</td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right"><span style="background:var(--red2);color:var(--red);border-radius:20px;padding:2px 7px;font-size:9px;font-weight:700">${fQ(diff)} (${pct}%)</span></td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--gold)">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  abrirModal('modalBajoStock');
+}
+
+function mostrarModalSinMov(data,dias){
+  const sinMov=data.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>dias);
+  if(!sinMov.length)return;
+  document.getElementById('mSinTitulo').textContent=`💤 ${sinMov.length} productos sin movimiento +${dias}d`;
+  document.getElementById('mSinSub').textContent=`Capital inmovilizado: ${fCOP(sinMov.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}`;
+  document.getElementById('mSinCuerpo').innerHTML=`
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr>
+        <th style="text-align:left;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Descripción</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Stock</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Días sin salida</th>
+        <th style="text-align:right;padding:8px 10px;background:var(--bg3);color:var(--text3);font-size:9px;font-weight:700;text-transform:uppercase;border-bottom:1.5px solid var(--border)">Valor</th>
+      </tr></thead>
+      <tbody>${sinMov.sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0)).map((r,i)=>{
+        const d=r.dias_sin_salida||0;
+        const cls=d>180?'background:#7F1D1D;color:#FCA5A5':d>90?'background:var(--red2);color:var(--red)':'background:var(--orange2);color:var(--orange)';
+        const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+        return`<tr style="${odd}">
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2)">
+            <div style="font-weight:600;font-size:11px">${r.descripcion.length>40?r.descripcion.substring(0,40)+'…':r.descripcion}</div>
+            <div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.referencia}</div>
+          </td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700">${fQ(r.existencia_actual)}</td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right"><span style="border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;${cls}">${d}d</span></td>
+          <td style="padding:9px 10px;border-bottom:1px solid var(--border2);text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--gold)">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  abrirModal('modalSinMov');
+}
+
+/* ── LOADING ─────────────────────────────── */
 function setLoad(msg,p,t){
   const pct=t>0?Math.round((p/t)*100):0;
   document.getElementById('ct').innerHTML=`<div class="loading"><div class="ls"></div><div>${msg}</div>${t>0?`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><small style="color:var(--text4);font-size:10px">Página ${p} de ${t} · ${pct}%</small>`:''}</div>`;
 }
 
+/* ── FETCH ─────────────────────────────── */
 async function fetchAll(wh,label){
   const r1=await fetch(`${wh}?pagina=1`,{signal:AbortSignal.timeout(60000)});
-  if(!r1.ok)throw new Error('HTTP '+r1.status);
+  if(!r1.ok)throw new Error('HTTP '+r1.status+' en '+label);
   const j1=await r1.json();
-  const tot=j1?.detalle?.total_páginas||j1?.detalle?.total_paginas||1;
+  // Tolerancia case: Datos / datos
+  const getDatos=j=>j?.detalle?.Datos||j?.detalle?.datos||j?.Datos||j?.datos||[];
+  const tot=j1?.detalle?.total_páginas||j1?.detalle?.total_paginas||j1?.detalle?.['tamaño_página']||1;
+  const totPag=parseInt(tot)||1;
   const totR=j1?.detalle?.total_registros||0;
-  let datos=j1?.detalle?.Datos||[];
-  setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,1,tot);
+  let datos=getDatos(j1);
+  setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,1,totPag);
   const BATCH=5;
-  for(let p=2;p<=tot;p+=BATCH){
+  for(let p=2;p<=totPag;p+=BATCH){
     const ps=[];
-    for(let pp=p;pp<p+BATCH&&pp<=tot;pp++)
+    for(let pp=p;pp<p+BATCH&&pp<=totPag;pp++)
       ps.push(fetch(`${wh}?pagina=${pp}`,{signal:AbortSignal.timeout(60000)}).then(r=>r.json()).catch(()=>null));
     const res=await Promise.all(ps);
-    for(const rx of res) if(rx?.detalle?.Datos) datos=datos.concat(rx.detalle.Datos);
-    setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,Math.min(p+BATCH-1,tot),tot);
+    for(const rx of res){const d=getDatos(rx);if(d.length)datos=datos.concat(d);}
+    setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,Math.min(p+BATCH-1,totPag),totPag);
   }
   return datos;
 }
 
+/* ── CARGAR ─────────────────────────────── */
 async function cargar(){
   const btn=document.getElementById('br');btn.disabled=true;btn.textContent='⏳';
   try{
@@ -254,19 +411,9 @@ async function cargar(){
     setLoad('Cargando cierres mensuales…',0,0);
     rawC=await fetchAll(WH_C,'cierres');
 
-    // Normalizar
-    rawS=rawS.map(r=>({...r,
-      referencia:(r.referencia||'').trim(),
-      descripcion:(r.descripcion||'').trim(),
-      tipo_inventario:(r.tipo_inventario||'').trim(),
-      abc_rotacion:(r.abc_rotacion||'').trim()
-    }));
-    rawC=rawC.map(r=>({...r,
-      referencia:(r.referencia||'').trim(),
-      descripcion:(r.descripcion||'').trim()
-    }));
+    rawS=rawS.map(r=>({...r,referencia:nrm(r.referencia),descripcion:nrm(r.descripcion),tipo_inventario:nrm(r.tipo_inventario),abc_rotacion:nrm(r.abc_rotacion)}));
+    rawC=rawC.map(r=>({...r,referencia:nrm(r.referencia),descripcion:nrm(r.descripcion)}));
 
-    // Poblar filtros
     const tipos=[...new Set(rawS.map(r=>r.tipo_inventario).filter(Boolean))].sort();
     const selTipo=document.getElementById('ftipo');
     selTipo.innerHTML='<option value="">Todos</option>'+tipos.map(t=>`<option value="${t}">${t}</option>`).join('');
@@ -275,12 +422,12 @@ async function cargar(){
     document.getElementById('bl').style.display='flex';
     ap();
   }catch(e){
-    document.getElementById('ct').innerHTML=`<div class="err">❌ ${e.message}<br><button onclick="cargar()" style="margin-top:8px;background:var(--navy);color:#fff;border:none;border-radius:var(--rs);padding:7px 14px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700">↻ Reintentar</button></div>`;
+    document.getElementById('ct').innerHTML=`<div class="err">❌ ${e.message}<br><small>Stock: ${rawS.length} reg · Cierres: ${rawC.length} reg</small><br><button onclick="cargar()" style="margin-top:8px;background:var(--navy);color:#fff;border:none;border-radius:var(--rs);padding:7px 14px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700">↻ Reintentar</button></div>`;
   }finally{btn.disabled=false;btn.textContent='↻ Actualizar'}
 }
 
+/* ── FILTROS ─────────────────────────────── */
 function gF(){return{tipo:document.getElementById('ftipo').value,abc:document.getElementById('fabc').value,stock:document.getElementById('fstock').value,buscar:document.getElementById('fbuscar').value.toLowerCase().trim()}}
-
 function filS(data,f){
   return data.filter(r=>{
     if(f.tipo&&r.tipo_inventario!==f.tipo)return false;
@@ -293,18 +440,19 @@ function filS(data,f){
     return true;
   });
 }
-
 function ap(){dC();const f=gF();const d=filS(rawS,f);render(d,f)}
 function rst(){['ftipo','fabc','fstock'].forEach(id=>document.getElementById(id).value='');document.getElementById('fbuscar').value='';ap()}
 function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');ap()}
 function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
 
+/* ── CHART DEFAULTS ─────────────────────────────── */
 Chart.defaults.font.family="'Inter',sans-serif";
 const tOpts=(cb,leg)=>({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:!!leg,position:'top',labels:{color:'#3D5280',font:{size:9,weight:'600'},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',titleColor:'rgba(255,255,255,.5)',titleFont:{size:9},bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:cb||(ctx=>`  ${fCOP(ctx.raw)}`)}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:30},grid:{display:false},border:{display:false}}}});
 
+/* ── RENDER ─────────────────────────────── */
 function render(d,f){
   const c=document.getElementById('ct');
-  if(!d.length&&vista!=='c'&&vista!=='t'){c.innerHTML='<div class="loading" style="color:var(--text3)">Sin datos para los filtros seleccionados.</div>';return;}
+  if(!d.length&&vista!=='c'&&vista!=='t'&&vista!=='p'){c.innerHTML='<div class="loading" style="color:var(--text3)">Sin datos para los filtros seleccionados.</div>';return;}
   if(vista==='r')vR(d,c);
   else if(vista==='s')vS(d,c);
   else if(vista==='v')vV(d,c);
@@ -314,7 +462,7 @@ function render(d,f){
   else if(vista==='p')vP(d,c);
 }
 
-// ══ RESUMEN ═══════════════════════════════════════════════════
+/* ══ RESUMEN ═══════════════════════════════════════════════════ */
 function vR(d,c){
   const conStock=d.filter(r=>r.existencia_actual>0);
   const sinStock=d.filter(r=>r.existencia_actual<=0);
@@ -323,36 +471,41 @@ function vR(d,c){
   const sinMov90=conStock.filter(r=>(r.dias_sin_salida||9999)>90);
   const enTransito=d.filter(r=>r.pendiente_entrar>0);
   const totUnid=conStock.reduce((s,r)=>s+parseFloat(r.existencia_actual||0),0);
-  const abcA=conStock.filter(r=>r.abc_rotacion==='A');
-  const abcC=conStock.filter(r=>r.abc_rotacion==='C');
-  const valAbcA=abcA.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
   const valSinMov=sinMov90.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
-
-  // Alertas críticas
-  const alertas=[];
-  if(bajMin.length>0)alertas.push({tipo:'warn',msg:`${bajMin.length} producto${bajMin.length>1?'s':''} bajo stock mínimo`,sub:`Valor: ${fCOP(bajMin.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}`});
-  if(sinMov90.length>0)alertas.push({tipo:'critico',msg:`${sinMov90.length} producto${sinMov90.length>1?'s':''} sin movimiento > 90 días`,sub:`Capital inmovilizado: ${fCOP(valSinMov)}`});
-
-  // Por tipo inventario
   const porTipo={};
-  conStock.forEach(r=>{
-    const k=r.tipo_inventario||'Sin tipo';
-    if(!porTipo[k])porTipo[k]={items:0,valor:0,unidades:0};
-    porTipo[k].items++;
-    porTipo[k].valor+=parseFloat(r.valor_inventario||0);
-    porTipo[k].unidades+=parseFloat(r.existencia_actual||0);
-  });
+  conStock.forEach(r=>{const k=r.tipo_inventario||'Sin tipo';if(!porTipo[k])porTipo[k]={items:0,valor:0,unidades:0};porTipo[k].items++;porTipo[k].valor+=parseFloat(r.valor_inventario||0);porTipo[k].unidades+=parseFloat(r.existencia_actual||0);});
   const tiposSorted=Object.entries(porTipo).sort((a,b)=>b[1].valor-a[1].valor);
 
   c.innerHTML=`
-    ${alertas.map(a=>`<div class="alert-bar alert-${a.tipo}"><span style="font-size:18px">${a.tipo==='critico'?'🚨':'⚠️'}</span><div><div style="font-weight:700;font-size:13px">${a.msg}</div><div style="font-size:11px;opacity:.8;margin-top:2px">${a.sub}</div></div></div>`).join('')}
+    ${bajMin.length>0?`<div class="alert-bar alert-warn" onclick="mostrarModalBajoStock(rawS)">
+      <span style="font-size:20px">⚠️</span>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:13px">Tienes ${bajMin.length} producto${bajMin.length>1?'s':''} con bajo stock mínimo</div>
+        <div class="alert-hint">👉 Toca aquí para conocerlos</div>
+      </div>
+      <span style="font-size:18px">›</span>
+    </div>`:''}
+    ${sinMov90.length>0?`<div class="alert-bar alert-critico" onclick="mostrarModalSinMov(conStock,90)">
+      <span style="font-size:20px">🚨</span>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:13px">${sinMov90.length} producto${sinMov90.length>1?'s':''} sin movimiento hace más de 90 días — ${fCOP(valSinMov)} inmovilizado</div>
+        <div class="alert-hint">👉 Toca aquí para ver la lista completa</div>
+      </div>
+      <span style="font-size:18px">›</span>
+    </div>`:''}
     <div class="kpis">
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--navy),var(--blue));--kbg:var(--blue3)"><div class="kpi-ic">📦</div><div class="kpi-lbl">Total ítems</div><div class="kpi-val">${fQ(d.length)}</div><div class="kpi-sub">${fQ(conStock.length)} con stock · ${fQ(sinStock.length)} sin stock</div></div>
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--gold),var(--gold2));--kbg:var(--gold3)"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fM(valorTotal)}</div><div class="kpi-sub">${fCOP(valorTotal)}</div></div>
-      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--teal),#047857);--kbg:var(--teal2)"><div class="kpi-ic">📊</div><div class="kpi-lbl">Unidades en stock</div><div class="kpi-val">${fQ(totUnid)}</div><div class="kpi-sub">Promedio ${fQ(totUnid/Math.max(conStock.length,1))} und/ítem</div></div>
-      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--red),#922B21);--kbg:var(--red2)"><div class="kpi-ic">💤</div><div class="kpi-lbl">Sin movimiento +90d</div><div class="kpi-val" style="color:var(--red)">${fQ(sinMov90.length)}</div><div class="kpi-sub">${fCOP(valSinMov)} inmovilizado</div></div>
-      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--orange),#B45309);--kbg:var(--orange2)"><div class="kpi-ic">⚠️</div><div class="kpi-lbl">Bajo mínimo</div><div class="kpi-val" style="color:var(--orange)">${fQ(bajMin.length)}</div><div class="kpi-sub">${bajMin.length>0?'Requiere reposición':'✅ Todos en nivel ok'}</div></div>
-      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--purple),#5B21B6);--kbg:var(--purple2)"><div class="kpi-ic">🚚</div><div class="kpi-lbl">Pendiente entrar</div><div class="kpi-val">${fQ(enTransito.length)}</div><div class="kpi-sub">${fQ(enTransito.reduce((s,r)=>s+parseFloat(r.pendiente_entrar||0),0))} und en tránsito</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--teal),#047857);--kbg:var(--teal2)"><div class="kpi-ic">📊</div><div class="kpi-lbl">Unidades en stock</div><div class="kpi-val">${fQ(totUnid)}</div><div class="kpi-sub">Prom. ${fQ(totUnid/Math.max(conStock.length,1))} und/ítem</div></div>
+      <div class="kpi kpi-clickable" style="--kbar:linear-gradient(90deg,var(--red),#922B21);--kbg:var(--red2)" onclick="mostrarModalSinMov(conStock,90)">
+        <div class="kpi-ic" style="background:var(--red2)">💤</div><div class="kpi-lbl">Sin movimiento +90d</div><div class="kpi-val" style="color:var(--red)">${fQ(sinMov90.length)}</div>
+        <div class="kpi-hint">👁 Ver lista →</div>
+      </div>
+      <div class="kpi kpi-clickable" style="--kbar:linear-gradient(90deg,var(--orange),#B45309);--kbg:var(--orange2)" onclick="mostrarModalBajoStock(rawS)">
+        <div class="kpi-ic" style="background:var(--orange2)">⚠️</div><div class="kpi-lbl">Bajo mínimo</div><div class="kpi-val" style="color:var(--orange)">${fQ(bajMin.length)}</div>
+        <div class="kpi-hint">${bajMin.length>0?'👁 Ver cuáles →':'✅ Todos ok'}</div>
+      </div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--purple),#5B21B6);--kbg:var(--purple2)"><div class="kpi-ic">🚚</div><div class="kpi-lbl">En tránsito</div><div class="kpi-val">${fQ(enTransito.length)}</div><div class="kpi-sub">${fQ(enTransito.reduce((s,r)=>s+parseFloat(r.pendiente_entrar||0),0))} und pendientes</div></div>
     </div>
     <div class="g3">
       <div class="card gf"><div class="ct">Valor por tipo de inventario <span class="ct-line"></span></div><div class="cw h260"><canvas id="cTipo"></canvas></div></div>
@@ -372,9 +525,7 @@ function vR(d,c){
         <div class="ct">Top 10 por valor en inventario <span class="ct-line"></span></div>
         <div class="tw"><table><thead><tr><th>#</th><th>Descripción</th><th>ABC</th><th class="num">Stock</th><th class="num">Valor</th></tr></thead><tbody>
           ${conStock.sort((a,b)=>parseFloat(b.valor_inventario)-parseFloat(a.valor_inventario)).slice(0,10).map((r,i)=>{
-            const ic=['🥇','🥈','🥉'];
-            const dias=r.dias_sin_salida||null;
-            const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+            const ic=['🥇','🥈','🥉'];const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
             return`<tr style="${odd}"><td style="font-size:13px">${ic[i]||`<span style="font-weight:700;color:var(--navy)">${i+1}</span>`}</td>
               <td><div style="font-weight:600;font-size:11px">${r.descripcion.length>32?r.descripcion.substring(0,32)+'…':r.descripcion}</div><div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.referencia}</div></td>
               <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
@@ -386,146 +537,257 @@ function vR(d,c){
       </div>
     </div>`;
 
-  // Gráfica tipos
-  ch.tipo=new Chart(document.getElementById('cTipo'),{type:'doughnut',data:{
-    labels:tiposSorted.slice(0,6).map(([k])=>k.replace('INV143501','IMPORT.').replace('INV143502','NACIONAL').replace('INV143503','SERV.')),
-    datasets:[{data:tiposSorted.slice(0,6).map(([,v])=>v.valor),backgroundColor:CL,borderWidth:4,borderColor:'#fff',hoverOffset:10}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
-
-  const abcData={A:0,B:0,C:0};
-  conStock.forEach(r=>{if(abcData[r.abc_rotacion]!==undefined)abcData[r.abc_rotacion]+=parseFloat(r.valor_inventario||0);});
-  ch.abc=new Chart(document.getElementById('cABC'),{type:'doughnut',data:{
-    labels:['A — Alta rotación','B — Media rotación','C — Baja rotación'],
-    datasets:[{data:[abcData.A,abcData.B,abcData.C],backgroundColor:['#15803D','#CA8A04','#DC2626'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
-
-  ch.estado=new Chart(document.getElementById('cEstado'),{type:'bar',data:{
-    labels:['Con stock','Sin stock','Bajo mínimo','Sin mov. >90d','En tránsito'],
-    datasets:[{data:[conStock.length,sinStock.length,bajMin.length,sinMov90.length,enTransito.length],backgroundColor:['rgba(10,122,90,.8)','rgba(192,57,43,.8)','rgba(217,119,6,.8)','rgba(107,33,168,.8)','rgba(59,111,212,.8)'],borderRadius:7,borderSkipped:false,borderWidth:0}]
-  },options:{...tOpts(ctx=>` ${fQ(ctx.raw)} ítems`)}});
+  ch.tipo=new Chart(document.getElementById('cTipo'),{type:'doughnut',data:{labels:tiposSorted.slice(0,6).map(([k])=>k),datasets:[{data:tiposSorted.slice(0,6).map(([,v])=>v.valor),backgroundColor:CL,borderWidth:4,borderColor:'#fff',hoverOffset:10}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+  const abcD={A:0,B:0,C:0};conStock.forEach(r=>{if(abcD[r.abc_rotacion]!==undefined)abcD[r.abc_rotacion]+=parseFloat(r.valor_inventario||0);});
+  ch.abc=new Chart(document.getElementById('cABC'),{type:'doughnut',data:{labels:['A — Alta','B — Media','C — Baja'],datasets:[{data:[abcD.A,abcD.B,abcD.C],backgroundColor:['#15803D','#CA8A04','#DC2626'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+  ch.estado=new Chart(document.getElementById('cEstado'),{type:'bar',data:{labels:['Con stock','Sin stock','Bajo mín.','Sin mov.>90d','En tránsito'],datasets:[{data:[conStock.length,sinStock.length,bajMin.length,sinMov90.length,enTransito.length],backgroundColor:['rgba(10,122,90,.8)','rgba(192,57,43,.8)','rgba(217,119,6,.8)','rgba(107,33,168,.8)','rgba(59,111,212,.8)'],borderRadius:7,borderSkipped:false,borderWidth:0}]},options:{...tOpts(ctx=>` ${fQ(ctx.raw)} ítems`)}});
 }
 
-// ══ STOCK ACTUAL ══════════════════════════════════════════════
+/* ══ STOCK ACTUAL ══════════════════════════════════════════════ */
 function vS(d,c){
   const sorted=[...d].filter(r=>r.existencia_actual>=0).sort((a,b)=>parseFloat(b.valor_inventario)-parseFloat(a.valor_inventario));
+  // Grupos = tipo_inventario
+  const grupos={};
+  sorted.forEach(r=>{const k=r.tipo_inventario||'Sin tipo';if(!grupos[k])grupos[k]=[];grupos[k].push(r);});
+  const gruposSorted=Object.entries(grupos).sort((a,b)=>b[1].reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0)-a[1].reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0));
+
   c.innerHTML=`
-    <div class="card gf">
-      <div class="ct">Stock actual en bodega <span class="ct-line"></span><span class="tag tag-blue">${fQ(sorted.length)} productos</span><span class="tag tag-gold" style="margin-left:auto">Valor total: ${fCOP(sorted.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}</span></div>
-      <div class="tw"><table><thead><tr>
-        <th>Referencia</th><th>Descripción</th><th>Tipo</th><th>ABC</th>
-        <th class="num">Existencia</th><th class="num">Disponible</th><th class="num">Comprometido</th><th class="num">En tránsito</th>
-        <th class="num">Costo prom.</th><th class="num">Valor total</th>
-        <th>Estado</th><th>Últ. salida</th>
-      </tr></thead><tbody>
-        ${sorted.map((r,i)=>{
-          const st=r.stock_minimo>0&&r.disponible<r.stock_minimo?'sf-low':r.existencia_actual<=0?'sf-zero':r.existencia_actual<5?'sf-warn':'sf-ok';
-          const stTxt=r.existencia_actual<=0?'🔴 Sin stock':r.stock_minimo>0&&r.disponible<r.stock_minimo?'⚠️ Bajo mín.':r.existencia_actual<5?'⚡ Bajo':'✅ Ok';
-          const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
-          return`<tr style="${odd}">
-            <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)">${r.referencia.substring(0,16)}</td>
-            <td style="max-width:180px"><div style="font-weight:600;font-size:11px">${r.descripcion.length>30?r.descripcion.substring(0,30)+'…':r.descripcion}</div></td>
-            <td><span class="tag tag-blue" style="font-size:8px">${r.tipo_inventario.replace('INV143501','IMP').replace('INV143502','NAC').replace('INV143503','SRV')}</span></td>
-            <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
-            <td class="num" style="font-weight:700;color:var(--navy)">${fQ(r.existencia_actual)}</td>
-            <td class="num" style="color:var(--teal)">${fQ(r.disponible)}</td>
-            <td class="num" style="color:${r.comprometido>0?'var(--orange)':'var(--text4)'}">${fQ(r.comprometido)}</td>
-            <td class="num" style="color:${r.pendiente_entrar>0?'var(--purple)':'var(--text4)'}">${fQ(r.pendiente_entrar||0)}</td>
-            <td class="num">${fCOP(parseFloat(r.costo_prom_uni||0))}</td>
-            <td class="num" style="color:var(--gold);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
-            <td><span class="${st}">${stTxt}</span></td>
-            <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:'-'}</td>
-          </tr>`;
-        }).join('')}
-      </tbody></table></div>
-    </div>`;
+    <div class="inner-filter">
+      <div class="fg"><span class="if-lbl">Buscar en stock actual</span>
+        <input type="text" id="sfBuscar" placeholder="Referencia o descripción…" oninput="sFilS()" style="min-width:240px">
+      </div>
+      <div class="fg"><span class="if-lbl">Filtrar por ABC</span>
+        <select id="sfAbc" onchange="sFilS()">
+          <option value="">Todos</option>
+          <option value="A">A — Alta</option><option value="B">B — Media</option><option value="C">C — Baja</option>
+        </select>
+      </div>
+      <div class="fg"><span class="if-lbl">Vista</span>
+        <select id="sfVista" onchange="sFilS()">
+          <option value="grupos">Por grupos (desplegable)</option>
+          <option value="tabla">Tabla completa</option>
+        </select>
+      </div>
+      <div style="margin-left:auto;font-size:11px;color:var(--text3);align-self:center">
+        <strong style="color:var(--navy)" id="sfCount">${fQ(sorted.length)}</strong> productos · Valor: <strong style="color:var(--gold)" id="sfVal">${fCOP(sorted.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}</strong>
+      </div>
+    </div>
+    <div id="sfResult"></div>`;
+
+  window._stockData=sorted;
+  window._stockGrupos=gruposSorted;
+  sFilS();
 }
 
-// ══ SIN MOVIMIENTO ════════════════════════════════════════════
-function vV(d,c){
-  // Productos con stock pero sin movimiento reciente
-  const umbral30=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>30&&(r.dias_sin_salida||9999)<=60);
-  const umbral60=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>60&&(r.dias_sin_salida||9999)<=90);
-  const umbral90=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>90&&(r.dias_sin_salida||9999)<=180);
-  const umbral180=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>180);
-  const v30=umbral30.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
-  const v60=umbral60.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
-  const v90=umbral90.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
-  const v180=umbral180.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+function sFilS(){
+  const q=(document.getElementById('sfBuscar')?.value||'').toLowerCase().trim();
+  const abc=document.getElementById('sfAbc')?.value||'';
+  const vista=document.getElementById('sfVista')?.value||'grupos';
+  let data=window._stockData||[];
+  if(q)data=data.filter(r=>r.referencia.toLowerCase().includes(q)||r.descripcion.toLowerCase().includes(q));
+  if(abc)data=data.filter(r=>r.abc_rotacion===abc);
+  const cnt=document.getElementById('sfCount');if(cnt)cnt.textContent=fQ(data.length);
+  const val=document.getElementById('sfVal');if(val)val.textContent=fCOP(data.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0));
+  const res=document.getElementById('sfResult');if(!res)return;
+  if(vista==='tabla'){res.innerHTML=tablaStock(data)}
+  else{
+    // Por grupos
+    const grupos={};data.forEach(r=>{const k=r.tipo_inventario||'Sin tipo';if(!grupos[k])grupos[k]=[];grupos[k].push(r);});
+    const gs=Object.entries(grupos).sort((a,b)=>b[1].reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0)-a[1].reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0));
+    res.innerHTML=`<div class="grupo-list">${gs.map(([g,items],gi)=>{
+      const valG=items.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+      const undG=items.reduce((s,r)=>s+parseFloat(r.existencia_actual||0),0);
+      const firstOpen=gi===0?' open':'';
+      return`<div class="grupo-row${firstOpen}" id="gS_${gi}">
+        <div class="grupo-header" onclick="toggleGrupo('gS_${gi}')">
+          <span class="grupo-name">📦 ${g}</span>
+          <span class="grupo-badge${firstOpen?'':' grupo-badge-dark'}" style="margin-left:8px">${fQ(items.length)} productos</span>
+          <div class="grupo-stats">
+            <div class="grupo-stat"><div class="grupo-stats-lbl">Unidades</div><div class="grupo-stats-val">${fQ(undG)}</div></div>
+            <div class="grupo-stat"><div class="grupo-stats-lbl">Valor total</div><div class="grupo-stats-val">${fM(valG)}</div></div>
+          </div>
+          <span class="grupo-arrow">›</span>
+        </div>
+        <div class="grupo-body">${tablaStock(items)}</div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+}
 
-  const criticos=[...umbral90,...umbral180].sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0));
+function tablaStock(items){
+  return`<div class="tw"><table><thead><tr>
+    <th>Referencia</th><th>Descripción</th><th>ABC</th>
+    <th class="num">Existencia</th><th class="num">Disponible</th><th class="num">Comprometido</th><th class="num">En tránsito</th>
+    <th class="num">Costo prom.</th><th class="num">Valor total</th><th>Estado</th><th>Últ. salida</th>
+  </tr></thead><tbody>
+    ${items.map((r,i)=>{
+      const st=r.stock_minimo>0&&r.disponible<r.stock_minimo?'sf-low':r.existencia_actual<=0?'sf-zero':r.existencia_actual<5?'sf-warn':'sf-ok';
+      const stTxt=r.existencia_actual<=0?'🔴 Sin stock':r.stock_minimo>0&&r.disponible<r.stock_minimo?'⚠️ Bajo mín.':r.existencia_actual<5?'⚡ Bajo':'✅ Ok';
+      const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+      return`<tr style="${odd}">
+        <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)">${r.referencia.substring(0,16)}</td>
+        <td style="max-width:180px"><div style="font-weight:600;font-size:11px">${r.descripcion.length>30?r.descripcion.substring(0,30)+'…':r.descripcion}</div></td>
+        <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
+        <td class="num" style="font-weight:700;color:var(--navy)">${fQ(r.existencia_actual)}</td>
+        <td class="num" style="color:var(--teal)">${fQ(r.disponible)}</td>
+        <td class="num" style="color:${r.comprometido>0?'var(--orange)':'var(--text4)'}">${fQ(r.comprometido)}</td>
+        <td class="num" style="color:${r.pendiente_entrar>0?'var(--purple)':'var(--text4)'}">${fQ(r.pendiente_entrar||0)}</td>
+        <td class="num">${fCOP(parseFloat(r.costo_prom_uni||0))}</td>
+        <td class="num" style="color:var(--gold);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+        <td><span class="${st}">${stTxt}</span></td>
+        <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:'-'}</td>
+      </tr>`;
+    }).join('')}
+  </tbody></table></div>`;
+}
+
+/* ══ SIN MOVIMIENTO ════════════════════════════════════════════ */
+function vV(d,c){
+  const umb30=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>30&&(r.dias_sin_salida||9999)<=60);
+  const umb60=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>60&&(r.dias_sin_salida||9999)<=90);
+  const umb90=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>90&&(r.dias_sin_salida||9999)<=180);
+  const umb180=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>180);
+  const v30=umb30.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const v60=umb60.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const v90=umb90.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const v180=umb180.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const criticos=[...umb90,...umb180].sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0));
 
   c.innerHTML=`
     <div class="g4" style="margin-bottom:16px">
-      <div class="card" style="border-color:var(--orange)"><div class="kpi-ic" style="background:var(--orange2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⏰</div><div class="kpi-lbl">31–60 días</div><div class="kpi-val">${fQ(umbral30.length)}</div><div class="kpi-sub">${fCOP(v30)}</div></div>
-      <div class="card" style="border-color:var(--orange)"><div class="kpi-ic" style="background:var(--orange2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⚡</div><div class="kpi-lbl">61–90 días</div><div class="kpi-val">${fQ(umbral60.length)}</div><div class="kpi-sub">${fCOP(v60)}</div></div>
-      <div class="card" style="border-color:var(--red)"><div class="kpi-ic" style="background:var(--red2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">🔴</div><div class="kpi-lbl">91–180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umbral90.length)}</div><div class="kpi-sub">${fCOP(v90)}</div></div>
-      <div class="card" style="border-color:var(--red)"><div class="kpi-ic" style="background:var(--red2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">💀</div><div class="kpi-lbl">+180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umbral180.length)}</div><div class="kpi-sub">${fCOP(v180)}</div></div>
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,30)" style="padding:16px;border-color:var(--orange)">
+        <div class="kpi-ic" style="background:var(--orange2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⏰</div>
+        <div class="kpi-lbl">31–60 días</div><div class="kpi-val">${fQ(umb30.length)}</div>
+        <div class="kpi-sub">${fCOP(v30)}</div><div class="kpi-hint">👁 Ver lista →</div>
+      </div>
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,60)" style="padding:16px;border-color:var(--orange)">
+        <div class="kpi-ic" style="background:var(--orange2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⚡</div>
+        <div class="kpi-lbl">61–90 días</div><div class="kpi-val">${fQ(umb60.length)}</div>
+        <div class="kpi-sub">${fCOP(v60)}</div><div class="kpi-hint">👁 Ver lista →</div>
+      </div>
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,90)" style="padding:16px;border-color:var(--red)">
+        <div class="kpi-ic" style="background:var(--red2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">🔴</div>
+        <div class="kpi-lbl">91–180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umb90.length)}</div>
+        <div class="kpi-sub">${fCOP(v90)}</div><div class="kpi-hint">👁 Ver lista →</div>
+      </div>
+      <div class="card kpi-clickable" onclick="mostrarModalSinMov(d,180)" style="padding:16px;border-color:var(--red)">
+        <div class="kpi-ic" style="background:var(--red2);width:32px;height:32px;border-radius:9px;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">💀</div>
+        <div class="kpi-lbl">+180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umb180.length)}</div>
+        <div class="kpi-sub">${fCOP(v180)}</div><div class="kpi-hint">👁 Ver lista →</div>
+      </div>
     </div>
     <div class="g2">
       <div class="card gf"><div class="ct">Capital inmovilizado por rango <span class="ct-line"></span></div><div class="cw h260"><canvas id="cInmov"></canvas></div></div>
-      <div class="card gf"><div class="ct">Top sin movimiento — por valor <span class="ct-line"></span><span class="tag tag-red">+90 días</span></div><div class="cw h260"><canvas id="cSinMov"></canvas></div></div>
+      <div class="card gf"><div class="ct">Top críticos sin movimiento +90d <span class="ct-line"></span><span class="tag tag-red">${fQ(criticos.length)} productos</span></div><div class="cw h260"><canvas id="cSinMov"></canvas></div></div>
     </div>
-    <div class="card gf">
-      <div class="ct">Listado productos críticos sin movimiento <span class="ct-line"></span><span class="tag tag-red">${fQ(criticos.length)} productos</span><span class="tag tag-gold" style="margin-left:auto">Capital: ${fCOP(v90+v180)}</span></div>
-      <div class="tw"><table><thead><tr>
-        <th>Referencia</th><th>Descripción</th><th>ABC</th>
-        <th class="num">Stock</th><th class="num">Valor</th>
-        <th>Últ. salida</th><th class="num">Días sin mov.</th>
-        <th>Alerta</th>
-      </tr></thead><tbody>
-        ${criticos.slice(0,50).map((r,i)=>{
-          const dias=r.dias_sin_salida||0;
-          const cls=dias>180?'sf-zero':dias>90?'sf-low':'sf-warn';
-          const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
-          return`<tr style="${odd}">
-            <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)">${r.referencia.substring(0,16)}</td>
-            <td style="font-weight:600;font-size:11px">${r.descripcion.length>35?r.descripcion.substring(0,35)+'…':r.descripcion}</td>
-            <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
-            <td class="num" style="font-weight:700">${fQ(r.existencia_actual)}</td>
-            <td class="num" style="color:var(--red);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
-            <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:'Sin registro'}</td>
-            <td class="num"><span class="${cls}">${dias}d</span></td>
-            <td>${dias>180?'<span class="tag tag-red">💀 Obsoleto</span>':dias>90?'<span class="tag tag-red">🔴 Crítico</span>':'<span class="tag tag-orange">⚡ Atención</span>'}</td>
-          </tr>`;
-        }).join('')}
-        ${criticos.length>50?`<tr><td colspan="8" style="text-align:center;color:var(--text3);font-size:11px;padding:10px">Mostrando 50 de ${fQ(criticos.length)} registros</td></tr>`:''}
-      </tbody></table></div>
-    </div>`;
+    <div class="inner-filter">
+      <div class="fg"><span class="if-lbl">Buscar en sin movimiento</span>
+        <input type="text" id="vmBuscar" placeholder="Referencia o descripción…" oninput="vmFil()" style="min-width:240px">
+      </div>
+      <div class="fg"><span class="if-lbl">Rango de días</span>
+        <select id="vmRango" onchange="vmFil()">
+          <option value="30">+30 días</option>
+          <option value="60">+60 días</option>
+          <option value="90" selected>+90 días (críticos)</option>
+          <option value="180">+180 días (obsoletos)</option>
+        </select>
+      </div>
+      <div class="fg"><span class="if-lbl">Vista</span>
+        <select id="vmVista" onchange="vmFil()">
+          <option value="grupos">Por grupos</option>
+          <option value="tabla">Tabla completa</option>
+        </select>
+      </div>
+      <div style="margin-left:auto;font-size:11px;color:var(--text3);align-self:center">
+        <strong style="color:var(--red)" id="vmCount">${fQ(criticos.length)}</strong> productos · Capital: <strong style="color:var(--gold)" id="vmVal">${fCOP(v90+v180)}</strong>
+      </div>
+    </div>
+    <div id="vmResult"></div>`;
 
-  ch.inmov=new Chart(document.getElementById('cInmov'),{type:'bar',data:{
-    labels:['31–60 días','61–90 días','91–180 días','+180 días'],
-    datasets:[{data:[v30,v60,v90,v180],backgroundColor:['rgba(217,119,6,.7)','rgba(217,119,6,.9)','rgba(192,57,43,.8)','rgba(127,29,29,.9)'],borderRadius:8,borderSkipped:false,borderWidth:0}]
-  },options:tOpts()});
+  window._sinMovData=d.filter(r=>r.existencia_actual>0);
+  vmFil();
 
-  const top10=criticos.filter(r=>r.dias_sin_salida>90).slice(0,10);
-  ch.sinmov=new Chart(document.getElementById('cSinMov'),{type:'bar',data:{
-    labels:top10.map(r=>r.descripcion.length>18?r.descripcion.substring(0,18)+'…':r.descripcion),
-    datasets:[{data:top10.map(r=>parseFloat(r.valor_inventario||0)),backgroundColor:'rgba(192,57,43,.7)',borderColor:'#C0392B',borderWidth:1.5,borderRadius:6,borderSkipped:false}]
-  },options:{indexAxis:'y',...tOpts()}});
+  ch.inmov=new Chart(document.getElementById('cInmov'),{type:'bar',data:{labels:['31–60d','61–90d','91–180d','+180d'],datasets:[{data:[v30,v60,v90,v180],backgroundColor:['rgba(217,119,6,.7)','rgba(217,119,6,.9)','rgba(192,57,43,.8)','rgba(127,29,29,.9)'],borderRadius:8,borderSkipped:false,borderWidth:0}]},options:tOpts()});
+  const top10=criticos.slice(0,10);
+  ch.sinmov=new Chart(document.getElementById('cSinMov'),{type:'bar',data:{labels:top10.map(r=>r.descripcion.length>18?r.descripcion.substring(0,18)+'…':r.descripcion),datasets:[{data:top10.map(r=>parseFloat(r.valor_inventario||0)),backgroundColor:'rgba(192,57,43,.7)',borderColor:'#C0392B',borderWidth:1.5,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',...tOpts()}});
 }
 
-// ══ ANÁLISIS ABC ══════════════════════════════════════════════
+function vmFil(){
+  const q=(document.getElementById('vmBuscar')?.value||'').toLowerCase().trim();
+  const rango=parseInt(document.getElementById('vmRango')?.value||'90');
+  const vista=document.getElementById('vmVista')?.value||'grupos';
+  let data=(window._sinMovData||[]).filter(r=>(r.dias_sin_salida||9999)>rango);
+  if(q)data=data.filter(r=>r.referencia.toLowerCase().includes(q)||r.descripcion.toLowerCase().includes(q));
+  data.sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0));
+  const cnt=document.getElementById('vmCount');if(cnt)cnt.textContent=fQ(data.length);
+  const val=document.getElementById('vmVal');if(val)val.textContent=fCOP(data.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0));
+  const res=document.getElementById('vmResult');if(!res)return;
+  if(vista==='tabla'){res.innerHTML=tablaMovimiento(data);}
+  else{
+    const grupos={};data.forEach(r=>{const k=r.tipo_inventario||'Sin tipo';if(!grupos[k])grupos[k]=[];grupos[k].push(r);});
+    const gs=Object.entries(grupos).sort((a,b)=>b[1].reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0)-a[1].reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0));
+    res.innerHTML=`<div class="grupo-list">${gs.map(([g,items],gi)=>{
+      const valG=items.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+      const maxDias=Math.max(...items.map(r=>r.dias_sin_salida||0));
+      const firstOpen=gi===0?' open':'';
+      return`<div class="grupo-row${firstOpen}" id="gV_${gi}">
+        <div class="grupo-header" onclick="toggleGrupo('gV_${gi}')">
+          <span class="grupo-name">💤 ${g}</span>
+          <span class="grupo-badge${firstOpen?'':' grupo-badge-dark'}" style="margin-left:8px">${fQ(items.length)} productos</span>
+          <div class="grupo-stats">
+            <div class="grupo-stat"><div class="grupo-stats-lbl">Máx. días</div><div class="grupo-stats-val">${maxDias}d</div></div>
+            <div class="grupo-stat"><div class="grupo-stats-lbl">Capital inm.</div><div class="grupo-stats-val">${fM(valG)}</div></div>
+          </div>
+          <span class="grupo-arrow">›</span>
+        </div>
+        <div class="grupo-body">${tablaMovimiento(items)}</div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+}
+
+function tablaMovimiento(items){
+  return`<div class="tw"><table><thead><tr>
+    <th>Referencia</th><th>Descripción</th><th>ABC</th>
+    <th class="num">Stock</th><th class="num">Valor</th>
+    <th>Últ. salida</th><th class="num">Días sin mov.</th><th>Alerta</th>
+  </tr></thead><tbody>
+    ${items.slice(0,100).map((r,i)=>{
+      const dias=r.dias_sin_salida||0;
+      const cls=dias>180?'sf-zero':dias>90?'sf-low':'sf-warn';
+      const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+      return`<tr style="${odd}">
+        <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)">${r.referencia.substring(0,16)}</td>
+        <td style="font-weight:600;font-size:11px">${r.descripcion.length>35?r.descripcion.substring(0,35)+'…':r.descripcion}</td>
+        <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
+        <td class="num" style="font-weight:700">${fQ(r.existencia_actual)}</td>
+        <td class="num" style="color:var(--red);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+        <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:'Sin registro'}</td>
+        <td class="num"><span class="${cls}">${dias}d</span></td>
+        <td>${dias>180?'<span class="tag tag-red">💀 Obsoleto</span>':dias>90?'<span class="tag tag-red">🔴 Crítico</span>':'<span class="tag tag-orange">⚡ Atención</span>'}</td>
+      </tr>`;
+    }).join('')}
+    ${items.length>100?`<tr><td colspan="8" style="text-align:center;color:var(--text3);font-size:11px;padding:10px">Mostrando 100 de ${fQ(items.length)} registros — usa el buscador para filtrar</td></tr>`:''}
+  </tbody></table></div>`;
+}
+
+function toggleGrupo(id){const el=document.getElementById(id);if(el)el.classList.toggle('open')}
+
+/* ══ ABC ══════════════════════════════════════════════════════ */
 function vABC(d,c){
   const abc={A:{items:[],valor:0,unidades:0},B:{items:[],valor:0,unidades:0},C:{items:[],valor:0,unidades:0}};
-  d.filter(r=>r.existencia_actual>0).forEach(r=>{
-    const k=r.abc_rotacion||'C';
-    if(abc[k]){abc[k].items.push(r);abc[k].valor+=parseFloat(r.valor_inventario||0);abc[k].unidades+=parseFloat(r.existencia_actual||0);}
-  });
+  d.filter(r=>r.existencia_actual>0).forEach(r=>{const k=r.abc_rotacion||'C';if(abc[k]){abc[k].items.push(r);abc[k].valor+=parseFloat(r.valor_inventario||0);abc[k].unidades+=parseFloat(r.existencia_actual||0);}});
   const totValor=abc.A.valor+abc.B.valor+abc.C.valor;
   const totItems=abc.A.items.length+abc.B.items.length+abc.C.items.length;
-
   c.innerHTML=`
     <div class="g3" style="margin-bottom:16px">
       ${['A','B','C'].map(k=>{
-        const pV=totValor>0?((abc[k].valor/totValor)*100).toFixed(1):0;
-        const pI=totItems>0?((abc[k].items.length/totItems)*100).toFixed(1):0;
-        const color=k==='A'?'var(--green)':k==='B'?'var(--orange)':'var(--red)';
-        const bg=k==='A'?'var(--green2)':k==='B'?'var(--orange2)':'var(--red2)';
-        const desc=k==='A'?'Alta rotación — prioridad máxima':k==='B'?'Rotación media — gestión regular':'Baja rotación — revisar existencias';
+        const pV=totValor>0?((abc[k].valor/totValor)*100).toFixed(1):0;const pI=totItems>0?((abc[k].items.length/totItems)*100).toFixed(1):0;
+        const color=k==='A'?'var(--green)':k==='B'?'var(--orange)':'var(--red)';const bg=k==='A'?'var(--green2)':k==='B'?'var(--orange2)':'var(--red2)';
         return`<div class="card" style="border-color:${color}">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
             <div style="width:44px;height:44px;border-radius:12px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:${color};font-family:'Playfair Display',serif">${k}</div>
-            <div><div style="font-size:11px;font-weight:600;color:var(--text2)">${desc}</div></div>
+            <div><div style="font-size:11px;font-weight:600;color:var(--text2)">${k==='A'?'Alta rotación — prioridad máxima':k==='B'?'Rotación media — gestión regular':'Baja rotación — revisar existencias'}</div></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
             <div style="background:var(--bg3);border-radius:var(--rs);padding:10px"><div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Ítems</div><div style="font-size:16px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace">${fQ(abc[k].items.length)}</div><div style="font-size:9px;color:var(--text3)">${pI}% del total</div></div>
@@ -535,17 +797,17 @@ function vABC(d,c){
       }).join('')}
     </div>
     <div class="g2">
-      <div class="card gf"><div class="ct">Items por clasificación ABC <span class="ct-line"></span></div><div class="cw h240"><canvas id="cAbcI"></canvas></div></div>
-      <div class="card gf"><div class="ct">Valor por clasificación ABC <span class="ct-line"></span></div><div class="cw h240"><canvas id="cAbcV"></canvas></div></div>
+      <div class="card gf"><div class="ct">Items por ABC <span class="ct-line"></span></div><div class="cw h240"><canvas id="cAbcI"></canvas></div></div>
+      <div class="card gf"><div class="ct">Valor por ABC <span class="ct-line"></span></div><div class="cw h240"><canvas id="cAbcV"></canvas></div></div>
     </div>
     <div class="card gf">
       <div class="ct">Top productos clase A — mayor valor <span class="ct-line"></span><span class="tag tag-a">Alta rotación</span></div>
-      <div class="tw"><table><thead><tr><th>#</th><th>Descripción</th><th>Tipo</th><th class="num">Stock</th><th class="num">Costo prom.</th><th class="num">Valor inventario</th><th>Últ. movimiento</th></tr></thead><tbody>
+      <div class="tw"><table><thead><tr><th>#</th><th>Descripción</th><th>Tipo</th><th class="num">Stock</th><th class="num">Costo prom.</th><th class="num">Valor inventario</th><th>Últ. mov.</th></tr></thead><tbody>
         ${abc.A.items.sort((a,b)=>parseFloat(b.valor_inventario)-parseFloat(a.valor_inventario)).slice(0,15).map((r,i)=>{
           const ic=['🥇','🥈','🥉'];const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
           return`<tr style="${odd}"><td style="font-size:13px">${ic[i]||`<span style="font-weight:700;color:var(--navy)">${i+1}</span>`}</td>
             <td><div style="font-weight:600;font-size:11px">${r.descripcion.length>35?r.descripcion.substring(0,35)+'…':r.descripcion}</div><div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.referencia}</div></td>
-            <td><span class="tag tag-blue" style="font-size:8px">${r.tipo_inventario.replace('INV143501','IMP').replace('INV143502','NAC').replace('INV143503','SRV')}</span></td>
+            <td><span class="tag tag-blue" style="font-size:8px">${r.tipo_inventario}</span></td>
             <td class="num" style="font-weight:700">${fQ(r.existencia_actual)}</td>
             <td class="num">${fCOP(parseFloat(r.costo_prom_uni||0))}</td>
             <td class="num" style="color:var(--gold);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
@@ -554,57 +816,47 @@ function vABC(d,c){
         }).join('')}
       </tbody></table></div>
     </div>`;
-
-  ch.abci=new Chart(document.getElementById('cAbcI'),{type:'doughnut',data:{
-    labels:['A — Alta','B — Media','C — Baja'],
-    datasets:[{data:[abc.A.items.length,abc.B.items.length,abc.C.items.length],backgroundColor:['rgba(21,128,61,.85)','rgba(202,138,4,.85)','rgba(220,38,38,.85)'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:9},padding:10,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fQ(ctx.raw)} ítems (${((ctx.raw/totItems)*100).toFixed(1)}%)`}}}}});
-  ch.abcv=new Chart(document.getElementById('cAbcV'),{type:'doughnut',data:{
-    labels:['A — Alta','B — Media','C — Baja'],
-    datasets:[{data:[abc.A.valor,abc.B.valor,abc.C.valor],backgroundColor:['rgba(21,128,61,.85)','rgba(202,138,4,.85)','rgba(220,38,38,.85)'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]
-  },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:9},padding:10,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)} (${((ctx.raw/totValor)*100).toFixed(1)}%)`}}}}});
+  ch.abci=new Chart(document.getElementById('cAbcI'),{type:'doughnut',data:{labels:['A','B','C'],datasets:[{data:[abc.A.items.length,abc.B.items.length,abc.C.items.length],backgroundColor:['rgba(21,128,61,.85)','rgba(202,138,4,.85)','rgba(220,38,38,.85)'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:9},padding:10,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fQ(ctx.raw)} ítems`}}}}});
+  ch.abcv=new Chart(document.getElementById('cAbcV'),{type:'doughnut',data:{labels:['A','B','C'],datasets:[{data:[abc.A.valor,abc.B.valor,abc.C.valor],backgroundColor:['rgba(21,128,61,.85)','rgba(202,138,4,.85)','rgba(220,38,38,.85)'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:9},padding:10,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
 }
 
-// ══ CIERRES MENSUALES ═════════════════════════════════════════
+/* ══ CIERRES ════════════════════════════════════════════════════ */
 function vC(c){
-  // Agrupar rawC por período
+  if(!rawC.length){c.innerHTML='<div class="loading" style="color:var(--text3)">⏳ Cargando cierres… si persiste pulsa Actualizar.</div>';return;}
   const byPer={};
   rawC.forEach(r=>{
-    const k=r.periodo;
+    const k=r.periodo;if(!k)return;
     if(!byPer[k])byPer[k]={periodo:k,entradas:0,salidas:0,vlr_entradas:0,vlr_salidas:0,movimientos:0,productos:new Set()};
-    byPer[k].entradas+=parseFloat(r.cant_entradas||0);
-    byPer[k].salidas+=parseFloat(r.cant_salidas||0);
-    byPer[k].vlr_entradas+=parseFloat(r.vlr_entradas||0);
-    byPer[k].vlr_salidas+=parseFloat(r.vlr_salidas||0);
-    byPer[k].movimientos+=parseInt(r.num_movimientos||0);
-    byPer[k].productos.add(r.referencia);
+    byPer[k].entradas+=parseFloat(r.cant_entradas||0);byPer[k].salidas+=parseFloat(r.cant_salidas||0);
+    byPer[k].vlr_entradas+=parseFloat(r.vlr_entradas||0);byPer[k].vlr_salidas+=parseFloat(r.vlr_salidas||0);
+    byPer[k].movimientos+=parseInt(r.num_movimientos||0);byPer[k].productos.add(r.referencia);
   });
   const pers=Object.values(byPer).map(x=>({...x,productos:x.productos.size})).sort((a,b)=>a.periodo-b.periodo);
-  const perLabels=pers.map(p=>`${MN[p.periodo%100]} ${String(Math.floor(p.periodo/100)).slice(2)}`);
+  if(!pers.length){c.innerHTML='<div class="err">Sin datos en rawC — '+rawC.length+' registros cargados pero sin campo período válido.</div>';return;}
+  const perLabels=pers.map(p=>`${MN[p.periodo%100]||'?'} ${String(Math.floor(p.periodo/100))}`);
 
   c.innerHTML=`
     <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:18px">
       <div class="kpi" style="--kbg:var(--green2)"><div class="kpi-ic">📅</div><div class="kpi-lbl">Períodos</div><div class="kpi-val">${pers.length}</div><div class="kpi-sub">${perLabels[0]||'—'} → ${perLabels[perLabels.length-1]||'—'}</div></div>
       <div class="kpi" style="--kbg:var(--blue3)"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fM(pers.reduce((s,p)=>s+p.vlr_entradas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.entradas,0))} und</div></div>
       <div class="kpi" style="--kbg:var(--orange2)"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fM(pers.reduce((s,p)=>s+p.vlr_salidas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.salidas,0))} und</div></div>
-      <div class="kpi" style="--kbg:var(--purple2)"><div class="kpi-ic">🔄</div><div class="kpi-lbl">Total movimientos</div><div class="kpi-val">${fQ(pers.reduce((s,p)=>s+p.movimientos,0))}</div><div class="kpi-sub">Prom. ${fQ(pers.reduce((s,p)=>s+p.movimientos,0)/Math.max(pers.length,1))} / período</div></div>
+      <div class="kpi" style="--kbg:var(--purple2)"><div class="kpi-ic">🔄</div><div class="kpi-lbl">Total movimientos</div><div class="kpi-val">${fQ(pers.reduce((s,p)=>s+p.movimientos,0))}</div><div class="kpi-sub">Prom. ${fQ(Math.round(pers.reduce((s,p)=>s+p.movimientos,0)/Math.max(pers.length,1)))} / período</div></div>
     </div>
     <div class="g2">
-      <div class="card gf"><div class="ct">Entradas vs Salidas — valor por período <span class="ct-line"></span></div><div class="cw h280"><canvas id="cCierreEV"></canvas></div></div>
+      <div class="card gf"><div class="ct">Entradas vs Salidas — valor <span class="ct-line"></span></div><div class="cw h280"><canvas id="cCierreEV"></canvas></div></div>
       <div class="card gf"><div class="ct">Unidades movidas por período <span class="ct-line"></span></div><div class="cw h280"><canvas id="cCierreU"></canvas></div></div>
     </div>
     <div class="card gf">
-      <div class="ct">Resumen por período <span class="ct-line"></span></div>
+      <div class="ct">Resumen por período <span class="ct-line"></span><span class="tag tag-blue">${pers.length} períodos</span></div>
       <div class="tw"><table><thead><tr>
         <th>Período</th><th class="num">Cant. entradas</th><th class="num">Valor entradas</th>
         <th class="num">Cant. salidas</th><th class="num">Valor salidas</th>
         <th class="num">Neto und.</th><th class="num">Movimientos</th><th class="num">Productos</th>
       </tr></thead><tbody>
         ${[...pers].reverse().map((p,i)=>{
-          const neto=p.entradas-p.salidas;
-          const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          const neto=p.entradas-p.salidas;const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
           return`<tr style="${odd}">
-            <td style="font-weight:700">${MF[p.periodo%100]} ${Math.floor(p.periodo/100)}</td>
+            <td style="font-weight:700">${MF[p.periodo%100]||'?'} ${Math.floor(p.periodo/100)}</td>
             <td class="num" style="color:var(--teal)">${fQ(p.entradas)}</td>
             <td class="num" style="color:var(--teal);font-weight:700">${fCOP(p.vlr_entradas)}</td>
             <td class="num" style="color:var(--orange)">${fQ(p.salidas)}</td>
@@ -617,61 +869,29 @@ function vC(c){
       </tbody></table></div>
     </div>`;
 
-  ch.cEV=new Chart(document.getElementById('cCierreEV'),{type:'bar',data:{
-    labels:perLabels,
-    datasets:[
-      {label:'Entradas',data:pers.map(p=>p.vlr_entradas),backgroundColor:'rgba(10,122,90,.75)',borderRadius:5,borderSkipped:false},
-      {label:'Salidas',data:pers.map(p=>p.vlr_salidas),backgroundColor:'rgba(217,119,6,.75)',borderRadius:5,borderSkipped:false}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
-
-  ch.cU=new Chart(document.getElementById('cCierreU'),{type:'line',data:{
-    labels:perLabels,
-    datasets:[
-      {label:'Entradas',data:pers.map(p=>p.entradas),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5},
-      {label:'Salidas',data:pers.map(p=>p.salidas),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+  ch.cEV=new Chart(document.getElementById('cCierreEV'),{type:'bar',data:{labels:perLabels,datasets:[{label:'Entradas',data:pers.map(p=>p.vlr_entradas),backgroundColor:'rgba(10,122,90,.75)',borderRadius:5,borderSkipped:false},{label:'Salidas',data:pers.map(p=>p.vlr_salidas),backgroundColor:'rgba(217,119,6,.75)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+  ch.cU=new Chart(document.getElementById('cCierreU'),{type:'line',data:{labels:perLabels,datasets:[{label:'Entradas',data:pers.map(p=>p.entradas),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5},{label:'Salidas',data:pers.map(p=>p.salidas),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
 }
 
-// ══ TENDENCIA ══════════════════════════════════════════════════
+/* ══ TENDENCIA ══════════════════════════════════════════════════ */
 function vT(c){
-  // Top 5 productos por volumen de salidas en todos los períodos
+  if(!rawC.length){c.innerHTML='<div class="loading" style="color:var(--text3)">⏳ Sin datos de cierres cargados aún.</div>';return;}
   const byProd={};
-  rawC.forEach(r=>{
-    const k=r.referencia;
-    if(!byProd[k])byProd[k]={ref:k,desc:r.descripcion,salidas:0,entradas:0,vlr_salidas:0};
-    byProd[k].salidas+=parseFloat(r.cant_salidas||0);
-    byProd[k].entradas+=parseFloat(r.cant_entradas||0);
-    byProd[k].vlr_salidas+=parseFloat(r.vlr_salidas||0);
-  });
+  rawC.forEach(r=>{const k=r.referencia;if(!byProd[k])byProd[k]={ref:k,desc:r.descripcion,salidas:0,entradas:0,vlr_salidas:0};byProd[k].salidas+=parseFloat(r.cant_salidas||0);byProd[k].entradas+=parseFloat(r.cant_entradas||0);byProd[k].vlr_salidas+=parseFloat(r.vlr_salidas||0);});
   const top5=Object.values(byProd).sort((a,b)=>b.vlr_salidas-a.vlr_salidas).slice(0,5);
-
-  const pers=[...new Set(rawC.map(r=>r.periodo))].sort();
-  const perLabels=pers.map(p=>`${MN[p%100]} ${String(Math.floor(p/100)).slice(2)}`);
-
-  // Rotación total por período
-  const rotByPer={};
-  rawC.forEach(r=>{
-    const k=r.periodo;
-    if(!rotByPer[k])rotByPer[k]={e:0,s:0};
-    rotByPer[k].e+=parseFloat(r.cant_entradas||0);
-    rotByPer[k].s+=parseFloat(r.cant_salidas||0);
-  });
+  const pers=[...new Set(rawC.map(r=>r.periodo).filter(Boolean))].sort();
+  const perLabels=pers.map(p=>`${MN[p%100]||'?'} ${String(Math.floor(p/100))}`);
+  const rotByPer={};rawC.forEach(r=>{const k=r.periodo;if(!k)return;if(!rotByPer[k])rotByPer[k]={e:0,s:0};rotByPer[k].e+=parseFloat(r.cant_entradas||0);rotByPer[k].s+=parseFloat(r.cant_salidas||0);});
 
   c.innerHTML=`
     <div class="g2">
-      <div class="card gf"><div class="ct">Rotación total — entradas vs salidas <span class="ct-line"></span></div><div class="cw h280"><canvas id="cTRot"></canvas></div></div>
-      <div class="card gf"><div class="ct">Top 5 productos — valor salidas acum. <span class="ct-line"></span></div><div class="cw h280"><canvas id="cTTop"></canvas></div></div>
+      <div class="card gf"><div class="ct">Rotación total — und por período <span class="ct-line"></span></div><div class="cw h280"><canvas id="cTRot"></canvas></div></div>
+      <div class="card gf"><div class="ct">Top 5 — valor salidas acumulado <span class="ct-line"></span></div><div class="cw h280"><canvas id="cTTop"></canvas></div></div>
     </div>
-    <div class="card gf"><div class="ct">Top 5 — tendencia salidas por período <span class="ct-line"></span></div><div class="cw h300"><canvas id="cT5"></canvas></div></div>
+    <div class="card gf"><div class="ct">Top 5 productos — tendencia salidas por período <span class="ct-line"></span></div><div class="cw h300"><canvas id="cT5"></canvas></div></div>
     <div class="card gf">
-      <div class="ct">Ranking productos por volumen total de salidas <span class="ct-line"></span></div>
-      <div class="tw"><table><thead><tr>
-        <th>#</th><th>Descripción</th>
-        <th class="num">Cant. salidas</th><th class="num">Valor salidas</th>
-        <th class="num">Cant. entradas</th><th>Balance</th>
-      </tr></thead><tbody>
+      <div class="ct">Ranking por volumen total de salidas <span class="ct-line"></span><span class="tag tag-blue">${Object.keys(byProd).length} productos</span></div>
+      <div class="tw"><table><thead><tr><th>#</th><th>Descripción</th><th class="num">Cant. salidas</th><th class="num">Valor salidas</th><th class="num">Cant. entradas</th><th>Balance</th></tr></thead><tbody>
         ${Object.values(byProd).sort((a,b)=>b.vlr_salidas-a.vlr_salidas).slice(0,20).map((r,i)=>{
           const bal=r.entradas-r.salidas;const ic=['🥇','🥈','🥉'];const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
           return`<tr style="${odd}"><td style="font-size:13px">${ic[i]||`<span style="font-weight:700;color:var(--navy)">${i+1}</span>`}</td>
@@ -685,41 +905,19 @@ function vT(c){
       </tbody></table></div>
     </div>`;
 
-  ch.trot=new Chart(document.getElementById('cTRot'),{type:'line',data:{
-    labels:perLabels,
-    datasets:[
-      {label:'Entradas',data:pers.map(p=>rotByPer[p]?.e||0),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:4,borderWidth:2.5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2},
-      {label:'Salidas',data:pers.map(p=>rotByPer[p]?.s||0),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:4,borderWidth:2.5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2}
-    ]
-  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
-
-  ch.ttop=new Chart(document.getElementById('cTTop'),{type:'bar',data:{
-    labels:top5.map(r=>r.desc.length>18?r.desc.substring(0,18)+'…':r.desc),
-    datasets:[{data:top5.map(r=>r.vlr_salidas),backgroundColor:CL.map((c,i)=>i<3?c:c+'99'),borderColor:CL,borderWidth:1.5,borderRadius:6,borderSkipped:false}]
-  },options:{indexAxis:'y',...tOpts()}});
-
-  // Tendencia top5 por período
-  const td={};
-  top5.forEach(p=>{
-    td[p.ref]=pers.map(per=>{
-      const recs=rawC.filter(r=>r.referencia===p.ref&&r.periodo===per);
-      return recs.reduce((s,r)=>s+parseFloat(r.cant_salidas||0),0);
-    });
-  });
-  ch.t5=new Chart(document.getElementById('cT5'),{type:'line',data:{
-    labels:perLabels,
-    datasets:top5.map((p,i)=>({label:p.desc.length>22?p.desc.substring(0,22)+'…':p.desc,data:td[p.ref],borderColor:CL[i],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2,pointBackgroundColor:CL[i],pointBorderColor:'#fff',pointBorderWidth:1.5,pointHoverRadius:6}))
-  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+  ch.trot=new Chart(document.getElementById('cTRot'),{type:'line',data:{labels:perLabels,datasets:[{label:'Entradas',data:pers.map(p=>rotByPer[p]?.e||0),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:4,borderWidth:2.5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2},{label:'Salidas',data:pers.map(p=>rotByPer[p]?.s||0),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:4,borderWidth:2.5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+  ch.ttop=new Chart(document.getElementById('cTTop'),{type:'bar',data:{labels:top5.map(r=>r.desc.length>18?r.desc.substring(0,18)+'…':r.desc),datasets:[{data:top5.map(r=>r.vlr_salidas),backgroundColor:CL,borderColor:CL,borderWidth:1.5,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',...tOpts()}});
+  const td={};top5.forEach(p=>{td[p.ref]=pers.map(per=>{const recs=rawC.filter(r=>r.referencia===p.ref&&r.periodo===per);return recs.reduce((s,r)=>s+parseFloat(r.cant_salidas||0),0);});});
+  ch.t5=new Chart(document.getElementById('cT5'),{type:'line',data:{labels:perLabels,datasets:top5.map((p,i)=>({label:p.desc.length>22?p.desc.substring(0,22)+'…':p.desc,data:td[p.ref],borderColor:CL[i],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2,pointBackgroundColor:CL[i],pointBorderColor:'#fff',pointBorderWidth:1.5,pointHoverRadius:6}))},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
 }
 
-// ══ POR PRODUCTO ══════════════════════════════════════════════
+/* ══ POR PRODUCTO ═══════════════════════════════════════════════ */
 function vP(d,c){
   c.innerHTML=`
     <div class="card gf">
       <div class="ct">🔍 Buscar producto <span class="ct-line"></span></div>
       <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
-        <div class="fg" style="flex:1;min-width:280px">
-          <label>Referencia o descripción</label>
+        <div class="fg" style="flex:1;min-width:280px"><label>Referencia o descripción</label>
           <input type="text" id="pq" class="prod-search" placeholder="Ej: UPVCH1070 o COVERMAS…" oninput="pSearch()" style="font-size:13px;padding:10px 14px">
         </div>
         <button class="ba" onclick="pSearch()">Buscar</button>
@@ -735,25 +933,19 @@ function pSearch(){
   clearTimeout(pTimer);
   pTimer=setTimeout(()=>{
     const q=(document.getElementById('pq')?.value||'').trim().toLowerCase();
-    const sug=document.getElementById('pSug');
-    const res=document.getElementById('pRes');
+    const sug=document.getElementById('pSug'),res=document.getElementById('pRes');
     if(!sug||!res)return;
     if(q.length<2){sug.innerHTML='';res.innerHTML='';return;}
     const matches=rawS.filter(r=>r.referencia.toLowerCase().includes(q)||r.descripcion.toLowerCase().includes(q)).slice(0,8);
     if(!matches.length){sug.innerHTML='<div style="font-size:12px;color:var(--text3);padding:4px 2px">Sin resultados</div>';res.innerHTML='';return;}
     sug.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-      ${matches.map(m=>`<button onclick="pDetalle('${m.referencia}')" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:11px;font-family:inherit;cursor:pointer;color:var(--navy);font-weight:600;transition:all .15s" onmouseover="this.style.background='var(--blue3)'" onmouseout="this.style.background='var(--bg3)'">
+      ${matches.map(m=>`<button onclick="pDetalle('${m.referencia.replace(/'/g,"&#39;")}')" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:11px;font-family:inherit;cursor:pointer;color:var(--navy);font-weight:600;transition:all .15s" onmouseover="this.style.background='var(--blue3)'" onmouseout="this.style.background='var(--bg3)'">
         <span class="tag tag-${m.abc_rotacion==='A'?'a':m.abc_rotacion==='B'?'b':'c'}" style="margin-right:5px">${m.abc_rotacion||'?'}</span>${m.descripcion.length>35?m.descripcion.substring(0,35)+'…':m.descripcion}
       </button>`).join('')}
     </div>`;
   },220);
 }
-
-function pClear(){
-  const pq=document.getElementById('pq');if(pq)pq.value='';
-  const ps=document.getElementById('pSug');if(ps)ps.innerHTML='';
-  const pr=document.getElementById('pRes');if(pr)pr.innerHTML='';
-}
+function pClear(){const pq=document.getElementById('pq');if(pq)pq.value='';const ps=document.getElementById('pSug');if(ps)ps.innerHTML='';const pr=document.getElementById('pRes');if(pr)pr.innerHTML='';}
 
 function pDetalle(ref){
   dC();
@@ -761,13 +953,11 @@ function pDetalle(ref){
   const movs=rawC.filter(r=>r.referencia===ref).sort((a,b)=>a.periodo-b.periodo);
   const res=document.getElementById('pRes');if(!res)return;
   if(!stock){res.innerHTML='<div class="err">Sin datos de stock para este producto.</div>';return;}
-
   const totE=movs.reduce((s,r)=>s+parseFloat(r.cant_entradas||0),0);
   const totS=movs.reduce((s,r)=>s+parseFloat(r.cant_salidas||0),0);
   const totVE=movs.reduce((s,r)=>s+parseFloat(r.vlr_entradas||0),0);
   const totVS=movs.reduce((s,r)=>s+parseFloat(r.vlr_salidas||0),0);
-  const perLabels=movs.map(p=>`${MN[p.periodo%100]} ${String(Math.floor(p.periodo/100)).slice(2)}`);
-
+  const perLabels=movs.map(p=>`${MN[p.periodo%100]||'?'} ${String(Math.floor(p.periodo/100))}`);
   res.innerHTML=`
     <div class="card gf" style="border-color:var(--blue)">
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
@@ -777,7 +967,7 @@ function pDetalle(ref){
           <div style="display:flex;gap:8px;margin-top:5px;flex-wrap:wrap;align-items:center">
             <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:6px">${stock.referencia}</span>
             <span class="tag tag-${stock.abc_rotacion==='A'?'a':stock.abc_rotacion==='B'?'b':'c'}">ABC: ${stock.abc_rotacion||'?'}</span>
-            <span class="tag tag-blue">${stock.tipo_inventario.replace('INV143501','IMPORTADO').replace('INV143502','NACIONAL').replace('INV143503','SERVICIO')}</span>
+            <span class="tag tag-blue">${stock.tipo_inventario}</span>
             ${stock.pendiente_entrar>0?`<span class="tag tag-purple">🚚 En tránsito: ${fQ(stock.pendiente_entrar)}</span>`:''}
           </div>
         </div>
@@ -789,42 +979,26 @@ function pDetalle(ref){
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fQ(totE)} und</div><div class="kpi-sub">${fCOP(totVE)}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fQ(totS)} und</div><div class="kpi-sub">${fCOP(totVS)}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📅</div><div class="kpi-lbl">Últ. salida</div><div class="kpi-val" style="font-size:14px">${stock.fecha_ult_salida?stock.fecha_ult_salida.split('T')[0]:'Sin registro'}</div><div class="kpi-sub">${stock.dias_sin_salida?stock.dias_sin_salida+' días sin salida':''}</div></div>
-      <div class="kpi" style="cursor:default"><div class="kpi-ic">📈</div><div class="kpi-lbl">Períodos activo</div><div class="kpi-val">${movs.length}</div><div class="kpi-sub">En historial</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📈</div><div class="kpi-lbl">Períodos activo</div><div class="kpi-val">${movs.length}</div><div class="kpi-sub">En historial de cierres</div></div>
     </div>
-    ${movs.length>0?`
-    <div class="card gf"><div class="ct">Historial movimientos — ${stock.descripcion.substring(0,35)} <span class="ct-line"></span></div><div class="cw h280"><canvas id="cPD"></canvas></div></div>
-    <div class="card gf">
-      <div class="ct">Movimientos por período <span class="ct-line"></span></div>
-      <div class="tw"><table><thead><tr>
-        <th>Período</th><th class="num">Cant. entradas</th><th class="num">Valor entradas</th>
-        <th class="num">Cant. salidas</th><th class="num">Valor salidas</th>
-        <th class="num">Neto</th><th class="num">Costo prom.</th><th class="num">Movimientos</th>
-      </tr></thead><tbody>
+    ${movs.length>0?`<div class="card gf"><div class="ct">Historial movimientos <span class="ct-line"></span></div><div class="cw h280"><canvas id="cPD"></canvas></div></div>
+    <div class="card gf"><div class="ct">Detalle por período <span class="ct-line"></span></div>
+      <div class="tw"><table><thead><tr><th>Período</th><th class="num">Cant. ent.</th><th class="num">Valor ent.</th><th class="num">Cant. sal.</th><th class="num">Valor sal.</th><th class="num">Neto</th><th class="num">Costo prom.</th><th class="num">Movs.</th></tr></thead><tbody>
         ${[...movs].reverse().map((r,i)=>{const neto=parseFloat(r.cant_entradas||0)-parseFloat(r.cant_salidas||0);const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
-          return`<tr style="${odd}"><td style="font-weight:600">${MF[r.periodo%100]} ${Math.floor(r.periodo/100)}</td>
-            <td class="num" style="color:var(--teal)">${fQ(r.cant_entradas||0)}</td>
-            <td class="num" style="color:var(--teal);font-weight:700">${fCOP(parseFloat(r.vlr_entradas||0))}</td>
-            <td class="num" style="color:var(--orange)">${fQ(r.cant_salidas||0)}</td>
-            <td class="num" style="color:var(--orange);font-weight:700">${fCOP(parseFloat(r.vlr_salidas||0))}</td>
+          return`<tr style="${odd}"><td style="font-weight:600">${MF[r.periodo%100]||'?'} ${Math.floor(r.periodo/100)}</td>
+            <td class="num" style="color:var(--teal)">${fQ(r.cant_entradas||0)}</td><td class="num" style="color:var(--teal);font-weight:700">${fCOP(parseFloat(r.vlr_entradas||0))}</td>
+            <td class="num" style="color:var(--orange)">${fQ(r.cant_salidas||0)}</td><td class="num" style="color:var(--orange);font-weight:700">${fCOP(parseFloat(r.vlr_salidas||0))}</td>
             <td class="num"><span class="${neto>=0?'tag tag-green':'tag tag-red'}">${neto>=0?'+':''}${fQ(neto)}</span></td>
-            <td class="num">${fCOP(parseFloat(r.costo_prom_cierre||0))}</td>
-            <td class="num">${r.num_movimientos||0}</td>
+            <td class="num">${fCOP(parseFloat(r.costo_prom_cierre||0))}</td><td class="num">${r.num_movimientos||0}</td>
           </tr>`;
         }).join('')}
       </tbody></table></div>
-    </div>`:'<div class="card gf" style="text-align:center;padding:30px;color:var(--text3)">Sin historial de movimientos para este producto</div>'}`;
+    </div>`:'<div class="card gf" style="text-align:center;padding:30px;color:var(--text3)">Sin historial de movimientos para este producto en el período consultado</div>'}`;
 
   if(movs.length>0){
     setTimeout(()=>{
       const cv=document.getElementById('cPD');if(!cv)return;
-      ch.pd=new Chart(cv,{type:'bar',data:{
-        labels:perLabels,
-        datasets:[
-          {type:'bar',label:'Entradas',data:movs.map(r=>parseFloat(r.cant_entradas||0)),backgroundColor:'rgba(10,122,90,.7)',borderRadius:5,borderSkipped:false,order:2},
-          {type:'bar',label:'Salidas',data:movs.map(r=>parseFloat(r.cant_salidas||0)),backgroundColor:'rgba(217,119,6,.7)',borderRadius:5,borderSkipped:false,order:2},
-          {type:'line',label:'Costo prom.',data:movs.map(r=>parseFloat(r.costo_prom_cierre||0)),borderColor:'#1A3A6E',backgroundColor:'transparent',tension:.4,pointRadius:4,borderWidth:2,yAxisID:'y2',order:1}
-        ]
-      },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.datasetIndex===2?fCOP(ctx.raw):fQ(ctx.raw)+' und'}`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},y2:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},position:'right',grid:{display:false},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+      ch.pd=new Chart(cv,{type:'bar',data:{labels:perLabels,datasets:[{type:'bar',label:'Entradas',data:movs.map(r=>parseFloat(r.cant_entradas||0)),backgroundColor:'rgba(10,122,90,.7)',borderRadius:5,borderSkipped:false,order:2},{type:'bar',label:'Salidas',data:movs.map(r=>parseFloat(r.cant_salidas||0)),backgroundColor:'rgba(217,119,6,.7)',borderRadius:5,borderSkipped:false,order:2},{type:'line',label:'Costo prom.',data:movs.map(r=>parseFloat(r.costo_prom_cierre||0)),borderColor:'#1A3A6E',backgroundColor:'transparent',tension:.4,pointRadius:4,borderWidth:2,yAxisID:'y2',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.datasetIndex===2?fCOP(ctx.raw):fQ(ctx.raw)+' und'}`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},y2:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},position:'right',grid:{display:false},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
     },100);
   }
 }

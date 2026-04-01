@@ -299,7 +299,7 @@ let rawS=[],rawC=[],vista='r',ch={};
 
 const fCOP=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
 const fM=v=>{if(v<0)return'-'+fM(-v);if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'MM';if(v>=1e6)return'$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString('es-CO')};
-const fQ=v=>{if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return parseFloat(v).toLocaleString('es-CO',{maximumFractionDigits:2})};
+const fQ=v=>parseFloat(v).toLocaleString('es-CO',{maximumFractionDigits:2});
 const nrm=s=>(s||'').trim();
 
 /* ── MODAL ─────────────────────────────── */

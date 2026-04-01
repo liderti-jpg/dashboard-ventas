@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="https://i.ibb.co/BKyTpZ1g/logo-JOTA-MUNDIAL-SAS-original-mundoo.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventarios — Jota Mundial SAS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F7FD;--bg2:#FFFFFF;--bg3:#EEF2FB;--bg4:#E3EAF8;
+  --navy:#0B1F4A;--navy2:#1A3A6E;--navy3:#2E5199;
+  --blue:#3B6FD4;--blue2:#5B8FE8;--blue3:#EAF0FD;
+  --teal:#0A7A5A;--teal2:#E6F7F2;
+  --gold:#B8860B;--gold2:#D4A017;--gold3:#FFF8E7;
+  --text:#0B1F4A;--text2:#3D5280;--text3:#7A90B8;--text4:#A8BAD8;
+  --border:#D4DFFA;--border2:#EEF2FB;
+  --green:#0A7A5A;--green2:#E6F7F2;
+  --red:#C0392B;--red2:#FDECEA;
+  --orange:#D97706;--orange2:#FFFBEB;
+  --yellow:#CA8A04;--yellow2:#FEF9C3;
+  --purple:#6B21A8;--purple2:#F0E6FF;
+  --shadow:0 2px 16px rgba(11,31,74,.07);
+  --shadow2:0 8px 40px rgba(11,31,74,.12);
+  --r:16px;--rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#071530 0%,#0B1F4A 60%,#1A3A6E 100%);padding:0 36px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 24px rgba(0,0,0,.3)}
+.hlogo{display:flex;align-items:center;gap:14px}
+.logo-nm{font-size:15px;font-weight:700;color:#fff;letter-spacing:.3px}
+.logo-sb{font-size:9px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:1.8px;text-transform:uppercase;display:block;margin-top:1px}
+.hdiv{width:1px;height:28px;background:rgba(255,255,255,.12);margin:0 6px}
+.htitle{font-size:11px;color:rgba(255,255,255,.4)}
+.hright{display:flex;align-items:center;gap:10px}
+.badge-live{display:none;align-items:center;gap:5px;background:rgba(10,122,90,.25);border:1px solid rgba(10,122,90,.4);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:#4ECBA8}
+.dot-live{width:5px;height:5px;border-radius:50%;background:#4ECBA8;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.btn-ref{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;border-radius:var(--rs);padding:8px 18px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;box-shadow:0 3px 10px rgba(180,130,0,.3)}
+.btn-ref:hover{opacity:.9;transform:translateY(-1px)}
+.btn-ref:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-centro{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--rs);padding:7px 14px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;transition:all .2s}
+.btn-centro:hover{background:rgba(255,255,255,.15)}
+#ts{font-size:10px;color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace}
+
+/* MAIN */
+.main{padding:24px 36px;max-width:1700px;margin:0 auto}
+@media(max-width:700px){.main{padding:12px}.hlogo .logo-sb{display:none}}
+
+/* FILTROS */
+.fp{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.fph{font-size:10px;font-weight:700;color:var(--navy3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
+.fr{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+.fg select,.fg input{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:7px 11px;font-size:12px;color:var(--text);font-family:'Inter',sans-serif;min-width:130px;outline:none;transition:all .2s}
+.fg select:focus,.fg input:focus{border-color:var(--blue);background:var(--bg2);box-shadow:0 0 0 3px rgba(59,111,212,.1)}
+.ba{background:var(--navy);color:#fff;border:none;border-radius:var(--rs);padding:7px 16px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;height:34px;transition:all .2s}
+.ba:hover{background:var(--navy2)}
+.bcl{background:var(--bg3);color:var(--text2);border:1.5px solid var(--border);border-radius:var(--rs);padding:7px 12px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;height:34px}
+
+/* TABS */
+.vtabs{display:flex;gap:3px;margin-bottom:20px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:4px;width:fit-content;box-shadow:var(--shadow);flex-wrap:wrap}
+.vt{padding:7px 15px;border-radius:10px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:600;color:var(--text3);font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap}
+.vt.active{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 3px 12px rgba(11,31,74,.2)}
+.vt:not(.active):hover{background:var(--bg3);color:var(--navy)}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:18px;transition:all .22s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kbar,linear-gradient(90deg,var(--blue),var(--navy)));opacity:.8}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+.kpi-ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:8px;background:var(--kbg,var(--blue3))}
+.kpi-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.kpi-val{font-size:18px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace;line-height:1.1;margin-bottom:3px;word-break:break-all}
+.kpi-sub{font-size:10px;color:var(--text3)}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.gf{margin-bottom:14px}
+@media(max-width:1200px){.g3{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* CARDS */
+.card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.ct{font-size:9px;font-weight:700;color:var(--navy3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ct-line{flex:1;height:1px;background:var(--border2)}
+.cw{position:relative}.h200{height:200px}.h240{height:240px}.h260{height:260px}.h280{height:280px}.h300{height:300px}.h340{height:340px}
+
+/* TABLA */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 12px;background:var(--bg3);color:var(--text3);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1.5px solid var(--border);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--border2);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--blue3)}
+.num{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px}
+.bb{background:var(--bg4);border-radius:4px;height:4px;margin-top:4px;min-width:50px}
+.bf{background:linear-gradient(90deg,var(--blue),var(--navy));border-radius:4px;height:4px;transition:width .8s ease}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:700;white-space:nowrap}
+.tag-blue{background:var(--blue3);color:var(--navy3)}
+.tag-green{background:var(--green2);color:var(--green)}
+.tag-red{background:var(--red2);color:var(--red)}
+.tag-gold{background:var(--gold3);color:var(--gold)}
+.tag-orange{background:var(--orange2);color:var(--orange)}
+.tag-purple{background:var(--purple2);color:var(--purple)}
+.tag-a{background:#DCFCE7;color:#15803D}
+.tag-b{background:#FEF9C3;color:#854D0E}
+.tag-c{background:#FEE2E2;color:#991B1B}
+
+/* SEMÁFOROS */
+.sf-ok{color:var(--green);background:var(--green2);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;display:inline-block}
+.sf-warn{color:var(--orange);background:var(--orange2);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;display:inline-block}
+.sf-low{color:var(--red);background:var(--red2);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;display:inline-block}
+.sf-zero{color:#fff;background:var(--red);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;display:inline-block}
+
+/* ALERTA BANNERS */
+.alert-bar{border-radius:var(--r);padding:12px 18px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.alert-critico{background:linear-gradient(135deg,#450a0a,#7F1D1D);color:#FCA5A5;border:1px solid rgba(220,38,38,.3)}
+.alert-warn{background:var(--orange2);color:var(--orange);border:1.5px solid rgba(217,119,6,.2)}
+
+/* BUSCADOR PRODUCTO */
+.prod-search{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 14px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;transition:all .2s;width:100%}
+.prod-search:focus{border-color:var(--blue);background:var(--bg2);box-shadow:0 0 0 3px rgba(59,111,212,.1)}
+
+/* CIERRES PERÍODO */
+.periodo-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px;transition:all .2s;cursor:pointer}
+.periodo-card:hover{border-color:var(--blue);background:var(--blue3)}
+.periodo-card.active{border-color:var(--navy);background:var(--blue3)}
+.periodo-lbl{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.periodo-stats{font-size:10px;color:var(--text3)}
+
+/* LOADING */
+.loading{text-align:center;padding:70px 20px;color:var(--text3);font-size:13px}
+.ls{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{background:var(--red2);border:1.5px solid rgba(192,57,43,.2);border-radius:var(--rs);padding:13px 16px;color:var(--red);font-size:12px}
+.prog-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;width:200px;margin:10px auto}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--navy));border-radius:4px;transition:width .3s}
+</style>
+</head>
+<body>
+<header>
+  <div class="hlogo">
+    <img src="https://i.ibb.co/gbVD1bq5/logo-JOTA-MUNDIAL-SAS-original.png" alt="JM" style="height:42px;width:auto;object-fit:contain;display:block;mix-blend-mode:lighten">
+    <div><div class="logo-nm">JOTA MUNDIAL SAS</div><span class="logo-sb">Inventarios · Bodega</span></div>
+    <div class="hdiv"></div>
+    <span class="htitle">SIESA SBS · Tiempo Real</span>
+  </div>
+  <div class="hright">
+    <a href="https://liderti-jpg.github.io/dashboard-ventas/centro-dashboards-jm.html" class="btn-centro">← Centro</a>
+    <span id="ts"></span>
+    <div class="badge-live" id="bl"><span class="dot-live"></span>EN VIVO</div>
+    <button class="btn-ref" id="br" onclick="cargar()">↻ Actualizar</button>
+  </div>
+</header>
+
+<div class="main">
+  <!-- FILTROS -->
+  <div class="fp">
+    <div class="fph">⊞ Filtros</div>
+    <div class="fr">
+      <div class="fg"><label>Tipo inventario</label>
+        <select id="ftipo"><option value="">Todos</option></select>
+      </div>
+      <div class="fg"><label>ABC Rotación</label>
+        <select id="fabc">
+          <option value="">Todos</option>
+          <option value="A">A — Alta rotación</option>
+          <option value="B">B — Media rotación</option>
+          <option value="C">C — Baja rotación</option>
+        </select>
+      </div>
+      <div class="fg"><label>Stock</label>
+        <select id="fstock">
+          <option value="">Todos</option>
+          <option value="con">Con stock</option>
+          <option value="sin">Sin stock</option>
+          <option value="bajo">Bajo mínimo</option>
+          <option value="critico">Sin mov. +90d</option>
+        </select>
+      </div>
+      <div class="fg"><label>Buscar producto</label>
+        <input type="text" id="fbuscar" placeholder="Referencia o descripción…" oninput="ap()" style="min-width:220px">
+      </div>
+      <button class="ba" onclick="ap()">Aplicar</button>
+      <button class="bcl" onclick="rst()">Limpiar</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="vtabs">
+    <button class="vt active" onclick="sv('r',this)">📊 Resumen</button>
+    <button class="vt" onclick="sv('s',this)">📦 Stock Actual</button>
+    <button class="vt" onclick="sv('v',this)">💤 Sin Movimiento</button>
+    <button class="vt" onclick="sv('abc',this)">🏆 Análisis ABC</button>
+    <button class="vt" onclick="sv('c',this)">📅 Cierres Mensuales</button>
+    <button class="vt" onclick="sv('t',this)">📈 Tendencia</button>
+    <button class="vt" onclick="sv('p',this)">🔍 Por Producto</button>
+  </div>
+
+  <div id="ct"><div class="loading"><div class="ls"></div>Conectando con SIESA…</div></div>
+</div>
+
+<script>
+const WH_S='https://jotamundial2.app.n8n.cloud/webhook/inventarios-stock';
+const WH_C='https://jotamundial2.app.n8n.cloud/webhook/inventarios-cierres';
+const MN=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MF=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const CL=['#1A3A6E','#3B6FD4','#0A7A5A','#B8860B','#6B21A8','#C0392B','#0E6655','#D4851A','#1A5276','#6C3483','#148F77','#A04000'];
+let rawS=[],rawC=[],vista='r',ch={};
+
+const fCOP=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
+const fM=v=>{if(v<0)return'-'+fM(-v);if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'MM';if(v>=1e6)return'$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString('es-CO')};
+const fQ=v=>{if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return parseFloat(v).toLocaleString('es-CO',{maximumFractionDigits:2})};
+
+function setLoad(msg,p,t){
+  const pct=t>0?Math.round((p/t)*100):0;
+  document.getElementById('ct').innerHTML=`<div class="loading"><div class="ls"></div><div>${msg}</div>${t>0?`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><small style="color:var(--text4);font-size:10px">Página ${p} de ${t} · ${pct}%</small>`:''}</div>`;
+}
+
+async function fetchAll(wh,label){
+  const r1=await fetch(`${wh}?pagina=1`,{signal:AbortSignal.timeout(60000)});
+  if(!r1.ok)throw new Error('HTTP '+r1.status);
+  const j1=await r1.json();
+  const tot=j1?.detalle?.total_páginas||j1?.detalle?.total_paginas||1;
+  const totR=j1?.detalle?.total_registros||0;
+  let datos=j1?.detalle?.Datos||[];
+  setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,1,tot);
+  const BATCH=5;
+  for(let p=2;p<=tot;p+=BATCH){
+    const ps=[];
+    for(let pp=p;pp<p+BATCH&&pp<=tot;pp++)
+      ps.push(fetch(`${wh}?pagina=${pp}`,{signal:AbortSignal.timeout(60000)}).then(r=>r.json()).catch(()=>null));
+    const res=await Promise.all(ps);
+    for(const rx of res) if(rx?.detalle?.Datos) datos=datos.concat(rx.detalle.Datos);
+    setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,Math.min(p+BATCH-1,tot),tot);
+  }
+  return datos;
+}
+
+async function cargar(){
+  const btn=document.getElementById('br');btn.disabled=true;btn.textContent='⏳';
+  try{
+    setLoad('Cargando stock actual…',0,0);
+    rawS=await fetchAll(WH_S,'stock');
+    setLoad('Cargando cierres mensuales…',0,0);
+    rawC=await fetchAll(WH_C,'cierres');
+
+    // Normalizar
+    rawS=rawS.map(r=>({...r,
+      referencia:(r.referencia||'').trim(),
+      descripcion:(r.descripcion||'').trim(),
+      tipo_inventario:(r.tipo_inventario||'').trim(),
+      abc_rotacion:(r.abc_rotacion||'').trim()
+    }));
+    rawC=rawC.map(r=>({...r,
+      referencia:(r.referencia||'').trim(),
+      descripcion:(r.descripcion||'').trim()
+    }));
+
+    // Poblar filtros
+    const tipos=[...new Set(rawS.map(r=>r.tipo_inventario).filter(Boolean))].sort();
+    const selTipo=document.getElementById('ftipo');
+    selTipo.innerHTML='<option value="">Todos</option>'+tipos.map(t=>`<option value="${t}">${t}</option>`).join('');
+
+    document.getElementById('ts').textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('bl').style.display='flex';
+    ap();
+  }catch(e){
+    document.getElementById('ct').innerHTML=`<div class="err">❌ ${e.message}<br><button onclick="cargar()" style="margin-top:8px;background:var(--navy);color:#fff;border:none;border-radius:var(--rs);padding:7px 14px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700">↻ Reintentar</button></div>`;
+  }finally{btn.disabled=false;btn.textContent='↻ Actualizar'}
+}
+
+function gF(){return{tipo:document.getElementById('ftipo').value,abc:document.getElementById('fabc').value,stock:document.getElementById('fstock').value,buscar:document.getElementById('fbuscar').value.toLowerCase().trim()}}
+
+function filS(data,f){
+  return data.filter(r=>{
+    if(f.tipo&&r.tipo_inventario!==f.tipo)return false;
+    if(f.abc&&r.abc_rotacion!==f.abc)return false;
+    if(f.stock==='con'&&!(r.existencia_actual>0))return false;
+    if(f.stock==='sin'&&r.existencia_actual>0)return false;
+    if(f.stock==='bajo'&&!(r.stock_minimo>0&&r.disponible<r.stock_minimo))return false;
+    if(f.stock==='critico'&&!((r.dias_sin_salida||9999)>90&&r.existencia_actual>0))return false;
+    if(f.buscar&&!r.referencia.toLowerCase().includes(f.buscar)&&!r.descripcion.toLowerCase().includes(f.buscar))return false;
+    return true;
+  });
+}
+
+function ap(){dC();const f=gF();const d=filS(rawS,f);render(d,f)}
+function rst(){['ftipo','fabc','fstock'].forEach(id=>document.getElementById(id).value='');document.getElementById('fbuscar').value='';ap()}
+function sv(v,el){vista=v;document.querySelectorAll('.vt').forEach(t=>t.classList.remove('active'));el.classList.add('active');ap()}
+function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
+
+Chart.defaults.font.family="'Inter',sans-serif";
+const tOpts=(cb,leg)=>({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:!!leg,position:'top',labels:{color:'#3D5280',font:{size:9,weight:'600'},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',titleColor:'rgba(255,255,255,.5)',titleFont:{size:9},bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:cb||(ctx=>`  ${fCOP(ctx.raw)}`)}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:30},grid:{display:false},border:{display:false}}}});
+
+function render(d,f){
+  const c=document.getElementById('ct');
+  if(!d.length&&vista!=='c'&&vista!=='t'){c.innerHTML='<div class="loading" style="color:var(--text3)">Sin datos para los filtros seleccionados.</div>';return;}
+  if(vista==='r')vR(d,c);
+  else if(vista==='s')vS(d,c);
+  else if(vista==='v')vV(d,c);
+  else if(vista==='abc')vABC(d,c);
+  else if(vista==='c')vC(c);
+  else if(vista==='t')vT(c);
+  else if(vista==='p')vP(d,c);
+}
+
+// ══ RESUMEN ═══════════════════════════════════════════════════
+function vR(d,c){
+  const conStock=d.filter(r=>r.existencia_actual>0);
+  const sinStock=d.filter(r=>r.existencia_actual<=0);
+  const valorTotal=conStock.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const bajMin=d.filter(r=>r.stock_minimo>0&&r.disponible<r.stock_minimo);
+  const sinMov90=conStock.filter(r=>(r.dias_sin_salida||9999)>90);
+  const enTransito=d.filter(r=>r.pendiente_entrar>0);
+  const totUnid=conStock.reduce((s,r)=>s+parseFloat(r.existencia_actual||0),0);
+  const abcA=conStock.filter(r=>r.abc_rotacion==='A');
+  const abcC=conStock.filter(r=>r.abc_rotacion==='C');
+  const valAbcA=abcA.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const valSinMov=sinMov90.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+
+  // Alertas críticas
+  const alertas=[];
+  if(bajMin.length>0)alertas.push({tipo:'warn',msg:`${bajMin.length} producto${bajMin.length>1?'s':''} bajo stock mínimo`,sub:`Valor: ${fCOP(bajMin.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}`});
+  if(sinMov90.length>0)alertas.push({tipo:'critico',msg:`${sinMov90.length} producto${sinMov90.length>1?'s':''} sin movimiento > 90 días`,sub:`Capital inmovilizado: ${fCOP(valSinMov)}`});
+
+  // Por tipo inventario
+  const porTipo={};
+  conStock.forEach(r=>{
+    const k=r.tipo_inventario||'Sin tipo';
+    if(!porTipo[k])porTipo[k]={items:0,valor:0,unidades:0};
+    porTipo[k].items++;
+    porTipo[k].valor+=parseFloat(r.valor_inventario||0);
+    porTipo[k].unidades+=parseFloat(r.existencia_actual||0);
+  });
+  const tiposSorted=Object.entries(porTipo).sort((a,b)=>b[1].valor-a[1].valor);
+
+  c.innerHTML=`
+    ${alertas.map(a=>`<div class="alert-bar alert-${a.tipo}"><span style="font-size:18px">${a.tipo==='critico'?'🚨':'⚠️'}</span><div><div style="font-weight:700;font-size:13px">${a.msg}</div><div style="font-size:11px;opacity:.8;margin-top:2px">${a.sub}</div></div></div>`).join('')}
+    <div class="kpis">
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--navy),var(--blue));--kbg:var(--blue3)"><div class="kpi-ic">📦</div><div class="kpi-lbl">Total ítems</div><div class="kpi-val">${fQ(d.length)}</div><div class="kpi-sub">${fQ(conStock.length)} con stock · ${fQ(sinStock.length)} sin stock</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--gold),var(--gold2));--kbg:var(--gold3)"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fM(valorTotal)}</div><div class="kpi-sub">${fCOP(valorTotal)}</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--teal),#047857);--kbg:var(--teal2)"><div class="kpi-ic">📊</div><div class="kpi-lbl">Unidades en stock</div><div class="kpi-val">${fQ(totUnid)}</div><div class="kpi-sub">Promedio ${fQ(totUnid/Math.max(conStock.length,1))} und/ítem</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--red),#922B21);--kbg:var(--red2)"><div class="kpi-ic">💤</div><div class="kpi-lbl">Sin movimiento +90d</div><div class="kpi-val" style="color:var(--red)">${fQ(sinMov90.length)}</div><div class="kpi-sub">${fCOP(valSinMov)} inmovilizado</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--orange),#B45309);--kbg:var(--orange2)"><div class="kpi-ic">⚠️</div><div class="kpi-lbl">Bajo mínimo</div><div class="kpi-val" style="color:var(--orange)">${fQ(bajMin.length)}</div><div class="kpi-sub">${bajMin.length>0?'Requiere reposición':'✅ Todos en nivel ok'}</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--purple),#5B21B6);--kbg:var(--purple2)"><div class="kpi-ic">🚚</div><div class="kpi-lbl">Pendiente entrar</div><div class="kpi-val">${fQ(enTransito.length)}</div><div class="kpi-sub">${fQ(enTransito.reduce((s,r)=>s+parseFloat(r.pendiente_entrar||0),0))} und en tránsito</div></div>
+    </div>
+    <div class="g3">
+      <div class="card gf"><div class="ct">Valor por tipo de inventario <span class="ct-line"></span></div><div class="cw h260"><canvas id="cTipo"></canvas></div></div>
+      <div class="card gf"><div class="ct">Distribución ABC por valor <span class="ct-line"></span></div><div class="cw h260"><canvas id="cABC"></canvas></div></div>
+      <div class="card gf"><div class="ct">Estado del stock <span class="ct-line"></span></div><div class="cw h260"><canvas id="cEstado"></canvas></div></div>
+    </div>
+    <div class="g2">
+      <div class="card gf">
+        <div class="ct">Valor por tipo de inventario <span class="ct-line"></span><span class="tag tag-blue">${tiposSorted.length} tipos</span></div>
+        <div class="tw"><table><thead><tr><th>Tipo</th><th class="num">Ítems</th><th class="num">Unidades</th><th class="num">Valor total</th><th>Part. %</th></tr></thead><tbody>
+          ${tiposSorted.map(([k,v],i)=>{const p=valorTotal>0?((v.valor/valorTotal)*100).toFixed(1):0;const bw=tiposSorted[0]?Math.round((v.valor/tiposSorted[0][1].valor)*100):0;const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+            return`<tr style="${odd}"><td style="font-weight:600;font-size:11px">${k}</td><td class="num">${fQ(v.items)}</td><td class="num">${fQ(v.unidades)}</td><td class="num" style="color:var(--navy2);font-weight:700">${fCOP(v.valor)}<div class="bb"><div class="bf" style="width:${bw}%"></div></div></td><td><span class="tag tag-blue">${p}%</span></td></tr>`;
+          }).join('')}
+        </tbody></table></div>
+      </div>
+      <div class="card gf">
+        <div class="ct">Top 10 por valor en inventario <span class="ct-line"></span></div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Descripción</th><th>ABC</th><th class="num">Stock</th><th class="num">Valor</th></tr></thead><tbody>
+          ${conStock.sort((a,b)=>parseFloat(b.valor_inventario)-parseFloat(a.valor_inventario)).slice(0,10).map((r,i)=>{
+            const ic=['🥇','🥈','🥉'];
+            const dias=r.dias_sin_salida||null;
+            const odd=i%2===0?'':'background:rgba(238,241,248,.4)';
+            return`<tr style="${odd}"><td style="font-size:13px">${ic[i]||`<span style="font-weight:700;color:var(--navy)">${i+1}</span>`}</td>
+              <td><div style="font-weight:600;font-size:11px">${r.descripcion.length>32?r.descripcion.substring(0,32)+'…':r.descripcion}</div><div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.referencia}</div></td>
+              <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
+              <td class="num">${fQ(r.existencia_actual)}</td>
+              <td class="num" style="color:var(--gold);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+            </tr>`;
+          }).join('')}
+        </tbody></table></div>
+      </div>
+    </div>`;
+
+  // Gráfica tipos
+  ch.tipo=new Chart(document.getElementById('cTipo'),{type:'doughnut',data:{
+    labels:tiposSorted.slice(0,6).map(([k])=>k.replace('INV143501','IMPORT.').replace('INV143502','NACIONAL').replace('INV143503','SERV.')),
+    datasets:[{data:tiposSorted.slice(0,6).map(([,v])=>v.valor),backgroundColor:CL,borderWidth:4,borderColor:'#fff',hoverOffset:10}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+
+  const abcData={A:0,B:0,C:0};
+  conStock.forEach(r=>{if(abcData[r.abc_rotacion]!==undefined)abcData[r.abc_rotacion]+=parseFloat(r.valor_inventario||0);});
+  ch.abc=new Chart(document.getElementById('cABC'),{type:'doughnut',data:{
+    labels:['A — Alta rotación','B — Media rotación','C — Baja rotación'],
+    datasets:[{data:[abcData.A,abcData.B,abcData.C],backgroundColor:['#15803D','#CA8A04','#DC2626'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{color:'#3D5280',font:{size:9},padding:7,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)}`}}}}});
+
+  ch.estado=new Chart(document.getElementById('cEstado'),{type:'bar',data:{
+    labels:['Con stock','Sin stock','Bajo mínimo','Sin mov. >90d','En tránsito'],
+    datasets:[{data:[conStock.length,sinStock.length,bajMin.length,sinMov90.length,enTransito.length],backgroundColor:['rgba(10,122,90,.8)','rgba(192,57,43,.8)','rgba(217,119,6,.8)','rgba(107,33,168,.8)','rgba(59,111,212,.8)'],borderRadius:7,borderSkipped:false,borderWidth:0}]
+  },options:{...tOpts(ctx=>` ${fQ(ctx.raw)} ítems`)}});
+}
+
+// ══ STOCK ACTUAL ══════════════════════════════════════════════
+function vS(d,c){
+  const sorted=[...d].filter(r=>r.existencia_actual>=0).sort((a,b)=>parseFloat(b.valor_inventario)-parseFloat(a.valor_inventario));
+  c.innerHTML=`
+    <div class="card gf">
+      <div class="ct">Stock actual en bodega <span class="ct-line"></span><span class="tag tag-blue">${fQ(sorted.length)} productos</span><span class="tag tag-gold" style="margin-left:auto">Valor total: ${fCOP(sorted.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0))}</span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Referencia</th><th>Descripción</th><th>Tipo</th><th>ABC</th>
+        <th class="num">Existencia</th><th class="num">Disponible</th><th class="num">Comprometido</th><th class="num">En tránsito</th>
+        <th class="num">Costo prom.</th><th class="num">Valor total</th>
+        <th>Estado</th><th>Últ. salida</th>
+      </tr></thead><tbody>
+        ${sorted.map((r,i)=>{
+          const st=r.stock_minimo>0&&r.disponible<r.stock_minimo?'sf-low':r.existencia_actual<=0?'sf-zero':r.existencia_actual<5?'sf-warn':'sf-ok';
+          const stTxt=r.existencia_actual<=0?'🔴 Sin stock':r.stock_minimo>0&&r.disponible<r.stock_minimo?'⚠️ Bajo mín.':r.existencia_actual<5?'⚡ Bajo':'✅ Ok';
+          const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          return`<tr style="${odd}">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)">${r.referencia.substring(0,16)}</td>
+            <td style="max-width:180px"><div style="font-weight:600;font-size:11px">${r.descripcion.length>30?r.descripcion.substring(0,30)+'…':r.descripcion}</div></td>
+            <td><span class="tag tag-blue" style="font-size:8px">${r.tipo_inventario.replace('INV143501','IMP').replace('INV143502','NAC').replace('INV143503','SRV')}</span></td>
+            <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
+            <td class="num" style="font-weight:700;color:var(--navy)">${fQ(r.existencia_actual)}</td>
+            <td class="num" style="color:var(--teal)">${fQ(r.disponible)}</td>
+            <td class="num" style="color:${r.comprometido>0?'var(--orange)':'var(--text4)'}">${fQ(r.comprometido)}</td>
+            <td class="num" style="color:${r.pendiente_entrar>0?'var(--purple)':'var(--text4)'}">${fQ(r.pendiente_entrar||0)}</td>
+            <td class="num">${fCOP(parseFloat(r.costo_prom_uni||0))}</td>
+            <td class="num" style="color:var(--gold);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+            <td><span class="${st}">${stTxt}</span></td>
+            <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:'-'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+}
+
+// ══ SIN MOVIMIENTO ════════════════════════════════════════════
+function vV(d,c){
+  // Productos con stock pero sin movimiento reciente
+  const umbral30=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>30&&(r.dias_sin_salida||9999)<=60);
+  const umbral60=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>60&&(r.dias_sin_salida||9999)<=90);
+  const umbral90=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>90&&(r.dias_sin_salida||9999)<=180);
+  const umbral180=d.filter(r=>r.existencia_actual>0&&(r.dias_sin_salida||9999)>180);
+  const v30=umbral30.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const v60=umbral60.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const v90=umbral90.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+  const v180=umbral180.reduce((s,r)=>s+parseFloat(r.valor_inventario||0),0);
+
+  const criticos=[...umbral90,...umbral180].sort((a,b)=>(b.dias_sin_salida||0)-(a.dias_sin_salida||0));
+
+  c.innerHTML=`
+    <div class="g4" style="margin-bottom:16px">
+      <div class="card" style="border-color:var(--orange)"><div class="kpi-ic" style="background:var(--orange2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⏰</div><div class="kpi-lbl">31–60 días</div><div class="kpi-val">${fQ(umbral30.length)}</div><div class="kpi-sub">${fCOP(v30)}</div></div>
+      <div class="card" style="border-color:var(--orange)"><div class="kpi-ic" style="background:var(--orange2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">⚡</div><div class="kpi-lbl">61–90 días</div><div class="kpi-val">${fQ(umbral60.length)}</div><div class="kpi-sub">${fCOP(v60)}</div></div>
+      <div class="card" style="border-color:var(--red)"><div class="kpi-ic" style="background:var(--red2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">🔴</div><div class="kpi-lbl">91–180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umbral90.length)}</div><div class="kpi-sub">${fCOP(v90)}</div></div>
+      <div class="card" style="border-color:var(--red)"><div class="kpi-ic" style="background:var(--red2);font-size:14px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px">💀</div><div class="kpi-lbl">+180 días</div><div class="kpi-val" style="color:var(--red)">${fQ(umbral180.length)}</div><div class="kpi-sub">${fCOP(v180)}</div></div>
+    </div>
+    <div class="g2">
+      <div class="card gf"><div class="ct">Capital inmovilizado por rango <span class="ct-line"></span></div><div class="cw h260"><canvas id="cInmov"></canvas></div></div>
+      <div class="card gf"><div class="ct">Top sin movimiento — por valor <span class="ct-line"></span><span class="tag tag-red">+90 días</span></div><div class="cw h260"><canvas id="cSinMov"></canvas></div></div>
+    </div>
+    <div class="card gf">
+      <div class="ct">Listado productos críticos sin movimiento <span class="ct-line"></span><span class="tag tag-red">${fQ(criticos.length)} productos</span><span class="tag tag-gold" style="margin-left:auto">Capital: ${fCOP(v90+v180)}</span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Referencia</th><th>Descripción</th><th>ABC</th>
+        <th class="num">Stock</th><th class="num">Valor</th>
+        <th>Últ. salida</th><th class="num">Días sin mov.</th>
+        <th>Alerta</th>
+      </tr></thead><tbody>
+        ${criticos.slice(0,50).map((r,i)=>{
+          const dias=r.dias_sin_salida||0;
+          const cls=dias>180?'sf-zero':dias>90?'sf-low':'sf-warn';
+          const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          return`<tr style="${odd}">
+            <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2)">${r.referencia.substring(0,16)}</td>
+            <td style="font-weight:600;font-size:11px">${r.descripcion.length>35?r.descripcion.substring(0,35)+'…':r.descripcion}</td>
+            <td><span class="tag tag-${r.abc_rotacion==='A'?'a':r.abc_rotacion==='B'?'b':'c'}">${r.abc_rotacion||'?'}</span></td>
+            <td class="num" style="font-weight:700">${fQ(r.existencia_actual)}</td>
+            <td class="num" style="color:var(--red);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+            <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:'Sin registro'}</td>
+            <td class="num"><span class="${cls}">${dias}d</span></td>
+            <td>${dias>180?'<span class="tag tag-red">💀 Obsoleto</span>':dias>90?'<span class="tag tag-red">🔴 Crítico</span>':'<span class="tag tag-orange">⚡ Atención</span>'}</td>
+          </tr>`;
+        }).join('')}
+        ${criticos.length>50?`<tr><td colspan="8" style="text-align:center;color:var(--text3);font-size:11px;padding:10px">Mostrando 50 de ${fQ(criticos.length)} registros</td></tr>`:''}
+      </tbody></table></div>
+    </div>`;
+
+  ch.inmov=new Chart(document.getElementById('cInmov'),{type:'bar',data:{
+    labels:['31–60 días','61–90 días','91–180 días','+180 días'],
+    datasets:[{data:[v30,v60,v90,v180],backgroundColor:['rgba(217,119,6,.7)','rgba(217,119,6,.9)','rgba(192,57,43,.8)','rgba(127,29,29,.9)'],borderRadius:8,borderSkipped:false,borderWidth:0}]
+  },options:tOpts()});
+
+  const top10=criticos.filter(r=>r.dias_sin_salida>90).slice(0,10);
+  ch.sinmov=new Chart(document.getElementById('cSinMov'),{type:'bar',data:{
+    labels:top10.map(r=>r.descripcion.length>18?r.descripcion.substring(0,18)+'…':r.descripcion),
+    datasets:[{data:top10.map(r=>parseFloat(r.valor_inventario||0)),backgroundColor:'rgba(192,57,43,.7)',borderColor:'#C0392B',borderWidth:1.5,borderRadius:6,borderSkipped:false}]
+  },options:{indexAxis:'y',...tOpts()}});
+}
+
+// ══ ANÁLISIS ABC ══════════════════════════════════════════════
+function vABC(d,c){
+  const abc={A:{items:[],valor:0,unidades:0},B:{items:[],valor:0,unidades:0},C:{items:[],valor:0,unidades:0}};
+  d.filter(r=>r.existencia_actual>0).forEach(r=>{
+    const k=r.abc_rotacion||'C';
+    if(abc[k]){abc[k].items.push(r);abc[k].valor+=parseFloat(r.valor_inventario||0);abc[k].unidades+=parseFloat(r.existencia_actual||0);}
+  });
+  const totValor=abc.A.valor+abc.B.valor+abc.C.valor;
+  const totItems=abc.A.items.length+abc.B.items.length+abc.C.items.length;
+
+  c.innerHTML=`
+    <div class="g3" style="margin-bottom:16px">
+      ${['A','B','C'].map(k=>{
+        const pV=totValor>0?((abc[k].valor/totValor)*100).toFixed(1):0;
+        const pI=totItems>0?((abc[k].items.length/totItems)*100).toFixed(1):0;
+        const color=k==='A'?'var(--green)':k==='B'?'var(--orange)':'var(--red)';
+        const bg=k==='A'?'var(--green2)':k==='B'?'var(--orange2)':'var(--red2)';
+        const desc=k==='A'?'Alta rotación — prioridad máxima':k==='B'?'Rotación media — gestión regular':'Baja rotación — revisar existencias';
+        return`<div class="card" style="border-color:${color}">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+            <div style="width:44px;height:44px;border-radius:12px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:${color};font-family:'Playfair Display',serif">${k}</div>
+            <div><div style="font-size:11px;font-weight:600;color:var(--text2)">${desc}</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:var(--bg3);border-radius:var(--rs);padding:10px"><div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Ítems</div><div style="font-size:16px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace">${fQ(abc[k].items.length)}</div><div style="font-size:9px;color:var(--text3)">${pI}% del total</div></div>
+            <div style="background:var(--bg3);border-radius:var(--rs);padding:10px"><div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Valor</div><div style="font-size:14px;font-weight:700;color:${color};font-family:'JetBrains Mono',monospace">${fM(abc[k].valor)}</div><div style="font-size:9px;color:var(--text3)">${pV}% del inventario</div></div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="g2">
+      <div class="card gf"><div class="ct">Items por clasificación ABC <span class="ct-line"></span></div><div class="cw h240"><canvas id="cAbcI"></canvas></div></div>
+      <div class="card gf"><div class="ct">Valor por clasificación ABC <span class="ct-line"></span></div><div class="cw h240"><canvas id="cAbcV"></canvas></div></div>
+    </div>
+    <div class="card gf">
+      <div class="ct">Top productos clase A — mayor valor <span class="ct-line"></span><span class="tag tag-a">Alta rotación</span></div>
+      <div class="tw"><table><thead><tr><th>#</th><th>Descripción</th><th>Tipo</th><th class="num">Stock</th><th class="num">Costo prom.</th><th class="num">Valor inventario</th><th>Últ. movimiento</th></tr></thead><tbody>
+        ${abc.A.items.sort((a,b)=>parseFloat(b.valor_inventario)-parseFloat(a.valor_inventario)).slice(0,15).map((r,i)=>{
+          const ic=['🥇','🥈','🥉'];const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          return`<tr style="${odd}"><td style="font-size:13px">${ic[i]||`<span style="font-weight:700;color:var(--navy)">${i+1}</span>`}</td>
+            <td><div style="font-weight:600;font-size:11px">${r.descripcion.length>35?r.descripcion.substring(0,35)+'…':r.descripcion}</div><div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.referencia}</div></td>
+            <td><span class="tag tag-blue" style="font-size:8px">${r.tipo_inventario.replace('INV143501','IMP').replace('INV143502','NAC').replace('INV143503','SRV')}</span></td>
+            <td class="num" style="font-weight:700">${fQ(r.existencia_actual)}</td>
+            <td class="num">${fCOP(parseFloat(r.costo_prom_uni||0))}</td>
+            <td class="num" style="color:var(--gold);font-weight:700">${fCOP(parseFloat(r.valor_inventario||0))}</td>
+            <td style="font-size:10px;color:var(--text3)">${r.fecha_ult_salida?r.fecha_ult_salida.split('T')[0]:r.fecha_ult_entrada?r.fecha_ult_entrada.split('T')[0]:'-'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+
+  ch.abci=new Chart(document.getElementById('cAbcI'),{type:'doughnut',data:{
+    labels:['A — Alta','B — Media','C — Baja'],
+    datasets:[{data:[abc.A.items.length,abc.B.items.length,abc.C.items.length],backgroundColor:['rgba(21,128,61,.85)','rgba(202,138,4,.85)','rgba(220,38,38,.85)'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:9},padding:10,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fQ(ctx.raw)} ítems (${((ctx.raw/totItems)*100).toFixed(1)}%)`}}}}});
+  ch.abcv=new Chart(document.getElementById('cAbcV'),{type:'doughnut',data:{
+    labels:['A — Alta','B — Media','C — Baja'],
+    datasets:[{data:[abc.A.valor,abc.B.valor,abc.C.valor],backgroundColor:['rgba(21,128,61,.85)','rgba(202,138,4,.85)','rgba(220,38,38,.85)'],borderWidth:4,borderColor:'#fff',hoverOffset:10}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#3D5280',font:{size:9},padding:10,boxWidth:9}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${fCOP(ctx.raw)} (${((ctx.raw/totValor)*100).toFixed(1)}%)`}}}}});
+}
+
+// ══ CIERRES MENSUALES ═════════════════════════════════════════
+function vC(c){
+  // Agrupar rawC por período
+  const byPer={};
+  rawC.forEach(r=>{
+    const k=r.periodo;
+    if(!byPer[k])byPer[k]={periodo:k,entradas:0,salidas:0,vlr_entradas:0,vlr_salidas:0,movimientos:0,productos:new Set()};
+    byPer[k].entradas+=parseFloat(r.cant_entradas||0);
+    byPer[k].salidas+=parseFloat(r.cant_salidas||0);
+    byPer[k].vlr_entradas+=parseFloat(r.vlr_entradas||0);
+    byPer[k].vlr_salidas+=parseFloat(r.vlr_salidas||0);
+    byPer[k].movimientos+=parseInt(r.num_movimientos||0);
+    byPer[k].productos.add(r.referencia);
+  });
+  const pers=Object.values(byPer).map(x=>({...x,productos:x.productos.size})).sort((a,b)=>a.periodo-b.periodo);
+  const perLabels=pers.map(p=>`${MN[p.periodo%100]} ${String(Math.floor(p.periodo/100)).slice(2)}`);
+
+  c.innerHTML=`
+    <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:18px">
+      <div class="kpi" style="--kbg:var(--green2)"><div class="kpi-ic">📅</div><div class="kpi-lbl">Períodos</div><div class="kpi-val">${pers.length}</div><div class="kpi-sub">${perLabels[0]||'—'} → ${perLabels[perLabels.length-1]||'—'}</div></div>
+      <div class="kpi" style="--kbg:var(--blue3)"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fM(pers.reduce((s,p)=>s+p.vlr_entradas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.entradas,0))} und</div></div>
+      <div class="kpi" style="--kbg:var(--orange2)"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fM(pers.reduce((s,p)=>s+p.vlr_salidas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.salidas,0))} und</div></div>
+      <div class="kpi" style="--kbg:var(--purple2)"><div class="kpi-ic">🔄</div><div class="kpi-lbl">Total movimientos</div><div class="kpi-val">${fQ(pers.reduce((s,p)=>s+p.movimientos,0))}</div><div class="kpi-sub">Prom. ${fQ(pers.reduce((s,p)=>s+p.movimientos,0)/Math.max(pers.length,1))} / período</div></div>
+    </div>
+    <div class="g2">
+      <div class="card gf"><div class="ct">Entradas vs Salidas — valor por período <span class="ct-line"></span></div><div class="cw h280"><canvas id="cCierreEV"></canvas></div></div>
+      <div class="card gf"><div class="ct">Unidades movidas por período <span class="ct-line"></span></div><div class="cw h280"><canvas id="cCierreU"></canvas></div></div>
+    </div>
+    <div class="card gf">
+      <div class="ct">Resumen por período <span class="ct-line"></span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Período</th><th class="num">Cant. entradas</th><th class="num">Valor entradas</th>
+        <th class="num">Cant. salidas</th><th class="num">Valor salidas</th>
+        <th class="num">Neto und.</th><th class="num">Movimientos</th><th class="num">Productos</th>
+      </tr></thead><tbody>
+        ${[...pers].reverse().map((p,i)=>{
+          const neto=p.entradas-p.salidas;
+          const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          return`<tr style="${odd}">
+            <td style="font-weight:700">${MF[p.periodo%100]} ${Math.floor(p.periodo/100)}</td>
+            <td class="num" style="color:var(--teal)">${fQ(p.entradas)}</td>
+            <td class="num" style="color:var(--teal);font-weight:700">${fCOP(p.vlr_entradas)}</td>
+            <td class="num" style="color:var(--orange)">${fQ(p.salidas)}</td>
+            <td class="num" style="color:var(--orange);font-weight:700">${fCOP(p.vlr_salidas)}</td>
+            <td class="num"><span class="${neto>=0?'tag tag-green':'tag tag-red'}">${neto>=0?'+':''}${fQ(neto)}</span></td>
+            <td class="num">${fQ(p.movimientos)}</td>
+            <td class="num">${fQ(p.productos)}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+
+  ch.cEV=new Chart(document.getElementById('cCierreEV'),{type:'bar',data:{
+    labels:perLabels,
+    datasets:[
+      {label:'Entradas',data:pers.map(p=>p.vlr_entradas),backgroundColor:'rgba(10,122,90,.75)',borderRadius:5,borderSkipped:false},
+      {label:'Salidas',data:pers.map(p=>p.vlr_salidas),backgroundColor:'rgba(217,119,6,.75)',borderRadius:5,borderSkipped:false}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+
+  ch.cU=new Chart(document.getElementById('cCierreU'),{type:'line',data:{
+    labels:perLabels,
+    datasets:[
+      {label:'Entradas',data:pers.map(p=>p.entradas),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5},
+      {label:'Salidas',data:pers.map(p=>p.salidas),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+}
+
+// ══ TENDENCIA ══════════════════════════════════════════════════
+function vT(c){
+  // Top 5 productos por volumen de salidas en todos los períodos
+  const byProd={};
+  rawC.forEach(r=>{
+    const k=r.referencia;
+    if(!byProd[k])byProd[k]={ref:k,desc:r.descripcion,salidas:0,entradas:0,vlr_salidas:0};
+    byProd[k].salidas+=parseFloat(r.cant_salidas||0);
+    byProd[k].entradas+=parseFloat(r.cant_entradas||0);
+    byProd[k].vlr_salidas+=parseFloat(r.vlr_salidas||0);
+  });
+  const top5=Object.values(byProd).sort((a,b)=>b.vlr_salidas-a.vlr_salidas).slice(0,5);
+
+  const pers=[...new Set(rawC.map(r=>r.periodo))].sort();
+  const perLabels=pers.map(p=>`${MN[p%100]} ${String(Math.floor(p/100)).slice(2)}`);
+
+  // Rotación total por período
+  const rotByPer={};
+  rawC.forEach(r=>{
+    const k=r.periodo;
+    if(!rotByPer[k])rotByPer[k]={e:0,s:0};
+    rotByPer[k].e+=parseFloat(r.cant_entradas||0);
+    rotByPer[k].s+=parseFloat(r.cant_salidas||0);
+  });
+
+  c.innerHTML=`
+    <div class="g2">
+      <div class="card gf"><div class="ct">Rotación total — entradas vs salidas <span class="ct-line"></span></div><div class="cw h280"><canvas id="cTRot"></canvas></div></div>
+      <div class="card gf"><div class="ct">Top 5 productos — valor salidas acum. <span class="ct-line"></span></div><div class="cw h280"><canvas id="cTTop"></canvas></div></div>
+    </div>
+    <div class="card gf"><div class="ct">Top 5 — tendencia salidas por período <span class="ct-line"></span></div><div class="cw h300"><canvas id="cT5"></canvas></div></div>
+    <div class="card gf">
+      <div class="ct">Ranking productos por volumen total de salidas <span class="ct-line"></span></div>
+      <div class="tw"><table><thead><tr>
+        <th>#</th><th>Descripción</th>
+        <th class="num">Cant. salidas</th><th class="num">Valor salidas</th>
+        <th class="num">Cant. entradas</th><th>Balance</th>
+      </tr></thead><tbody>
+        ${Object.values(byProd).sort((a,b)=>b.vlr_salidas-a.vlr_salidas).slice(0,20).map((r,i)=>{
+          const bal=r.entradas-r.salidas;const ic=['🥇','🥈','🥉'];const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          return`<tr style="${odd}"><td style="font-size:13px">${ic[i]||`<span style="font-weight:700;color:var(--navy)">${i+1}</span>`}</td>
+            <td><div style="font-weight:600;font-size:11px">${r.desc.length>38?r.desc.substring(0,38)+'…':r.desc}</div><div style="font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.ref}</div></td>
+            <td class="num" style="font-weight:700">${fQ(r.salidas)}</td>
+            <td class="num" style="color:var(--orange);font-weight:700">${fCOP(r.vlr_salidas)}</td>
+            <td class="num">${fQ(r.entradas)}</td>
+            <td><span class="${bal>=0?'tag tag-green':'tag tag-red'}">${bal>=0?'+':''}${fQ(bal)}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`;
+
+  ch.trot=new Chart(document.getElementById('cTRot'),{type:'line',data:{
+    labels:perLabels,
+    datasets:[
+      {label:'Entradas',data:pers.map(p=>rotByPer[p]?.e||0),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:4,borderWidth:2.5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2},
+      {label:'Salidas',data:pers.map(p=>rotByPer[p]?.s||0),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:4,borderWidth:2.5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+
+  ch.ttop=new Chart(document.getElementById('cTTop'),{type:'bar',data:{
+    labels:top5.map(r=>r.desc.length>18?r.desc.substring(0,18)+'…':r.desc),
+    datasets:[{data:top5.map(r=>r.vlr_salidas),backgroundColor:CL.map((c,i)=>i<3?c:c+'99'),borderColor:CL,borderWidth:1.5,borderRadius:6,borderSkipped:false}]
+  },options:{indexAxis:'y',...tOpts()}});
+
+  // Tendencia top5 por período
+  const td={};
+  top5.forEach(p=>{
+    td[p.ref]=pers.map(per=>{
+      const recs=rawC.filter(r=>r.referencia===p.ref&&r.periodo===per);
+      return recs.reduce((s,r)=>s+parseFloat(r.cant_salidas||0),0);
+    });
+  });
+  ch.t5=new Chart(document.getElementById('cT5'),{type:'line',data:{
+    labels:perLabels,
+    datasets:top5.map((p,i)=>({label:p.desc.length>22?p.desc.substring(0,22)+'…':p.desc,data:td[p.ref],borderColor:CL[i],backgroundColor:'transparent',tension:.4,pointRadius:3,borderWidth:2,pointBackgroundColor:CL[i],pointBorderColor:'#fff',pointBorderWidth:1.5,pointHoverRadius:6}))
+  },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+}
+
+// ══ POR PRODUCTO ══════════════════════════════════════════════
+function vP(d,c){
+  c.innerHTML=`
+    <div class="card gf">
+      <div class="ct">🔍 Buscar producto <span class="ct-line"></span></div>
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div class="fg" style="flex:1;min-width:280px">
+          <label>Referencia o descripción</label>
+          <input type="text" id="pq" class="prod-search" placeholder="Ej: UPVCH1070 o COVERMAS…" oninput="pSearch()" style="font-size:13px;padding:10px 14px">
+        </div>
+        <button class="ba" onclick="pSearch()">Buscar</button>
+        <button class="bcl" onclick="pClear()">Limpiar</button>
+      </div>
+      <div id="pSug" style="margin-top:8px"></div>
+    </div>
+    <div id="pRes"></div>`;
+}
+
+let pTimer=null;
+function pSearch(){
+  clearTimeout(pTimer);
+  pTimer=setTimeout(()=>{
+    const q=(document.getElementById('pq')?.value||'').trim().toLowerCase();
+    const sug=document.getElementById('pSug');
+    const res=document.getElementById('pRes');
+    if(!sug||!res)return;
+    if(q.length<2){sug.innerHTML='';res.innerHTML='';return;}
+    const matches=rawS.filter(r=>r.referencia.toLowerCase().includes(q)||r.descripcion.toLowerCase().includes(q)).slice(0,8);
+    if(!matches.length){sug.innerHTML='<div style="font-size:12px;color:var(--text3);padding:4px 2px">Sin resultados</div>';res.innerHTML='';return;}
+    sug.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      ${matches.map(m=>`<button onclick="pDetalle('${m.referencia}')" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:11px;font-family:inherit;cursor:pointer;color:var(--navy);font-weight:600;transition:all .15s" onmouseover="this.style.background='var(--blue3)'" onmouseout="this.style.background='var(--bg3)'">
+        <span class="tag tag-${m.abc_rotacion==='A'?'a':m.abc_rotacion==='B'?'b':'c'}" style="margin-right:5px">${m.abc_rotacion||'?'}</span>${m.descripcion.length>35?m.descripcion.substring(0,35)+'…':m.descripcion}
+      </button>`).join('')}
+    </div>`;
+  },220);
+}
+
+function pClear(){
+  const pq=document.getElementById('pq');if(pq)pq.value='';
+  const ps=document.getElementById('pSug');if(ps)ps.innerHTML='';
+  const pr=document.getElementById('pRes');if(pr)pr.innerHTML='';
+}
+
+function pDetalle(ref){
+  dC();
+  const stock=rawS.find(r=>r.referencia===ref);
+  const movs=rawC.filter(r=>r.referencia===ref).sort((a,b)=>a.periodo-b.periodo);
+  const res=document.getElementById('pRes');if(!res)return;
+  if(!stock){res.innerHTML='<div class="err">Sin datos de stock para este producto.</div>';return;}
+
+  const totE=movs.reduce((s,r)=>s+parseFloat(r.cant_entradas||0),0);
+  const totS=movs.reduce((s,r)=>s+parseFloat(r.cant_salidas||0),0);
+  const totVE=movs.reduce((s,r)=>s+parseFloat(r.vlr_entradas||0),0);
+  const totVS=movs.reduce((s,r)=>s+parseFloat(r.vlr_salidas||0),0);
+  const perLabels=movs.map(p=>`${MN[p.periodo%100]} ${String(Math.floor(p.periodo/100)).slice(2)}`);
+
+  res.innerHTML=`
+    <div class="card gf" style="border-color:var(--blue)">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="width:50px;height:50px;border-radius:13px;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>
+        <div style="flex:1">
+          <div style="font-size:17px;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif">${stock.descripcion}</div>
+          <div style="display:flex;gap:8px;margin-top:5px;flex-wrap:wrap;align-items:center">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:6px">${stock.referencia}</span>
+            <span class="tag tag-${stock.abc_rotacion==='A'?'a':stock.abc_rotacion==='B'?'b':'c'}">ABC: ${stock.abc_rotacion||'?'}</span>
+            <span class="tag tag-blue">${stock.tipo_inventario.replace('INV143501','IMPORTADO').replace('INV143502','NACIONAL').replace('INV143503','SERVICIO')}</span>
+            ${stock.pendiente_entrar>0?`<span class="tag tag-purple">🚚 En tránsito: ${fQ(stock.pendiente_entrar)}</span>`:''}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(155px,1fr));margin-bottom:14px">
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📦</div><div class="kpi-lbl">Stock actual</div><div class="kpi-val">${fQ(stock.existencia_actual)}</div><div class="kpi-sub">Disponible: ${fQ(stock.disponible)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fM(parseFloat(stock.valor_inventario||0))}</div><div class="kpi-sub">Costo prom: ${fCOP(parseFloat(stock.costo_prom_uni||0))}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fQ(totE)} und</div><div class="kpi-sub">${fCOP(totVE)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fQ(totS)} und</div><div class="kpi-sub">${fCOP(totVS)}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📅</div><div class="kpi-lbl">Últ. salida</div><div class="kpi-val" style="font-size:14px">${stock.fecha_ult_salida?stock.fecha_ult_salida.split('T')[0]:'Sin registro'}</div><div class="kpi-sub">${stock.dias_sin_salida?stock.dias_sin_salida+' días sin salida':''}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📈</div><div class="kpi-lbl">Períodos activo</div><div class="kpi-val">${movs.length}</div><div class="kpi-sub">En historial</div></div>
+    </div>
+    ${movs.length>0?`
+    <div class="card gf"><div class="ct">Historial movimientos — ${stock.descripcion.substring(0,35)} <span class="ct-line"></span></div><div class="cw h280"><canvas id="cPD"></canvas></div></div>
+    <div class="card gf">
+      <div class="ct">Movimientos por período <span class="ct-line"></span></div>
+      <div class="tw"><table><thead><tr>
+        <th>Período</th><th class="num">Cant. entradas</th><th class="num">Valor entradas</th>
+        <th class="num">Cant. salidas</th><th class="num">Valor salidas</th>
+        <th class="num">Neto</th><th class="num">Costo prom.</th><th class="num">Movimientos</th>
+      </tr></thead><tbody>
+        ${[...movs].reverse().map((r,i)=>{const neto=parseFloat(r.cant_entradas||0)-parseFloat(r.cant_salidas||0);const odd=i%2===0?'':'background:rgba(238,241,248,.3)';
+          return`<tr style="${odd}"><td style="font-weight:600">${MF[r.periodo%100]} ${Math.floor(r.periodo/100)}</td>
+            <td class="num" style="color:var(--teal)">${fQ(r.cant_entradas||0)}</td>
+            <td class="num" style="color:var(--teal);font-weight:700">${fCOP(parseFloat(r.vlr_entradas||0))}</td>
+            <td class="num" style="color:var(--orange)">${fQ(r.cant_salidas||0)}</td>
+            <td class="num" style="color:var(--orange);font-weight:700">${fCOP(parseFloat(r.vlr_salidas||0))}</td>
+            <td class="num"><span class="${neto>=0?'tag tag-green':'tag tag-red'}">${neto>=0?'+':''}${fQ(neto)}</span></td>
+            <td class="num">${fCOP(parseFloat(r.costo_prom_cierre||0))}</td>
+            <td class="num">${r.num_movimientos||0}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`:'<div class="card gf" style="text-align:center;padding:30px;color:var(--text3)">Sin historial de movimientos para este producto</div>'}`;
+
+  if(movs.length>0){
+    setTimeout(()=>{
+      const cv=document.getElementById('cPD');if(!cv)return;
+      ch.pd=new Chart(cv,{type:'bar',data:{
+        labels:perLabels,
+        datasets:[
+          {type:'bar',label:'Entradas',data:movs.map(r=>parseFloat(r.cant_entradas||0)),backgroundColor:'rgba(10,122,90,.7)',borderRadius:5,borderSkipped:false,order:2},
+          {type:'bar',label:'Salidas',data:movs.map(r=>parseFloat(r.cant_salidas||0)),backgroundColor:'rgba(217,119,6,.7)',borderRadius:5,borderSkipped:false,order:2},
+          {type:'line',label:'Costo prom.',data:movs.map(r=>parseFloat(r.costo_prom_cierre||0)),borderColor:'#1A3A6E',backgroundColor:'transparent',tension:.4,pointRadius:4,borderWidth:2,yAxisID:'y2',order:1}
+        ]
+      },options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.datasetIndex===2?fCOP(ctx.raw):fQ(ctx.raw)+' und'}`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},y2:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},position:'right',grid:{display:false},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+    },100);
+  }
+}
+
+cargar();
+setInterval(cargar,30*60*1000);
+</script>
+</body>
+</html>

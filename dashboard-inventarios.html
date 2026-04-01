@@ -471,7 +471,7 @@ function dC(){Object.values(ch).forEach(c=>{try{c.destroy()}catch(e){}});ch={}}
 
 /* ── CHART DEFAULTS ─────────────────────────────── */
 Chart.defaults.font.family="'Inter',sans-serif";
-const tOpts=(cb,leg)=>({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:!!leg,position:'top',labels:{color:'#3D5280',font:{size:9,weight:'600'},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',titleColor:'rgba(255,255,255,.5)',titleFont:{size:9},bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:cb||(ctx=>`  ${fCOP(ctx.raw)}`)}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:30},grid:{display:false},border:{display:false}}}});
+const tOpts=(cb,leg)=>({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:!!leg,position:'top',labels:{color:'#3D5280',font:{size:9,weight:'600'},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',titleColor:'rgba(255,255,255,.5)',titleFont:{size:9},bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:cb||(ctx=>`  ${fCOP(ctx.raw)}`)}}},scales:{y:{ticks:{callback:v=>fCOP(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9},maxRotation:30},grid:{display:false},border:{display:false}}}});
 
 /* ── RENDER ─────────────────────────────── */
 function render(d,f){
@@ -520,7 +520,7 @@ function vR(d,c){
     </div>`:''}
     <div class="kpis">
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--navy),var(--blue));--kbg:var(--blue3)"><div class="kpi-ic">📦</div><div class="kpi-lbl">Total ítems</div><div class="kpi-val">${fQ(d.length)}</div><div class="kpi-sub">${fQ(conStock.length)} con stock · ${fQ(sinStock.length)} sin stock</div></div>
-      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--gold),var(--gold2));--kbg:var(--gold3)"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fM(valorTotal)}</div><div class="kpi-sub">${fCOP(valorTotal)}</div></div>
+      <div class="kpi" style="--kbar:linear-gradient(90deg,var(--gold),var(--gold2));--kbg:var(--gold3)"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fCOP(valorTotal)}</div><div class="kpi-sub">${fCOP(valorTotal)}</div></div>
       <div class="kpi" style="--kbar:linear-gradient(90deg,var(--teal),#047857);--kbg:var(--teal2)"><div class="kpi-ic">📊</div><div class="kpi-lbl">Unidades en stock</div><div class="kpi-val">${fQ(totUnid)}</div><div class="kpi-sub">Prom. ${fQ(totUnid/Math.max(conStock.length,1))} und/ítem</div></div>
       <div class="kpi kpi-clickable" style="--kbar:linear-gradient(90deg,var(--red),#922B21);--kbg:var(--red2)" onclick="mostrarModalSinMov(window._conStock,90)">
         <div class="kpi-ic" style="background:var(--red2)">💤</div><div class="kpi-lbl">Sin movimiento +90d</div><div class="kpi-val" style="color:var(--red)">${fQ(sinMov90.length)}</div>
@@ -629,7 +629,7 @@ function sFilS(){
           <span class="grupo-badge${firstOpen?'':' grupo-badge-dark'}" style="margin-left:8px">${fQ(items.length)} productos</span>
           <div class="grupo-stats">
             <div class="grupo-stat"><div class="grupo-stats-lbl">Unidades</div><div class="grupo-stats-val">${fQ(undG)}</div></div>
-            <div class="grupo-stat"><div class="grupo-stats-lbl">Valor total</div><div class="grupo-stats-val">${fM(valG)}</div></div>
+            <div class="grupo-stat"><div class="grupo-stats-lbl">Valor total</div><div class="grupo-stats-val">${fCOP(valG)}</div></div>
           </div>
           <span class="grupo-arrow">›</span>
         </div>
@@ -763,7 +763,7 @@ function vmFil(){
           <span class="grupo-badge${firstOpen?'':' grupo-badge-dark'}" style="margin-left:8px">${fQ(items.length)} productos</span>
           <div class="grupo-stats">
             <div class="grupo-stat"><div class="grupo-stats-lbl">Máx. días</div><div class="grupo-stats-val">${maxDias}d</div></div>
-            <div class="grupo-stat"><div class="grupo-stats-lbl">Capital inm.</div><div class="grupo-stats-val">${fM(valG)}</div></div>
+            <div class="grupo-stat"><div class="grupo-stats-lbl">Capital inm.</div><div class="grupo-stats-val">${fCOP(valG)}</div></div>
           </div>
           <span class="grupo-arrow">›</span>
         </div>
@@ -818,7 +818,7 @@ function vABC(d,c){
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
             <div style="background:var(--bg3);border-radius:var(--rs);padding:10px"><div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Ítems</div><div style="font-size:16px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace">${fQ(abc[k].items.length)}</div><div style="font-size:9px;color:var(--text3)">${pI}% del total</div></div>
-            <div style="background:var(--bg3);border-radius:var(--rs);padding:10px"><div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Valor</div><div style="font-size:14px;font-weight:700;color:${color};font-family:'JetBrains Mono',monospace">${fM(abc[k].valor)}</div><div style="font-size:9px;color:var(--text3)">${pV}% del inventario</div></div>
+            <div style="background:var(--bg3);border-radius:var(--rs);padding:10px"><div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:3px">Valor</div><div style="font-size:14px;font-weight:700;color:${color};font-family:'JetBrains Mono',monospace">${fCOP(abc[k].valor)}</div><div style="font-size:9px;color:var(--text3)">${pV}% del inventario</div></div>
           </div>
         </div>`;
       }).join('')}
@@ -865,8 +865,8 @@ function vC(c){
   c.innerHTML=`
     <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:18px">
       <div class="kpi" style="--kbg:var(--green2)"><div class="kpi-ic">📅</div><div class="kpi-lbl">Períodos</div><div class="kpi-val">${pers.length}</div><div class="kpi-sub">${perLabels[0]||'—'} → ${perLabels[perLabels.length-1]||'—'}</div></div>
-      <div class="kpi" style="--kbg:var(--blue3)"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fM(pers.reduce((s,p)=>s+p.vlr_entradas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.entradas,0))} und</div></div>
-      <div class="kpi" style="--kbg:var(--orange2)"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fM(pers.reduce((s,p)=>s+p.vlr_salidas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.salidas,0))} und</div></div>
+      <div class="kpi" style="--kbg:var(--blue3)"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fCOP(pers.reduce((s,p)=>s+p.vlr_entradas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.entradas,0))} und</div></div>
+      <div class="kpi" style="--kbg:var(--orange2)"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fCOP(pers.reduce((s,p)=>s+p.vlr_salidas,0))}</div><div class="kpi-sub">${fQ(pers.reduce((s,p)=>s+p.salidas,0))} und</div></div>
       <div class="kpi" style="--kbg:var(--purple2)"><div class="kpi-ic">🔄</div><div class="kpi-lbl">Total movimientos</div><div class="kpi-val">${fQ(pers.reduce((s,p)=>s+p.movimientos,0))}</div><div class="kpi-sub">Prom. ${fQ(Math.round(pers.reduce((s,p)=>s+p.movimientos,0)/Math.max(pers.length,1)))} / período</div></div>
     </div>
     <div class="g2">
@@ -896,7 +896,7 @@ function vC(c){
       </tbody></table></div>
     </div>`;
 
-  ch.cEV=new Chart(document.getElementById('cCierreEV'),{type:'bar',data:{labels:perLabels,datasets:[{label:'Entradas',data:pers.map(p=>p.vlr_entradas),backgroundColor:'rgba(10,122,90,.75)',borderRadius:5,borderSkipped:false},{label:'Salidas',data:pers.map(p=>p.vlr_salidas),backgroundColor:'rgba(217,119,6,.75)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+  ch.cEV=new Chart(document.getElementById('cCierreEV'),{type:'bar',data:{labels:perLabels,datasets:[{label:'Entradas',data:pers.map(p=>p.vlr_entradas),backgroundColor:'rgba(10,122,90,.75)',borderRadius:5,borderSkipped:false},{label:'Salidas',data:pers.map(p=>p.vlr_salidas),backgroundColor:'rgba(217,119,6,.75)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fCOP(ctx.raw)}`}}},scales:{y:{ticks:{callback:v=>fCOP(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
   ch.cU=new Chart(document.getElementById('cCierreU'),{type:'line',data:{labels:perLabels,datasets:[{label:'Entradas',data:pers.map(p=>p.entradas),borderColor:'#0A7A5A',backgroundColor:'rgba(10,122,90,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#0A7A5A',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5},{label:'Salidas',data:pers.map(p=>p.salidas),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#D97706',pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fQ(ctx.raw)} und`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
 }
 
@@ -1005,7 +1005,7 @@ function pDetalle(ref){
     </div>
     <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(155px,1fr));margin-bottom:14px">
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📦</div><div class="kpi-lbl">Stock actual</div><div class="kpi-val">${fQ(stock.existencia_actual)}</div><div class="kpi-sub">Disponible: ${fQ(stock.disponible)}</div></div>
-      <div class="kpi" style="cursor:default"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fM(parseFloat(stock.valor_inventario||0))}</div><div class="kpi-sub">Costo prom: ${fCOP(parseFloat(stock.costo_prom_uni||0))}</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">💰</div><div class="kpi-lbl">Valor inventario</div><div class="kpi-val">${fCOP(parseFloat(stock.valor_inventario||0))}</div><div class="kpi-sub">Costo prom: ${fCOP(parseFloat(stock.costo_prom_uni||0))}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fQ(totE)} und</div><div class="kpi-sub">${fCOP(totVE)}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fQ(totS)} und</div><div class="kpi-sub">${fCOP(totVS)}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📅</div><div class="kpi-lbl">Últ. salida</div><div class="kpi-val" style="font-size:14px">${stock.fecha_ult_salida?stock.fecha_ult_salida.split('T')[0]:'Sin registro'}</div><div class="kpi-sub">${stock.dias_sin_salida?stock.dias_sin_salida+' días sin salida':''}</div></div>
@@ -1028,7 +1028,7 @@ function pDetalle(ref){
   if(movs.length>0){
     setTimeout(()=>{
       const cv=document.getElementById('cPD');if(!cv)return;
-      ch.pd=new Chart(cv,{type:'bar',data:{labels:perLabels,datasets:[{type:'bar',label:'Entradas',data:movs.map(r=>parseFloat(r.cant_entradas||0)),backgroundColor:'rgba(10,122,90,.7)',borderRadius:5,borderSkipped:false,order:2},{type:'bar',label:'Salidas',data:movs.map(r=>parseFloat(r.cant_salidas||0)),backgroundColor:'rgba(217,119,6,.7)',borderRadius:5,borderSkipped:false,order:2},{type:'line',label:'Costo prom.',data:movs.map(r=>parseFloat(r.costo_prom_cierre||0)),borderColor:'#1A3A6E',backgroundColor:'transparent',tension:.4,pointRadius:4,borderWidth:2,yAxisID:'y2',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.datasetIndex===2?fCOP(ctx.raw):fQ(ctx.raw)+' und'}`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},y2:{ticks:{callback:v=>fM(v),color:'#7A90B8',font:{size:9}},position:'right',grid:{display:false},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
+      ch.pd=new Chart(cv,{type:'bar',data:{labels:perLabels,datasets:[{type:'bar',label:'Entradas',data:movs.map(r=>parseFloat(r.cant_entradas||0)),backgroundColor:'rgba(10,122,90,.7)',borderRadius:5,borderSkipped:false,order:2},{type:'bar',label:'Salidas',data:movs.map(r=>parseFloat(r.cant_salidas||0)),backgroundColor:'rgba(217,119,6,.7)',borderRadius:5,borderSkipped:false,order:2},{type:'line',label:'Costo prom.',data:movs.map(r=>parseFloat(r.costo_prom_cierre||0)),borderColor:'#1A3A6E',backgroundColor:'transparent',tension:.4,pointRadius:4,borderWidth:2,yAxisID:'y2',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{color:'#3D5280',font:{size:9},boxWidth:9,padding:10}},tooltip:{backgroundColor:'rgba(11,31,74,.95)',bodyColor:'#fff',bodyFont:{size:11,weight:'700'},padding:10,cornerRadius:8,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.datasetIndex===2?fCOP(ctx.raw):fQ(ctx.raw)+' und'}`}}},scales:{y:{ticks:{callback:v=>fQ(v),color:'#7A90B8',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'},border:{display:false}},y2:{ticks:{callback:v=>fCOP(v),color:'#7A90B8',font:{size:9}},position:'right',grid:{display:false},border:{display:false}},x:{ticks:{color:'#7A90B8',font:{size:9}},grid:{display:false},border:{display:false}}}}});
     },100);
   }
 }

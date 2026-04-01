@@ -384,10 +384,13 @@ async function fetchAll(wh,label){
   if(!r1.ok)throw new Error('HTTP '+r1.status+' en '+label);
   const j1=await r1.json();
   // Tolerancia case: Datos / datos
-  const getDatos=j=>j?.detalle?.Datos||j?.detalle?.datos||j?.Datos||j?.datos||[];
-  const tot=j1?.detalle?.total_páginas||j1?.detalle?.total_paginas||j1?.detalle?.['tamaño_página']||1;
+  // Connekta a veces devuelve [{...}] (array) en lugar de {...} — desenvolver si es necesario
+  const unwrap=j=>Array.isArray(j)?j[0]:j;
+  const getDatos=j=>{const u=unwrap(j);return u?.detalle?.Datos||u?.detalle?.datos||u?.Datos||u?.datos||[];};
+  const j1u=unwrap(j1);
+  const tot=j1u?.detalle?.total_páginas||j1u?.detalle?.total_paginas||1;
   const totPag=parseInt(tot)||1;
-  const totR=j1?.detalle?.total_registros||0;
+  const totR=j1u?.detalle?.total_registros||0;
   let datos=getDatos(j1);
   setLoad(`Cargando ${label}… (${datos.length} de ${totR})`,1,totPag);
   const BATCH=5;
@@ -950,7 +953,10 @@ function pClear(){const pq=document.getElementById('pq');if(pq)pq.value='';const
 function pDetalle(ref){
   dC();
   const stock=rawS.find(r=>r.referencia===ref);
-  const movs=rawC.filter(r=>r.referencia===ref).sort((a,b)=>a.periodo-b.periodo);
+  // Cruce robusto: trim en ambos lados por si quedan diferencias residuales
+  const movs=rawC.filter(r=>r.referencia.trim()===ref.trim()).sort((a,b)=>a.periodo-b.periodo);
+  // Debug badge
+  const _dbg=rawC.length>0?`<span class="tag tag-green" style="margin-left:4px">✓ ${rawC.length} reg. cierres cargados</span>`:`<span class="tag tag-red" style="margin-left:4px">⚠️ rawC vacío — verifica webhook</span>`;
   const res=document.getElementById('pRes');if(!res)return;
   if(!stock){res.innerHTML='<div class="err">Sin datos de stock para este producto.</div>';return;}
   const totE=movs.reduce((s,r)=>s+parseFloat(r.cant_entradas||0),0);
@@ -979,7 +985,7 @@ function pDetalle(ref){
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📥</div><div class="kpi-lbl">Total entradas</div><div class="kpi-val">${fQ(totE)} und</div><div class="kpi-sub">${fCOP(totVE)}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📤</div><div class="kpi-lbl">Total salidas</div><div class="kpi-val">${fQ(totS)} und</div><div class="kpi-sub">${fCOP(totVS)}</div></div>
       <div class="kpi" style="cursor:default"><div class="kpi-ic">📅</div><div class="kpi-lbl">Últ. salida</div><div class="kpi-val" style="font-size:14px">${stock.fecha_ult_salida?stock.fecha_ult_salida.split('T')[0]:'Sin registro'}</div><div class="kpi-sub">${stock.dias_sin_salida?stock.dias_sin_salida+' días sin salida':''}</div></div>
-      <div class="kpi" style="cursor:default"><div class="kpi-ic">📈</div><div class="kpi-lbl">Períodos activo</div><div class="kpi-val">${movs.length}</div><div class="kpi-sub">En historial de cierres</div></div>
+      <div class="kpi" style="cursor:default"><div class="kpi-ic">📈</div><div class="kpi-lbl">Períodos activo</div><div class="kpi-val">${movs.length}</div><div class="kpi-sub">En historial de cierres ${_dbg}</div></div>
     </div>
     ${movs.length>0?`<div class="card gf"><div class="ct">Historial movimientos <span class="ct-line"></span></div><div class="cw h280"><canvas id="cPD"></canvas></div></div>
     <div class="card gf"><div class="ct">Detalle por período <span class="ct-line"></span></div>

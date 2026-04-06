@@ -259,23 +259,13 @@ let raw=[],vista='r',ch={},kpArr=[],kpIdx=0;
 // ── FORMATO ──────────────────────────────────────────────────
 const fCOP=v=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v);
 const fM=v=>{if(v<0)return'-'+fM(-v);if(v>=1e12)return'$'+(v/1e12).toFixed(2)+'B';if(v>=1e9)return'$'+(v/1e9).toFixed(2)+'MM';if(v>=1e6)return'$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString('es-CO')};
-// El usuario ingresa el valor en millones: 215 = $215,000,000
-// Si el valor tiene punto o coma de miles (215.000 o 215,000) se limpia
+// Siempre se ingresa el valor completo en pesos: 215000000, 150500000
+// Acepta puntos y comas como separadores de miles: 215.000.000 o 215,000,000
 const parseMeta=s=>{
   if(!s)return 0;
-  // Quitar símbolo $ y espacios
-  let v=s.trim().replace(/\$/g,'').replace(/\s/g,'');
-  // Si tiene punto Y coma, el separador de miles es el punto y decimal la coma
-  if(v.includes('.') && v.includes(',')) v=v.replace(/\./g,'').replace(',','.');
-  // Si solo tiene punto y tiene 3 dígitos después → separador de miles
-  else if(v.includes('.') && v.split('.')[1]?.length===3) v=v.replace(/\./g,'');
-  // Si solo tiene coma → separador decimal o de miles
-  else if(v.includes(',') && v.split(',')[1]?.length===3) v=v.replace(/,/g,'');
-  else v=v.replace(',','.');
-  const num=parseFloat(v)||0;
-  // Si el número es mayor a 100,000 ya está en pesos → usarlo directo
-  // Si es menor o igual a 100,000 → multiplicar por 1,000,000 (está en millones)
-  return num > 100000 ? num : num * 1e6;
+  // Quitar $, espacios y cualquier separador de miles (. o ,)
+  const limpio=s.trim().replace(/\$/g,'').replace(/\s/g,'').replace(/[.,]/g,'');
+  return parseInt(limpio)||0;
 };
 const pct=(a,b)=>b===0?null:((a-b)/b*100).toFixed(1);
 const pHtml=(a,b)=>{const p=pct(a,b);if(!p)return'<span class="tag neutral">—</span>';const u=parseFloat(p)>=0;return`<span class="tag ${u?'up':'down'}">${u?'▲':'▼'} ${Math.abs(p)}%</span>`};
@@ -669,10 +659,10 @@ function vM(d,f,c){
           <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:3px">Meta anual</div>
           <div class="meta-input-label" style="margin-bottom:3px">Ingresa o edita la meta del año</div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <input class="meta-input" id="metaAnualInput" placeholder="Ej: 5000 (millones)" value="${metaAnual>0?(metaAnual/1e6).toFixed(0):''}">
+            <input class="meta-input" id="metaAnualInput" placeholder="Ej: 5000000000" value="${metaAnual>0?metaAnual.toFixed(0):''}">
             <button class="btn-meta-save" onclick="guardarMetaAnual(${año})">Guardar</button>
           </div>
-          <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">Ingresa en millones · Ej: 5000 = $5,000,000,000</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">Ingresa el valor completo en pesos · Ej: 215000000 = $215,000,000</div>
         </div>
         <div style="flex:1;min-width:220px">
           <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
@@ -699,10 +689,10 @@ function vM(d,f,c){
       <div style="margin-left:auto;display:flex;flex-direction:column;gap:3px">
         <div style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.8px">Aplicar meta rápida a todos</div>
         <div style="display:flex;gap:8px;align-items:center">
-          <input class="global-meta-input" id="metaGlobalInput" placeholder="Ej: 215 (millones)">
+          <input class="global-meta-input" id="metaGlobalInput" placeholder="Ej: 150500000">
           <button class="btn-aplicar-global" onclick="aplicarMetaGlobal(${año},${mes})">Aplicar a todos</button>
         </div>
-        <div style="font-size:10px;color:rgba(0,0,0,.4)">Ingresa en millones · Ej: 215 = $215,000,000</div>
+        <div style="font-size:10px;color:rgba(0,0,0,.4)">Valor completo en pesos · Ej: 150500000 = $150,500,000</div>
       </div>
     </div>
 
@@ -732,8 +722,8 @@ function vM(d,f,c){
             <td class="num" style="color:var(--navy2);font-weight:700;font-size:13px">${fCOP(x.bruto)}</td>
             <td class="num">
               <input class="meta-cell-input" id="meta_${x.codigo}"
-                value="${meta>0?(meta/1e6).toFixed(0):''}"
-                placeholder="MM"
+                value="${meta>0?meta.toFixed(0):''}"
+                placeholder="Ej: 215000000"
                 onchange="actualizarFila('${x.codigo}',${x.bruto},${año},${mes})"
                 onkeydown="if(event.key==='Enter')this.blur()">
             </td>
@@ -812,8 +802,7 @@ function actualizarFila(codigo,bruto,año,mes){
   if(!inp)return;
   const val=parseMeta(inp.value);
   setMeta(codigo,año,mes,val);
-  // Normalizar display a millones
-  if(val>0) inp.value=(val/1e6).toFixed(0);
+  // El input ya muestra el valor completo, no normalizar
   const p=val>0?(bruto/val)*100:0;
   const pEl=document.getElementById(`pct_${codigo}`);
   const bEl=document.getElementById(`bar_${codigo}`);
@@ -844,7 +833,7 @@ function aplicarMetaGlobal(año,mes){
   if(!val){alert('Ingresa un valor válido en millones. Ej: 215');return}
   document.querySelectorAll('[id^="meta_"]').forEach(el=>{
     const codigo=el.id.replace('meta_','');
-    el.value=(val/1e6).toFixed(0);
+    el.value=val.toFixed(0);
     setMeta(codigo,año,mes,val);
   });
   const f=gF();const dd=fil(raw,f);const aa=agA(dd);

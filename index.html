@@ -666,11 +666,11 @@ function vM(d,f,c){
         </div>
         <div style="flex:1;min-width:220px">
           <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
-            <div><div style="font-size:11px;color:rgba(255,255,255,.5)">Ventas brutas ${año}</div><div class="cump-anual-val">${fM(ventaAnual)}</div></div>
+            <div><div style="font-size:11px;color:rgba(255,255,255,.5)">Ventas brutas ${año}</div><div class="cump-anual-val">${fCOP(ventaAnual)}</div></div>
             <div class="cump-anual-pct" style="color:${colorAnual}">${metaAnual>0?pctAnual.toFixed(1)+'%':'—'}</div>
           </div>
           <div class="cump-anual-bar-bg"><div class="cump-anual-bar-fill" style="width:${Math.min(pctAnual,100)}%;background:${colorAnual}"></div></div>
-          <div class="cump-anual-sub">${metaAnual>0?`Meta: ${fM(metaAnual)} · Faltante: ${fM(Math.max(metaAnual-ventaAnual,0))}`:'Define la meta anual para ver el avance'}</div>
+          <div class="cump-anual-sub">${metaAnual>0?`Meta: ${fCOP(metaAnual)} · Faltante: ${fCOP(Math.max(metaAnual-ventaAnual,0))}`:'Define la meta anual para ver el avance'}</div>
         </div>
       </div>
     </div>
